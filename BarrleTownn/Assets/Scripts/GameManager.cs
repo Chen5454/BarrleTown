@@ -94,23 +94,34 @@ public class GameManager : MonoBehaviour
     }
 
     #region Day_Region
-    //players see normal, reset barrel/shop, ETC
-
+    
+    public void StartDayPhase()
+    {
+        //players see normal, reset barrel/shop, ETC
+    }
 
     #endregion
 
     #region Night_Region
-    //werewolf transforms, villagers visions get thinner, ETC
 
+    public void StartNightPhase()
+    {
+        //werewolf transforms, villagers visions get thinner, ETC
+    }
 
     #endregion
 
     #region Talk_And_Vote_Region
-    //let players talk in chat, move players to the campfire(or vote site), and let them vote
-               
-    
 
- 
+    public void StartTalkPhase()
+    {
+        //let players talk in chat, move players physically to the campfire(or vote site) each in their own seat
+    }
+
+    public void StartVotePhase()
+    {
+        //let them vote
+    }
     #endregion
 
 }
