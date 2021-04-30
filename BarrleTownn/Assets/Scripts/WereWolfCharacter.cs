@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WereWolfCharacter : MonoBehaviour
+public class WereWolfCharacter : VillagerCharacter
 {
-    // Start is called before the first frame update
-    void Start()
+
+
+
+
+    public override void Update()
     {
-        
+        base.Update();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdate()
     {
-        
+        base.FixedUpdate();
     }
 }
