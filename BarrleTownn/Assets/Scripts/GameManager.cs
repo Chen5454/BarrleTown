@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public enum GamePhases
 {
@@ -11,6 +13,9 @@ public enum GamePhases
 }
 public class GameManager : MonoBehaviour
 {
+    [Header("Phases")]
+    public List<GameObject> playersList;
+    public VotePhase votePhase;
     [Header("Current Phase")]
     [SerializeField]
     GamePhases gamePhase;
@@ -74,6 +79,7 @@ public class GameManager : MonoBehaviour
             case GamePhases.Night://switches to talk
                 gamePhase = GamePhases.talk;
                 timer = waitForVoteTime;
+                StartTalkPhase();
                 Debug.Log("Switching to Talk");
                 break;
             case GamePhases.talk://switches to Vote
@@ -115,6 +121,10 @@ public class GameManager : MonoBehaviour
 
     public void StartTalkPhase()
     {
+        votePhase.SetPlayersAtTheirVotingSpots(playersList);
+        //disable players movement
+
+
         //let players talk in chat, move players physically to the campfire(or vote site) each in their own seat
     }
 
@@ -123,5 +133,32 @@ public class GameManager : MonoBehaviour
         //let them vote
     }
     #endregion
+
+}
+[Serializable]
+public class VotePhase
+{
+    [SerializeField]
+    private Transform[] playerVoteSpots;
+
+    public void SetPlayersAtTheirVotingSpots(List<GameObject> players)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].transform.position = playerVoteSpots[i].position;
+        }
+    }
+
+}
+
+[Serializable]
+public class NightPhase
+{
+
+}
+
+[Serializable]
+public class DayPhase
+{
 
 }
