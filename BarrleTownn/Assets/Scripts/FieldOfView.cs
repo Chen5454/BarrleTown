@@ -24,7 +24,7 @@ public class FieldOfView : MonoBehaviour
 	{
 		camData = camera.gameObject.GetComponent<UniversalAdditionalCameraData>();
 
-		camData.SetRenderer(0);
+		SetDayFOV();
 
 		mesh = new Mesh();
 		GetComponent<MeshFilter>().mesh = mesh;
