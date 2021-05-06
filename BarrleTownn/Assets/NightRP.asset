@@ -148,7 +148,7 @@ MonoBehaviour:
       overrideStencilState: 1
       stencilReference: 1
       stencilCompareFunction: 3
-      passOperation: 0
+      passOperation: 4
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
