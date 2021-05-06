@@ -13,6 +13,8 @@ public enum GamePhases
 }
 public class GameManager : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] FieldOfView fov;
     [Header("Phases")]
     public List<GameObject> playersList;
     public VotePhase votePhase;
@@ -75,14 +77,17 @@ public class GameManager : MonoBehaviour
                 gamePhase = GamePhases.Night;
                 timer = nightTime;
                 Debug.Log("Switching to Night");
+                fov.SetNightFOV(true);
                 break;
             case GamePhases.Night://switches to talk
                 gamePhase = GamePhases.talk;
                 timer = waitForVoteTime;
                 StartTalkPhase();
                 Debug.Log("Switching to Talk");
+                fov.SetDayFOV();
                 break;
             case GamePhases.talk://switches to Vote
+
                 gamePhase = GamePhases.Vote;
                 timer = voteTime;
                 canVote = true;
@@ -146,9 +151,9 @@ public class VotePhase
         for (int i = 0; i < players.Count; i++)
         {
             players[i].transform.position = playerVoteSpots[i].position;
+            //player will not have the ability to move
         }
     }
-
 }
 
 [Serializable]
