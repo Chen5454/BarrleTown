@@ -98,7 +98,7 @@ public class FieldOfView : MonoBehaviour
 			mesh.uv = uv;
 			mesh.triangles = triangles;
 
-
+			mesh.bounds = new Bounds(origin, Vector3.zero * 1000f);
 		}
 	}
 
