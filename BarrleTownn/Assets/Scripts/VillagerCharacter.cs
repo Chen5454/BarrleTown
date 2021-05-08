@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,14 @@ public class VillagerCharacter : MonoBehaviour
     float horiznotal;
     float vertical;
     Rigidbody2D rb2D;
+    private bool isFacingRight;
+    private Inventory inventory;
 
+    private void Awake()
+    {
+        inventory = new Inventory();
+
+    }
 
     private void Start()
     {
@@ -18,7 +26,6 @@ public class VillagerCharacter : MonoBehaviour
     public virtual void Update()
     {
         MovementHandler();
-
     }
 
 
@@ -29,10 +36,28 @@ public class VillagerCharacter : MonoBehaviour
             horiznotal *= 0.7f;
             vertical *= 0.7f;
         }
-        rb2D.velocity = new Vector2(horiznotal, vertical * speed);
+        rb2D.velocity = new Vector2(horiznotal * speed, vertical * speed);
+
+        Flip(horiznotal);
+
     }
 
 
+
+    public void Flip(float horiznotal)
+        {
+            if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
+            {
+                isFacingRight = !isFacingRight;
+
+                Vector3 scale = transform.localScale;
+
+                scale.x *= -1;
+                transform.localScale = scale;
+            }
+        }
+
+    
 
     public virtual void MovementHandler()
     {
