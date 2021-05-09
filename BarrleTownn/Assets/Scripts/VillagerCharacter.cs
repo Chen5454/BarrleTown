@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviour
 {
+
     public float speed;
     float horiznotal;
     float vertical;
@@ -14,9 +15,12 @@ public class VillagerCharacter : MonoBehaviour
     public CollectItem item;
     private bool isPicked;
     public float distance;
+    public int currentHp;
+    public int Maxhp;
+    private Vector2 movement;
 
     public GameObject box;
-
+    public Animator animator;
     public bool GETIsPicked
     {
         set
@@ -24,7 +28,6 @@ public class VillagerCharacter : MonoBehaviour
             if (isPicked != value)
             {
                 isPicked = value;
-                
             }
         }
         get
@@ -42,8 +45,6 @@ public class VillagerCharacter : MonoBehaviour
     {
         MovementHandler();
         PickUp();
-
-
     }
 
 
@@ -55,8 +56,7 @@ public class VillagerCharacter : MonoBehaviour
             vertical *= 0.7f;
         }
 
-        rb2D.velocity = new Vector2(horiznotal * speed, vertical * speed);
-
+        rb2D.MovePosition(rb2D.position+movement*speed*Time.deltaTime);
         Flip(horiznotal,vertical);
 
     }
@@ -69,11 +69,15 @@ public class VillagerCharacter : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
 
-            Vector3 scale = transform.localScale;
 
-            scale.x *= -1;
-            transform.localScale = scale;
+            //Vector2 scale = transform.localScale;
+
+            //scale.x *= -1;
+            //transform.localScale = scale;
         }
+
+
+
 
         //if (vertical > 0 &&!isFacingUp || vertical<0 && isFacingUp)
         //{
@@ -88,7 +92,7 @@ public class VillagerCharacter : MonoBehaviour
     public virtual void PickUp()
     {
         Physics2D.queriesStartInColliders = false;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left * transform.localScale,distance);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position,movement,distance);
 
         if (Input.GetKeyDown(KeyCode.Q) && hit.collider != null)
         {
@@ -104,19 +108,36 @@ public class VillagerCharacter : MonoBehaviour
             GETIsPicked = false;
 
         }
+    }
 
+
+    public virtual void GetDamage(int amount)
+    {
+
+
+    }
+
+    public virtual void Hp()
+    {
+        currentHp = Maxhp;
     }
 
     private void OnDrawGizmos()  //to see the RayCast
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + Vector2.left * transform.localScale * distance);
+        Gizmos.DrawLine(transform.position,movement * distance);
     }
 
     public virtual void MovementHandler()
     {
-        horiznotal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+        animator.SetFloat("horizontal",movement.x);
+        animator.SetFloat("vertical",movement.y);
+        animator.SetFloat("Speed",movement.sqrMagnitude);
+
+
+
     }
 
 

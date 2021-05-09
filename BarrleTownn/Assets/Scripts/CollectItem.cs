@@ -23,10 +23,6 @@ public class CollectItem : MonoBehaviour
         }
     }
 
-    public void PickedUp(GameObject item)
-    {
-
-
-    }
+    
 
 }
