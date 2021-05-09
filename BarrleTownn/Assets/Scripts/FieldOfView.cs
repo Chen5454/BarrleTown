@@ -19,6 +19,10 @@ public class FieldOfView : MonoBehaviour
 	[SerializeField] Camera camera;
 	UniversalAdditionalCameraData camData;
 	public static UnityEngine.Rendering.RenderPipelineAsset renderPipelineAsset;
+
+
+
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -97,11 +101,11 @@ public class FieldOfView : MonoBehaviour
 		isNightTime = true;
 		if (_IsWerewolf)
 		{
-			viewDistance = 2.5f;
+			viewDistance = GameManager.getInstance.wolfViewRange;
 		}
 		else
 		{
-			viewDistance = 1f;
+			viewDistance = GameManager.getInstance.VillageViewRange;
 		}
 	}
 

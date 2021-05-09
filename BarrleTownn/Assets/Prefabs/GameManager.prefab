@@ -43,10 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420bdf8def8b5da4ab1ec2a79dcdf70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fov: {fileID: 0}
+  playersList: []
+  votePhase:
+    playerVoteSpots: []
+  player: {fileID: 0}
   gamePhase: 0
   dayTime: 5
   nightTime: 5
-  voteTime: 5
   waitForVoteTime: 2.5
+  voteTime: 5
   timer: 0
   canVote: 0

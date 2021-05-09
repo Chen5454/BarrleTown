@@ -13,38 +13,53 @@ public enum GamePhases
 }
 public class GameManager : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] FieldOfView fov;
-    [Header("Phases")]
+    static GameManager _instance;
+    public static GameManager getInstance => _instance;
+
+
+    //[Header("References")]
+    FieldOfView fov;
     public List<GameObject> playersList;
     public VotePhase votePhase;
-    [Header("Current Phase")]
+    [SerializeField] VillagerCharacter player;
+
+    [Header("Phases")]
     [SerializeField]
     GamePhases gamePhase;
-
-    [Header("Timers")]
     [SerializeField]
     float dayTime;
     [SerializeField]
     float nightTime;
     [SerializeField]
-    float voteTime;
-    [SerializeField]
     float waitForVoteTime; // this will have to be lower then vote time, how long players will have to wait untill they can vote someone
+    [SerializeField]
+    float voteTime;
 
+    
+    [Space(10)]
     [SerializeField]
     private float timer;
     [SerializeField]
     bool canVote;
 
-    [SerializeField]
-    VillagerCharacter player;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    [Header("Village Stats")]
+    public float VillageViewRange;
+    public float villageSpeed;
+    
+    [Header("Werewolf Stats")]
+    public float wolfViewRange;
+    public float wolfSpeed;
+
+
+
+
+    private void Awake()
+	{
         InitGame();
     }
+	// Start is called before the first frame update
+	
 
     // Update is called once per frame
     void Update()
@@ -74,6 +89,9 @@ public class GameManager : MonoBehaviour
     {
         timer = dayTime;
         gamePhase = GamePhases.Day;
+        fov = FindObjectOfType<FieldOfView>();
+        if (_instance == null)
+            _instance = this;
     }
 
     public void SwitchGamePhases()
@@ -84,7 +102,7 @@ public class GameManager : MonoBehaviour
                 gamePhase = GamePhases.Night;
                 timer = nightTime;
                 Debug.Log("Switching to Night");
-                fov.SetNightFOV(true);
+                fov.SetNightFOV(IfPlayerIsWerewolf());
                 break;
             case GamePhases.Night://switches to talk
                 gamePhase = GamePhases.talk;
@@ -110,6 +128,15 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+    public bool IfPlayerIsWerewolf()
+	{
+        if(player as WereWolfCharacter)
+		{
+            return true;
+		}
+        return false;
+	}
 
     #region Day_Region
     
