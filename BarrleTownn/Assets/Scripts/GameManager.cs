@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
     private float timer;
     [SerializeField]
     bool canVote;
+
+    [SerializeField]
+    VillagerCharacter player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +51,10 @@ public class GameManager : MonoBehaviour
     {
         GameTimers();
 
-
+        if(player != null)
+		{
+            fov.SetOrigin(player.gameObject.transform.position);
+		}
 
     }
 
