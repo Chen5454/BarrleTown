@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-
         Debug.Log("Game Manger is now On");
     }
 
@@ -57,9 +56,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             GameTimers();
         }
        
-
-
-
     }
 
     private void OnLevelWasLoaded(int level)
