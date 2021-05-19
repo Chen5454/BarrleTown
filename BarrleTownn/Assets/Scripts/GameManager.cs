@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("Phases")]
     public List<GameObject> playersList;
     public VotePhase votePhase;
+    bool isGameActive = false;
     [Header("Current Phase")]
     [SerializeField]
     GamePhases gamePhase;
@@ -44,16 +45,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        InitGame();
+
+        Debug.Log("Game Manger is now On");
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameTimers();
+        if (isGameActive)
+        {
+            GameTimers();
+        }
+       
 
 
 
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        if (level == 3)
+        {
+            InitGame();
+
+        }
     }
 
     public void GameTimers()
@@ -72,6 +87,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         timer = dayTime;
         gamePhase = GamePhases.Day;
+        isGameActive = true;
     }
 
     public void SwitchGamePhases()
