@@ -12,15 +12,19 @@ public class VillagerCharacter : MonoBehaviour
     Rigidbody2D rb2D;
     private bool isFacingRight;
     private bool isFacingUp;
-    public CollectItem item;
+    public bool canMove;
     private bool isPicked;
     public float distance;
     public int currentHp;
     public int Maxhp;
-    private Vector2 movement;
+    [HideInInspector]
+    public Vector2 movement;
+
+    public InteractItem hidebehind;
+    public SpriteRenderer playeRenderer;
 
     public GameObject box;
-    public Animator animator;
+    //public Animator animator;
     public bool GETIsPicked
     {
         set
@@ -39,6 +43,7 @@ public class VillagerCharacter : MonoBehaviour
     private void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        canMove = true;
     }
 
     public virtual void Update()
@@ -94,13 +99,17 @@ public class VillagerCharacter : MonoBehaviour
         Physics2D.queriesStartInColliders = false;
         RaycastHit2D hit = Physics2D.Raycast(transform.position,movement,distance);
 
-        if (Input.GetKeyDown(KeyCode.Q) && hit.collider != null)
-        {
-            GETIsPicked = true;
-            box = hit.collider.gameObject;
-           box.transform.parent = gameObject.transform;
-           speed = speed / 2;
-        }
+        
+        
+            if (Input.GetKeyDown(KeyCode.Q) && hit.collider != null && hit.collider.CompareTag("Pickup"))
+            {
+                GETIsPicked = true;
+                box = hit.collider.gameObject;
+                box.transform.parent = gameObject.transform;
+                speed = speed / 2;
+            }
+        
+     
         else if (Input.GetKeyUp(KeyCode.Q)&& GETIsPicked)
         {
             box.transform.parent = null;
@@ -109,6 +118,8 @@ public class VillagerCharacter : MonoBehaviour
 
         }
     }
+
+ 
 
 
     public virtual void GetDamage(int amount)
@@ -122,22 +133,22 @@ public class VillagerCharacter : MonoBehaviour
         currentHp = Maxhp;
     }
 
-    private void OnDrawGizmos()  //to see the RayCast
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position,movement * distance);
-    }
+    //private void OnDrawGizmos()  //to see the RayCast
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawLine(transform.position,movement * distance);
+    //}
 
     public virtual void MovementHandler()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-        animator.SetFloat("horizontal",movement.x);
-        animator.SetFloat("vertical",movement.y);
-        animator.SetFloat("Speed",movement.sqrMagnitude);
-
-
-
+        if (canMove)
+        {
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+            //animator.SetFloat("horizontal",movement.x);
+            //animator.SetFloat("vertical",movement.y);
+            //animator.SetFloat("Speed",movement.sqrMagnitude);
+        }
     }
 
 
