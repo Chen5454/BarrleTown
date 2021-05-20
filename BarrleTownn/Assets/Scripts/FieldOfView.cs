@@ -19,6 +19,10 @@ public class FieldOfView : MonoBehaviour
 	[SerializeField] Camera camera;
 	UniversalAdditionalCameraData camData;
 	public static UnityEngine.Rendering.RenderPipelineAsset renderPipelineAsset;
+
+
+
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -30,7 +34,7 @@ public class FieldOfView : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = mesh;
 		black.SetActive(false);
 		isNightTime = false;
-
+		origin = Vector3.zero;
 	}
 	private void LateUpdate()
 	{
@@ -39,10 +43,6 @@ public class FieldOfView : MonoBehaviour
 
 		if (isNightTime)
 		{
-
-
-			origin = Vector3.zero;
-			
 			float angle = 0f;
 			float angleIncrease = fov / rayCount;
 		
@@ -86,14 +86,6 @@ public class FieldOfView : MonoBehaviour
 				angle -= angleIncrease;
 			}
 
-
-			//vertices[1] = new Vector3(50,0);
-			//vertices[2] = new Vector3(0, -50);
-
-			//triangles[0] = 0;
-			//triangles[1] = 1;
-			//triangles[2] = 2;
-
 			mesh.vertices = vertices;
 			mesh.uv = uv;
 			mesh.triangles = triangles;
@@ -109,16 +101,12 @@ public class FieldOfView : MonoBehaviour
 		isNightTime = true;
 		if (_IsWerewolf)
 		{
-			viewDistance = 2.5f;
+			viewDistance = GameManager.getInstance.wolfViewRange;
 		}
 		else
 		{
-			viewDistance = 1f;
+			viewDistance = GameManager.getInstance.VillageViewRange;
 		}
-
-
-
-
 	}
 
 	public void SetDayFOV()
@@ -139,10 +127,6 @@ public class FieldOfView : MonoBehaviour
 	public void SetOrigin(Vector3 origin)
 	{
 		this.origin = origin;
-	}
-	public void SetAimDirection(Vector3 aimDirection)
-	{
-
 	}
 
 }
