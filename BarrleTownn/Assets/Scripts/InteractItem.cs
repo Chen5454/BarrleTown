@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class InteractItem : MonoBehaviour
 {
@@ -12,11 +13,13 @@ public class InteractItem : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
+
         if (other.collider.gameObject.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
             canHide = true;
             spriteRenderer.sortingOrder = 2;
-            player.transform.position = gameObject.transform.position;
+            player.playeRenderer.enabled = false;
+            //player.transform.position = gameObject.transform.position;
             player.canMove = false;
         }
         else if (Input.GetKeyUp(KeyCode.E))
@@ -24,6 +27,7 @@ public class InteractItem : MonoBehaviour
             canHide = false;
             spriteRenderer.sortingOrder = 0;
             player.canMove = true;
+            player.playeRenderer.enabled = true;
 
 
         }
