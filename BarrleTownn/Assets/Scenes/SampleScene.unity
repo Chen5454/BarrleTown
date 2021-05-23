@@ -624,6 +624,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1606366867}
   canHide: 0
+  barrel: 1
+  bush: 0
   spriteRenderer: {fileID: 1250729666}
 --- !u!1 &1606366864 stripped
 GameObject:
