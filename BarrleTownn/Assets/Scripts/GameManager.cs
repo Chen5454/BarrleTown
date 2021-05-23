@@ -16,11 +16,12 @@ public enum GamePhases
 public class GameManager : MonoBehaviourPunCallbacks
 {
 	private static GameManager _instance;
-	public static GameManager getInstance;
+	public static GameManager getInstance => _instance;
 
 	[Header("References")]
 	[SerializeField] FieldOfView fov;
 	[Header("Phases")]
+	public List<string> playersNameList;
 	public List<GameObject> playersList;
 	public VotePhase votePhase;
 	bool isGameActive = false;
@@ -186,8 +187,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerEnteredRoom(Player other)
 	{
-		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
+
+		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -251,8 +253,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	#endregion
-
-
+	public void AddToPlayerList(string playerName)
+	{
+		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
+	}
+	[PunRPC]
+	void RPC_AddToPlayerList(string playerName)
+	{
+		playersNameList.Add(playerName);
+		Debug.Log("Added name: " + playerName);
+	}
 
 }
 [Serializable]

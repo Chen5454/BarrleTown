@@ -18,7 +18,7 @@ namespace Afik.MultiProject.BarrelTown
 
         // Store the PlayerPref Key to avoid typos
         const string playerNamePrefKey = "PlayerName";
-
+        public string playerName;
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace Afik.MultiProject.BarrelTown
                 }
 
             }
-
+        
             PhotonNetwork.NickName = defaultName;
         }
 
@@ -57,6 +57,7 @@ namespace Afik.MultiProject.BarrelTown
                 Debug.LogError("Player Name is null or empty");
                 return;
             }
+            playerName = value;
             PhotonNetwork.NickName = value;
 
             PlayerPrefs.SetString(playerNamePrefKey, value);
