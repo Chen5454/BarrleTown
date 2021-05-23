@@ -191,6 +191,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
+		if(photonView.IsMine)
+			AddToPlayerList(other.NickName);
+
 		if (PhotonNetwork.IsMasterClient)
 		{
 			Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
