@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
+		RemovePlayerFromList(other.NickName);
 
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -265,6 +266,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
+	}
+	public void RemovePlayerFromList(string playerName)
+	{
+		int listIndex = playersNameList.IndexOf(playerName);
+		playersNameList.RemoveAt(listIndex);
+		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 
 }
