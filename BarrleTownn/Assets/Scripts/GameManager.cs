@@ -99,6 +99,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void InitGame()
 	{
+		if (fov == null)
+			fov = FindObjectOfType<FieldOfView>();
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
