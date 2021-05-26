@@ -20,11 +20,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	[Header("References")]
 	[SerializeField] FieldOfView fov;
+	[SerializeField] BarrelManager barrelManager;
 	[Header("Phases")]
 	public List<string> playersNameList;
 	public List<GameObject> playersList;
 	public VotePhase votePhase;
-	bool isGameActive = false;
+	[SerializeField] bool isGameActive = false;
 	[Header("Current Phase")]
 	[SerializeField]
 	GamePhases gamePhase;
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 			_instance = this;
 			DontDestroyOnLoad(this);
 		}
-		else if(_instance != this)
+		else if (_instance != this)
 		{
 			Destroy(this);
 		}
@@ -115,6 +116,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 				fov.SetNightFOV(true);
+				if (!barrelManager.canStartGeneration)
+					barrelManager.canStartGeneration = true;
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
@@ -122,6 +125,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
+
+				barrelManager.GenerateBarrels();
 				break;
 			case GamePhases.talk://switches to Vote
 
@@ -193,7 +198,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
-		if(photonView.IsMine)
+		if (photonView.IsMine)
 			AddToPlayerList(other.NickName);
 
 		if (PhotonNetwork.IsMasterClient)
