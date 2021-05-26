@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Photon.Pun;
+﻿using Photon.Pun;
+using UnityEngine;
 public class BarrelSpawnRegion : MonoBehaviour
 {
 	public Transform[] spawnLocations;
@@ -52,7 +52,7 @@ public class BarrelSpawnRegion : MonoBehaviour
 		{
 			if (loopIndex > 0)
 			{
-				
+
 				if (!CheckIfRegionIsFull())
 				{
 					int spawnLocationIndex = Random.Range(0, spawnLocations.Length);
@@ -109,11 +109,14 @@ public class BarrelSpawnRegion : MonoBehaviour
 	public void InstantiateBarrel(Transform trans)
 	{
 
-		GameObject barrel = Instantiate(barrelPF, trans.position, new Quaternion() ,barrelParent);
+		//GameObject barrel = Instantiate(barrelPF, trans.position, new Quaternion() ,barrelParent);
 
 		//multiplayer instantiate
-		//GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
-		//barrel.transform.SetParent(barrelParent);
+		if (PhotonNetwork.IsMasterClient)
+		{
+			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
+			barrel.transform.SetParent(barrelParent);
+		}
 	}
 	private void OnDrawGizmos()
 	{

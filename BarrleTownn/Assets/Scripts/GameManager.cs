@@ -13,7 +13,7 @@ public enum GamePhases
 	talk,
 	Vote
 }
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
 	private static GameManager _instance;
 	public static GameManager getInstance => _instance;
@@ -48,6 +48,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField]
 	bool canVote;
 
+
+	public VillagerCharacter player;
+
 	private void Awake()
 	{
 		if (_instance == null)
@@ -72,14 +75,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		if (isGameActive)
 		{
-			GameTimers();
+				GameTimers();
+			if (fov != null)
+			{
+				fov.SetOrigin();
+			}
 		}
+
 
 	}
 
 	private void OnLevelWasLoaded(int level)
 	{
-		if (level == 3)
+		if (level == 2)
 		{
 			InitGame();
 
@@ -90,6 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		if (timer >= 0)
 		{
+
 			timer -= Time.deltaTime;
 		}
 		else
@@ -100,12 +109,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void InitGame()
 	{
+		GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+		player = _player.GetComponent<VillagerCharacter>();
+
 		if (fov == null)
 			fov = FindObjectOfType<FieldOfView>();
+		if (barrelManager == null)
+			barrelManager = FindObjectOfType<BarrelManager>();
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
 	}
+
 
 	public void SwitchGamePhases()
 	{
@@ -145,6 +160,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 		}
 	}
+
+
+	
+
+
+
+
 
 	#region Day_Region
 
@@ -281,6 +303,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 
+	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	{
+		if (stream.IsReading)
+		{
+			gamePhase = (GamePhases)stream.ReceiveNext();
+
+		}
+		else if (stream.IsWriting)
+		{
+			stream.SendNext(gamePhase);
+		}
+	}
 }
 [Serializable]
 public class VotePhase
