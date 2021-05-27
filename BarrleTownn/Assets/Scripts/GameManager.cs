@@ -13,19 +13,18 @@ public enum GamePhases
 	talk,
 	Vote
 }
-public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
+public class GameManager : MonoBehaviourPunCallbacks
 {
 	private static GameManager _instance;
 	public static GameManager getInstance => _instance;
 
 	[Header("References")]
 	[SerializeField] FieldOfView fov;
-	[SerializeField] BarrelManager barrelManager;
 	[Header("Phases")]
 	public List<string> playersNameList;
 	public List<GameObject> playersList;
 	public VotePhase votePhase;
-	[SerializeField] bool isGameActive = false;
+	bool isGameActive = false;
 	[Header("Current Phase")]
 	[SerializeField]
 	GamePhases gamePhase;
@@ -48,9 +47,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 	[SerializeField]
 	bool canVote;
 
-
-	public VillagerCharacter player;
-
 	private void Awake()
 	{
 		if (_instance == null)
@@ -58,7 +54,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 			_instance = this;
 			DontDestroyOnLoad(this);
 		}
-		else if (_instance != this)
+		else if(_instance != this)
 		{
 			Destroy(this);
 		}
@@ -75,19 +71,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 	{
 		if (isGameActive)
 		{
-				GameTimers();
-			if (fov != null)
-			{
-				fov.SetOrigin();
-			}
+			GameTimers();
 		}
-
 
 	}
 
 	private void OnLevelWasLoaded(int level)
 	{
-		if (level == 2)
+		if (level == 3)
 		{
 			InitGame();
 
@@ -98,7 +89,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 	{
 		if (timer >= 0)
 		{
-
 			timer -= Time.deltaTime;
 		}
 		else
@@ -109,18 +99,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 	public void InitGame()
 	{
-		GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-		player = _player.GetComponent<VillagerCharacter>();
-
-		if (fov == null)
-			fov = FindObjectOfType<FieldOfView>();
-		if (barrelManager == null)
-			barrelManager = FindObjectOfType<BarrelManager>();
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
 	}
-
 
 	public void SwitchGamePhases()
 	{
@@ -131,8 +113,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 				fov.SetNightFOV(true);
-				if (!barrelManager.canStartGeneration)
-					barrelManager.canStartGeneration = true;
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
@@ -140,8 +120,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
-
-				barrelManager.GenerateBarrels();
 				break;
 			case GamePhases.talk://switches to Vote
 
@@ -160,13 +138,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 				break;
 		}
 	}
-
-
-	
-
-
-
-
 
 	#region Day_Region
 
@@ -220,7 +191,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
-		if (photonView.IsMine)
+		if(photonView.IsMine)
 			AddToPlayerList(other.NickName);
 
 		if (PhotonNetwork.IsMasterClient)
@@ -303,18 +274,6 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 
-	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-	{
-		if (stream.IsReading)
-		{
-			gamePhase = (GamePhases)stream.ReceiveNext();
-
-		}
-		else if (stream.IsWriting)
-		{
-			stream.SendNext(gamePhase);
-		}
-	}
 }
 [Serializable]
 public class VotePhase

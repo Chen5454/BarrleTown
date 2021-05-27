@@ -124,13 +124,9 @@ public class FieldOfView : MonoBehaviour
 	}
 
 
-	public void SetOrigin()
+	public void SetOrigin(Vector3 origin)
 	{
-		if(GameManager.getInstance.player != null)
-		{
-			this.origin = GameManager.getInstance.player.transform.position;
-		}
-		
+		this.origin = origin;
 	}
 
 }
