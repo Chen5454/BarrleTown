@@ -9,7 +9,7 @@ public class VillagerCharacter : MonoBehaviour
     public float speed;
     float horiznotal;
     float vertical;
-    Rigidbody2D rb2D;
+    public Rigidbody2D rb2D;
     private bool isFacingRight;
     private bool isFacingUp;
     public bool canMove;
@@ -22,7 +22,7 @@ public class VillagerCharacter : MonoBehaviour
 
     public InteractItem hidebehind;
     public SpriteRenderer playeRenderer;
-
+    private GameManager gameManager;
     public GameObject box;
     //public Animator animator;
     public bool GETIsPicked
@@ -42,16 +42,20 @@ public class VillagerCharacter : MonoBehaviour
 
     private void Start()
     {
-        rb2D = GetComponent<Rigidbody2D>();
+       // rb2D = GetComponent<Rigidbody2D>();
         canMove = true;
     }
 
     public virtual void Update()
     {
-        MovementHandler();
-        PickUp();
+        if (GameManager.getInstance.photonView.IsMine)
+        {
+            MovementHandler();
+            PickUp();
+        }
     }
 
+ 
 
     public virtual void FixedUpdate()
     {
@@ -62,23 +66,23 @@ public class VillagerCharacter : MonoBehaviour
         }
 
         rb2D.MovePosition(rb2D.position+movement*speed*Time.deltaTime);
-        Flip(horiznotal,vertical);
+
+        Flip(horiznotal);
 
     }
 
 
 
-    public void Flip(float horiznotal,float vertical)
+    public void Flip(float horiznotal)
     {
         if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
         {
             isFacingRight = !isFacingRight;
 
 
-            //Vector2 scale = transform.localScale;
-
-            //scale.x *= -1;
-            //transform.localScale = scale;
+            Vector2 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;
         }
 
 
@@ -94,7 +98,7 @@ public class VillagerCharacter : MonoBehaviour
         //}
     }
 
-    public virtual void PickUp()
+    public void PickUp()
     {
         Physics2D.queriesStartInColliders = false;
         RaycastHit2D hit = Physics2D.Raycast(transform.position,movement,distance);
@@ -125,12 +129,17 @@ public class VillagerCharacter : MonoBehaviour
     public virtual void GetDamage(int amount)
     {
 
+        currentHp -= amount;
 
     }
 
     public virtual void Hp()
     {
-        currentHp = Maxhp;
+
+        if (currentHp > Maxhp)
+        {
+            currentHp = Maxhp;
+        }
     }
 
     //private void OnDrawGizmos()  //to see the RayCast

@@ -929,7 +929,7 @@ MonoBehaviour:
   minPlayersToStart: 2
   roomCountDisplay: {fileID: 1786244888}
   timerToStartDisplay: {fileID: 1785093796}
-  maxWaitTime: 30
+  maxWaitTime: 5
   maxFullGameWaitTime: 5
 --- !u!4 &679583362
 Transform:

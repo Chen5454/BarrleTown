@@ -9,7 +9,7 @@ using Photon.Realtime;
 namespace Afik.MultiProject.BarrelTown
 {
 
-    /// Player name input field. Let the user input his name, will appear above the player in the game.
+    /// MovementAnimation name input field. Let the user input his name, will appear above the player in the game.
     [RequireComponent(typeof(InputField))]
     public class PlayerNameInputField : MonoBehaviour
     {
@@ -48,13 +48,13 @@ namespace Afik.MultiProject.BarrelTown
         #region Public Methods
 
         /// Sets the name of the player, and save it in the PlayerPrefs for future sessions.
-        /// <param name="value">The name of the Player</param>
+        /// <param name="value">The name of the MovementAnimation</param>
 
         public void SetPlayerName(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
-                Debug.LogError("Player Name is null or empty");
+                Debug.LogError("MovementAnimation Name is null or empty");
                 return;
             }
             playerName = value;
