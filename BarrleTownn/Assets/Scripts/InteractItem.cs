@@ -6,6 +6,8 @@ using UnityEngine.Analytics;
 
 public class InteractItem : MonoBehaviour
 {
+    public RecipeItems contain;
+
     public VillagerCharacter player;
     public bool canHide;
     public bool barrel;
