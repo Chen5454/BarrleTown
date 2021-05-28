@@ -1,15 +1,17 @@
 ﻿using System;
+using Photon.Realtime;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VillagerCharacter : MonoBehaviour
+public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
 
     public float speed;
     float horiznotal;
     float vertical;
-    public Rigidbody2D rb2D;
+    private Rigidbody2D rb2D;
     private bool isFacingRight;
     private bool isFacingUp;
     public bool canMove;
@@ -42,33 +44,39 @@ public class VillagerCharacter : MonoBehaviour
 
     private void Start()
     {
-       // rb2D = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
         canMove = true;
     }
 
     public virtual void Update()
     {
-        if (GameManager.getInstance.photonView.IsMine)
+        if (photonView.IsMine)
         {
             MovementHandler();
             PickUp();
         }
+         
+        
     }
 
  
 
     public virtual void FixedUpdate()
     {
-        if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+        if (photonView.IsMine)
         {
-            horiznotal *= 0.7f;
-            vertical *= 0.7f;
+
+
+            if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+            {
+                horiznotal *= 0.7f;
+                vertical *= 0.7f;
+            }
+
+            rb2D.MovePosition(rb2D.position + movement * speed * Time.deltaTime);
+
+            Flip(horiznotal);
         }
-
-        rb2D.MovePosition(rb2D.position+movement*speed*Time.deltaTime);
-
-        Flip(horiznotal);
-
     }
 
 
