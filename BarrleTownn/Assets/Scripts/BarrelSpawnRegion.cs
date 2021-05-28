@@ -116,7 +116,8 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 		{
 			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
 			_barrel = barrel;
-			photonView.RPC("RPC_RandomizeBarrel", RpcTarget.AllBufferedViaServer,RandomizeBarrelType());
+			_barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
+			//photonView.RPC("RPC_RandomizeBarrel", RpcTarget.AllBufferedViaServer,RandomizeBarrelType());
 			//barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
 			barrel.transform.SetParent(barrelParent);
 		}
@@ -130,6 +131,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 	[PunRPC]
 	void RPC_RandomizeBarrel(RecipeItems _item)
 	{
+		
 		_barrel.GetComponent<InteractItem>().contain = _item;
 	}
 	RecipeItems RandomizeBarrelType()

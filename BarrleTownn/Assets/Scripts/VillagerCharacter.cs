@@ -23,7 +23,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	private GameManager gameManager;
 	public GameObject box;
 	//public Animator animator;
-
+	UIManager uiManager; 
 
 	public bool GETIsPicked
 	{
@@ -44,6 +44,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
+		
 	}
 
 	public virtual void Update()
@@ -52,6 +53,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			MovementHandler();
 			PickUp();
+
+
+
+
+
 		}
 
 
@@ -167,6 +173,17 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			//animator.SetFloat("Speed",movement.sqrMagnitude);
 		}
 	}
+
+
+
+
+
+	#region PunRPC
+
+	#endregion
+
+
+
 
 
 }
