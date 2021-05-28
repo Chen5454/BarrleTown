@@ -68,5 +68,8 @@ public class ShopUI : MonoBehaviour
 		return tempColor[2];
 	}
 
+	
+
+
 
 }

@@ -1,6 +1,6 @@
 ﻿using Photon.Pun;
 using UnityEngine;
-public class BarrelSpawnRegion : MonoBehaviour
+public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 {
 	public Transform[] spawnLocations;
 	public bool[] hasBarrelNearBy;
@@ -115,9 +115,26 @@ public class BarrelSpawnRegion : MonoBehaviour
 		if (PhotonNetwork.IsMasterClient)
 		{
 			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
+			_barrel = barrel;
+			photonView.RPC("RPC_RandomizeBarrel", RpcTarget.AllBufferedViaServer,RandomizeBarrelType());
+			//barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
 			barrel.transform.SetParent(barrelParent);
 		}
 	}
+	GameObject _barrel;
+	[PunRPC]
+	void RPC_RandomizeBarrel(RecipeItems _item)
+	{
+		_barrel.GetComponent<InteractItem>().contain = _item;
+	}
+	RecipeItems RandomizeBarrelType()
+	{
+		int randomizer = Random.Range(1, 3);
+		RecipeItems test = (RecipeItems)randomizer;
+		return test;
+	}
+
+
 	private void OnDrawGizmos()
 	{
 		Gizmos.color = Color.red;
