@@ -1,15 +1,17 @@
 ﻿using System;
+using Photon.Realtime;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VillagerCharacter : MonoBehaviour
+public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
 
     public float speed;
     float horiznotal;
     float vertical;
-    Rigidbody2D rb2D;
+    private Rigidbody2D rb2D;
     private bool isFacingRight;
     private bool isFacingUp;
     public bool canMove;
@@ -22,7 +24,7 @@ public class VillagerCharacter : MonoBehaviour
 
     public InteractItem hidebehind;
     public SpriteRenderer playeRenderer;
-
+    private GameManager gameManager;
     public GameObject box;
     //public Animator animator;
     public bool GETIsPicked
@@ -48,37 +50,47 @@ public class VillagerCharacter : MonoBehaviour
 
     public virtual void Update()
     {
-        MovementHandler();
-        PickUp();
+        if (photonView.IsMine)
+        {
+            MovementHandler();
+            PickUp();
+        }
+         
+        
     }
 
+ 
 
     public virtual void FixedUpdate()
     {
-        if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+        if (photonView.IsMine)
         {
-            horiznotal *= 0.7f;
-            vertical *= 0.7f;
+
+
+            if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+            {
+                horiznotal *= 0.7f;
+                vertical *= 0.7f;
+            }
+
+            rb2D.MovePosition(rb2D.position + movement * speed * Time.deltaTime);
+
+            Flip(horiznotal);
         }
-
-        rb2D.MovePosition(rb2D.position+movement*speed*Time.deltaTime);
-        Flip(horiznotal,vertical);
-
     }
 
 
 
-    public void Flip(float horiznotal,float vertical)
+    public void Flip(float horiznotal)
     {
         if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
         {
             isFacingRight = !isFacingRight;
 
 
-            //Vector2 scale = transform.localScale;
-
-            //scale.x *= -1;
-            //transform.localScale = scale;
+            Vector2 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;
         }
 
 
@@ -94,7 +106,7 @@ public class VillagerCharacter : MonoBehaviour
         //}
     }
 
-    public virtual void PickUp()
+    public void PickUp()
     {
         Physics2D.queriesStartInColliders = false;
         RaycastHit2D hit = Physics2D.Raycast(transform.position,movement,distance);
@@ -125,12 +137,17 @@ public class VillagerCharacter : MonoBehaviour
     public virtual void GetDamage(int amount)
     {
 
+        currentHp -= amount;
 
     }
 
     public virtual void Hp()
     {
-        currentHp = Maxhp;
+
+        if (currentHp > Maxhp)
+        {
+            currentHp = Maxhp;
+        }
     }
 
     //private void OnDrawGizmos()  //to see the RayCast
