@@ -1,23 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ShopUI : MonoBehaviour
 {
-    public Shop shopRef;
+	public Shop shopRef;
 
-    [Header("Show Recipe")]
-    public Image[] itemImage;
-    public TextMeshProUGUI[] itemAmountText;
+	[Header("Show Recipe")]
+	public Image[] itemImage;
+	public TextMeshProUGUI[] itemAmountText;
 	public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 
-	public void ShowRecipe()
+	public void ShowRecipe(int[] amountAquired)
 	{
-		for (int i = 0; i < shopRef.currentRecipe.recipe.Length; i++)
+		for (int i = 0; i < shopRef.currentRecipe.recipe.Count; i++)
 		{
-			if(i < shopRef.currentRecipe.recipe.Length)
+			if (i < shopRef.currentRecipe.recipe.Count)
 			{
 				itemImage[i].gameObject.SetActive(true);
 				itemImage[i].color = GetColorByItemType(shopRef.currentRecipe.recipe[i]);
@@ -28,8 +26,30 @@ public class ShopUI : MonoBehaviour
 				itemImage[i].gameObject.SetActive(false);
 			}
 		}
+		ShowNeededAmountOfRecipe(amountAquired);
 	}
 
+
+
+
+
+
+	void ShowNeededAmountOfRecipe(int[] amountAquired)
+	{
+
+		for (int i = 0; i < shopRef.currentRecipe.recipe.Count; i++)
+		{
+			int required = shopRef.currentRecipe.amountRequired[i] - amountAquired[i];
+			if (required < 0)
+				required = 0;
+
+			if (i < shopRef.currentRecipe.recipe.Count)
+			{
+				itemAmountText[i].text = required.ToString();
+			}
+		}
+
+	}
 	public Color GetColorByItemType(RecipeItems _item)
 	{
 		switch (_item)
@@ -49,4 +69,4 @@ public class ShopUI : MonoBehaviour
 	}
 
 
-	}
+}

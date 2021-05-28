@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -841,7 +841,11 @@ MonoBehaviour:
   currentRecipe:
     recipe: 0100000002000000
     amountRequired: 0200000003000000
+  amountRequired:
+    recipe: 
+    amountRequired: 
   itemInside: 
+  uiManager: {fileID: 454505791}
 --- !u!1 &454505790
 GameObject:
   m_ObjectHideFlags: 0
@@ -2783,11 +2787,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 442621266}
     m_Modifications:
-    - target: {fileID: -8380314885598888430, guid: 77c9e7e6c30aff4458370805b443056b,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8091340677481369614, guid: 77c9e7e6c30aff4458370805b443056b,
         type: 3}
       propertyPath: m_RootOrder
@@ -2848,13 +2847,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: VillagerPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 8091340677481369618, guid: 77c9e7e6c30aff4458370805b443056b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -8380314885598888430, guid: 77c9e7e6c30aff4458370805b443056b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77c9e7e6c30aff4458370805b443056b, type: 3}
 --- !u!1 &1420859419
 GameObject:

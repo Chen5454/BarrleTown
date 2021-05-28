@@ -6,8 +6,9 @@ public class UIManager : MonoBehaviour
 {
     public ShopUI shop;
 
-    // Start is called before the first frame update
-    void Start()
+	
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -17,7 +18,7 @@ public class UIManager : MonoBehaviour
     {
 		if (Input.GetKeyDown(KeyCode.V))
 		{
-            shop.ShowRecipe();
+            
         }
     }
 }

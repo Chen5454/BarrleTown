@@ -13,9 +13,11 @@ public class Shop : MonoBehaviour
     [Header("Recipe")]
     public ShopRecipe shopRecipe;
     public Recipe currentRecipe;
+    public Recipe amountRequired;
     public List<RecipeItems> itemInside = new List<RecipeItems>();
 
-    //[Header("Shop Recipe show")]
+	[Header("references")]
+	public UIManager uiManager;
     //public SpriteRenderer[] recipeItemShow;
     //public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
     //public Sprite[] amountSprites;
@@ -86,32 +88,71 @@ public class Shop : MonoBehaviour
 	public void CheckIfRecipeCompleted()
 	{
         int correctAmountOfItems = 0;
-		for (int i = 0; i < currentRecipe.recipe.Length; i++)
+
+		amountRequired = currentRecipe;
+		int[] test = new int[amountRequired.amountRequired.Count];
+		for (int i = 0; i < amountRequired.recipe.Count; i++)
 		{
 			for (int j = 0; j < itemInside.Count; j++)
 			{
-                if(currentRecipe.recipe[i] == itemInside[j])
+				if(amountRequired.recipe[i] == itemInside[j])
 				{
-                    correctAmountOfItems += 1;
-                    itemInside.RemoveAt(j);
-                    break;
-                }
-			}
-		}
+					test[i] += 1;
+					
+				}
 
-        if(correctAmountOfItems == currentRecipe.recipe.Length)
-		{
-            Debug.Log("Crafted item: " + " item name");
-        }
-		else
-		{
-            Debug.Log("not enough to craft item: " + " item name");
-        }
-        Debug.Log("Amount of Aquired item: " + correctAmountOfItems);
+
+			}
+			Debug.Log("Aquired: " + test[i]);
+		}
+		uiManager.shop.ShowRecipe(test);
+
+
+  //      Recipe itemCache = new Recipe();
+  //      itemCache.recipe = new List<RecipeItems>();
+
+		//      for (int i = 0; i < itemInside.Count; i++)
+		//{
+		//          itemCache.recipe.Add(itemInside[i]);
+
+		//      }
+
+
+
+		//      int test = 0;
+
+
+		//for (int i = 0; i < currentRecipe.recipe.Count; i++)
+		//{
+		//          test += currentRecipe.amountRequired[i];
+
+		//          for (int j = 0; j < itemCache.recipe.Count; j++)
+		//	{
+		//              if(currentRecipe.recipe[i] == itemCache.recipe[j])
+		//		{
+		//                  correctAmountOfItems += 1;
+		//                  itemCache.recipe.RemoveAt(j);
+		//                  break;
+		//              }
+		//	}
+		//}
+
+
+
+		//      if(correctAmountOfItems == currentRecipe.recipe.Count)
+		//{
+		//          Debug.Log("Crafted item: " + " item name");
+		//      }
+		//else
+		//{
+		//          Debug.Log("not enough to craft item: " + " item name");
+		//      }
+		//      Debug.Log("Amount of Aquired item: " + correctAmountOfItems);
 
 
 
 	}
+
 
 	private void OnDrawGizmos()
 	{
@@ -138,7 +179,10 @@ public class ShopRecipe
 [Serializable]
 public class Recipe
 {
-    public RecipeItems[] recipe;
-    public int[] amountRequired;
+    public List<RecipeItems> recipe;
+    public List<int> amountRequired;
+
+
+
     //item 
 }
