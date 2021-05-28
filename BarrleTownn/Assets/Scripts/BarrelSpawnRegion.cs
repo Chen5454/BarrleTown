@@ -121,6 +121,11 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 			barrel.transform.SetParent(barrelParent);
 		}
 	}
+
+
+
+
+
 	GameObject _barrel;
 	[PunRPC]
 	void RPC_RandomizeBarrel(RecipeItems _item)

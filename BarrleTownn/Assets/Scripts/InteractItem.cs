@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
-
-public class InteractItem : MonoBehaviour
+using Photon.Pun;
+public class InteractItem : MonoBehaviourPunCallbacks
 {
     public RecipeItems contain;
 
@@ -13,8 +13,14 @@ public class InteractItem : MonoBehaviour
     public bool barrel;
     public bool bush;
     public SpriteRenderer spriteRenderer;
+    public OwnerShipTranfer transfer;
 
-    private void OnCollisionStay2D(Collision2D other)
+
+	
+
+
+
+	private void OnCollisionStay2D(Collision2D other)
     {
         if (barrel)
         {
@@ -25,6 +31,7 @@ public class InteractItem : MonoBehaviour
                 player.playeRenderer.enabled = false;
                 //player.transform.position = gameObject.transform.position;
                 player.canMove = false;
+                transfer.PickingUp();
             }
             else if (Input.GetKeyUp(KeyCode.E))
             {
