@@ -765,6 +765,7 @@ Transform:
   m_Children:
   - {fileID: 1224863042}
   - {fileID: 374820562}
+  - {fileID: 467791141}
   m_Father: {fileID: 1251748401}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -839,15 +840,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   shopRecipe:
-    RecipeList: []
+    RecipeList:
+    - recipe: 
+      amountRequired: 
+      recipeReward: {fileID: 0}
   currentRecipe:
     recipe: 0100000002000000
     amountRequired: 0200000003000000
+    recipeReward: {fileID: 11400000, guid: e25f4dea770e0cb419e73ecf38cf98c0, type: 2}
   amountRequired:
     recipe: 
     amountRequired: 
+    recipeReward: {fileID: 0}
   itemInside: 
+  rewardSpawnPosition: {fileID: 467791141}
   uiManager: {fileID: 454505791}
+  itemBank: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
 --- !u!1 &454505790
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,6 +1002,36 @@ MonoBehaviour:
   - {r: 0.5660378, g: 0.29951498, b: 0, a: 1}
   - {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   recipeUI: {fileID: 2014933325}
+--- !u!1 &467791140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 467791141}
+  m_Layer: 0
+  m_Name: RewardDropPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &467791141
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467791140}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.039, y: -0.004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 446726420}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &487549251
 GameObject:
   m_ObjectHideFlags: 0

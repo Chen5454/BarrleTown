@@ -23,7 +23,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	private GameManager gameManager;
 	public GameObject box;
 	//public Animator animator;
-	UIManager uiManager; 
+	UIManager uiManager;
 
 	public bool GETIsPicked
 	{
@@ -44,7 +44,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
-		
+
 	}
 
 	public virtual void Update()
@@ -130,7 +130,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 		else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
 		{
-			box.transform.parent = null;
+			if (box != null)
+				box.transform.parent = null;
 			speed = speed * 2;
 			GETIsPicked = false;
 

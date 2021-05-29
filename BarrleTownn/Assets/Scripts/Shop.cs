@@ -15,16 +15,21 @@ public class Shop : MonoBehaviourPunCallbacks
 	public ShopRecipe shopRecipe;
 	public Recipe currentRecipe;
 	public Recipe amountRequired;
-	public List<RecipeItems> itemInside = new List<RecipeItems>();
+	public List<InteractItem> itemInside;
+
+	[Header("Reward Related")]
+	public Transform rewardSpawnPosition;
 
 	[Header("references")]
 	public UIManager uiManager;
+	public ItemBankSO itemBank;
+
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
 	int playersInsideShopRegion;
 	int barrelsInsideShopRegion;
-
+	public bool canGetReward;
 
 	void Update()
 	{
@@ -83,7 +88,7 @@ public class Shop : MonoBehaviourPunCallbacks
 					}
 				}
 
-				if(playerIndex != -1)
+				if (playerIndex != -1)
 				{
 					uiManager.shop.ShowRecipePanel(true);
 				}
@@ -96,7 +101,8 @@ public class Shop : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			//uiManager.shop.ShowRecipePanel(false);
+			if (uiManager.shop.recipeUI.activeInHierarchy)
+				uiManager.shop.ShowRecipePanel(false);
 			playersInsideShopRegion = 0;
 		}
 
@@ -105,22 +111,24 @@ public class Shop : MonoBehaviourPunCallbacks
 
 
 
+
+	public void GenerateNewShopRecipe()
+	{
+		canGetReward = true;
+	}
+
+
 	public void CheckDropSite()
 	{
-		itemInside = new List<RecipeItems>();
+		itemInside = new List<InteractItem>();
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
 		for (int i = 0; i < insideBarrels.Length; i++)
 		{
-			itemInside.Add(insideBarrels[i].GetComponent<InteractItem>().contain);
+			itemInside.Add(insideBarrels[i].GetComponent<InteractItem>());
 		}
 
 
 	}
-
-
-
-
-
 	public void CheckIfRecipeCompleted()
 	{
 		int correctAmountOfItems = 0;
@@ -131,7 +139,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			for (int j = 0; j < itemInside.Count; j++)
 			{
-				if (amountRequired.recipe[i] == itemInside[j])
+				if (amountRequired.recipe[i] == itemInside[j].contain)
 				{
 					test[i] += 1;
 
@@ -146,8 +154,13 @@ public class Shop : MonoBehaviourPunCallbacks
 			GameManager.getInstance.ShowRecipeOnUI(test);
 
 		}
-		if (CheckIfCompletedRecipe(test))
+		if (CheckIfCompletedRecipe(test) && canGetReward)
+		{
 			Debug.LogError("Collected all materials required: Instantiateing item: " + "ItemName");
+			canGetReward = false;
+			SpawnItemRecipe();
+			DeleteBarrelsFromDropZone();
+		}
 		else
 		{
 			Debug.LogError("Didn't collected all required materials");
@@ -156,6 +169,27 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	}
 
+
+	public void DeleteBarrelsFromDropZone()
+	{
+		for (int i = 0; i < currentRecipe.amountRequired.Count; i++)
+		{
+			for (int k = 0; k < itemInside.Count; k++)
+			{
+				if (currentRecipe.recipe[i] == itemInside[k].contain)
+				{
+					PhotonNetwork.Destroy(itemInside[k].photonView);
+				}
+			}
+		}
+		for (int i = 0; i < itemInside.Count; i++)
+		{
+			if (itemInside[i] == null)
+				itemInside.RemoveAt(i);
+		}
+
+
+	}
 
 
 	bool CheckIfCompletedRecipe(int[] intArray)
@@ -172,6 +206,21 @@ public class Shop : MonoBehaviourPunCallbacks
 			return false;
 
 	}
+
+
+
+
+	public void SpawnItemRecipe()
+	{
+		GameObject reward = PhotonNetwork.Instantiate("Pickable", rewardSpawnPosition.position, new Quaternion());
+		reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
+	}
+
+
+
+
+
+
 
 	private void OnDrawGizmos()
 	{
@@ -200,7 +249,7 @@ public class Recipe
 {
 	public List<RecipeItems> recipe;
 	public List<int> amountRequired;
-
+	public ItemSO recipeReward;
 
 
 	//item 

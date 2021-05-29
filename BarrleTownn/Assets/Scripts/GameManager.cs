@@ -140,11 +140,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
-
+				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
 				barrelManager.GenerateBarrels();
 				break;
 			case GamePhases.talk://switches to Vote
-
 				gamePhase = GamePhases.Vote;
 				timer = voteTime;
 				canVote = true;
