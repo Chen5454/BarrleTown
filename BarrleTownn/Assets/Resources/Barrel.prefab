@@ -101,8 +101,6 @@ MonoBehaviour:
   contain: 1
   player: {fileID: 0}
   canHide: 0
-  barrel: 1
-  bush: 0
   spriteRenderer: {fileID: 2509538891122064827}
   transfer: {fileID: -6168727787695638968}
 --- !u!114 &75972220418790823

@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		if (isGameActive)
 		{
-				GameTimers();
+			GameTimers();
 			if (fov != null)
 			{
 				fov.SetOrigin();
@@ -142,7 +142,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
-				ShowNewGeneratedRecipe();
+				if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
+					ShowNewGeneratedRecipe();
 				barrelManager.GenerateBarrels();
 				break;
 			case GamePhases.talk://switches to Vote
@@ -163,7 +164,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 
-	
+
 
 
 

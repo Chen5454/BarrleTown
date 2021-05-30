@@ -30,7 +30,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	int playersInsideShopRegion;
 	int barrelsInsideShopRegion;
 	public bool canGetReward;
-
+	public bool canGenerateNewRecipe;
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.V))
@@ -114,6 +114,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	{
 		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
 		currentRecipe = shopRecipe.RecipeList[randomizer];
+		canGenerateNewRecipe = false;
 	}
 
 
@@ -163,6 +164,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			Debug.LogError("Collected all materials required: Instantiateing item: " + "ItemName");
 			canGetReward = false;
+			canGenerateNewRecipe = true;
 			SpawnItemRecipe();
 			DeleteBarrelsFromDropZone();
 		}

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: WoodenShoe
   m_EditorClassIdentifier: 
   itemName: Wooden Shoe
-  shoeSpeed: 0
+  itemSprite: {fileID: 21300000, guid: ced1b843c30506746a556ebeb9485e14, type: 3}
+  shoeSpeed: 1
