@@ -106,10 +106,10 @@ public class LobbyController : MonoBehaviourPunCallbacks
             PlayerCountUpdate();
     }
 
-        private void Update()
-        {
+    private void Update()
+    {
             WaitingForMorePlayers();
-        }
+    }
 
         void WaitingForMorePlayers()
         {

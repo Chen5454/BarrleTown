@@ -243,8 +243,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
+			//LoadArena();
 
-			LoadArena();
+
+			//future::Check win condition 
 		}
 	}
 
