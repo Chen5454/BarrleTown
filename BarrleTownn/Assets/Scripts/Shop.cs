@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Shop : MonoBehaviourPunCallbacks
 {
+
 	[Header("Drop site Related")]
 	public Transform dropSite;
 	public Vector2 dropSiteRadius;
 	public LayerMask barrelMask;
+	public LayerMask playerMask;
 
 	[Header("Recipe")]
 	public ShopRecipe shopRecipe;
@@ -20,6 +22,10 @@ public class Shop : MonoBehaviourPunCallbacks
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
+	int playersInsideShopRegion;
+	int barrelsInsideShopRegion;
+
+
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.V))
@@ -27,10 +33,77 @@ public class Shop : MonoBehaviourPunCallbacks
 			if (PhotonNetwork.IsMasterClient)
 			{
 				CheckDropSite();
-				photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+				GameManager.getInstance.CheckIfRecipeCompleted();
+				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
 			}
 		}
+
+
+		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
+		Collider2D[] insidePlayers = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, playerMask);
+		//barrels
+		if (insideBarrels.Length > 0)
+		{
+			Debug.Log("Barrel Inside: " + insideBarrels.Length);
+			if (barrelsInsideShopRegion != insideBarrels.Length)
+			{
+				barrelsInsideShopRegion = insideBarrels.Length;
+				if (PhotonNetwork.IsMasterClient)
+				{
+					CheckDropSite();
+					GameManager.getInstance.CheckIfRecipeCompleted();
+					//GameManager.getInstance.CheckIfRecipeCompleted();photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+				}
+			}
+
+		}
+		else
+		{
+			barrelsInsideShopRegion = 0;
+		}
+
+		//players
+		if (insidePlayers.Length > 0)
+		{
+			Debug.Log("People Inside: " + insidePlayers.Length);
+			if (playersInsideShopRegion != insidePlayers.Length)
+			{
+				playersInsideShopRegion = insidePlayers.Length;
+
+				CheckDropSite();
+				GameManager.getInstance.CheckIfRecipeCompleted();
+				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+
+				int playerIndex = -1;
+				for (int i = 0; i < insidePlayers.Length; i++)
+				{
+					if (insidePlayers[i].gameObject.GetPhotonView().IsMine)
+					{
+						playerIndex = i;
+					}
+				}
+
+				if(playerIndex != -1)
+				{
+					uiManager.shop.ShowRecipePanel(true);
+				}
+				else
+				{
+					uiManager.shop.ShowRecipePanel(false);
+				}
+
+			}
+		}
+		else
+		{
+			//uiManager.shop.ShowRecipePanel(false);
+			playersInsideShopRegion = 0;
+		}
+
 	}
+
+
+
 
 	public void CheckDropSite()
 	{
@@ -45,55 +118,6 @@ public class Shop : MonoBehaviourPunCallbacks
 	}
 
 
-	//   public void ShowRecipeOnShop()
-	//{
-	//	for (int i = 0; i < recipeItemShow.Length; i++)
-	//	{
-	//           if(i < currentRecipe.recipe.Length)
-	//		{
-	//               recipeItemShow[i].gameObject.SetActive(true);
-	//               recipeItemShow[i].color = GetRecipeItemSprite(currentRecipe.recipe[i]);
-	//               recipeItemShow[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = GetAmountOfItemSprite(currentRecipe.amountRequired[i]);
-	//               //change sprite to fit the recipe
-
-	//           }
-	//		else
-	//		{
-	//               recipeItemShow[i].gameObject.SetActive(false);
-	//           }
-	//	}
-	//}
-
-
-	//   public Color GetRecipeItemSprite(RecipeItems _item)
-	//{
-	//	switch (_item)
-	//	{
-	//		case RecipeItems.Empty:
-	//			break;
-	//		case RecipeItems.Wood:
-	//               return tempColor[0];
-	//		case RecipeItems.Leather:
-	//               return tempColor[1];
-	//		case RecipeItems.Metal:
-	//               return tempColor[2];
-	//           default:
-	//			break;
-	//	}
-	//       return tempColor[2];
-	//   }
-
-	//   public Sprite GetAmountOfItemSprite(int amount)
-	//{
-	//      return amountSprites[amount];
-	//   }
-
-
-	[PunRPC]
-	void RPC_CheckIfRecipeCompleted()
-	{
-		CheckIfRecipeCompleted();
-	}
 
 
 
@@ -118,7 +142,10 @@ public class Shop : MonoBehaviourPunCallbacks
 			Debug.Log("Aquired: " + test[i]);
 		}
 		if (PhotonNetwork.IsMasterClient)
-			photonView.RPC("RPC_ShowRecipeOnUI", RpcTarget.AllBufferedViaServer, test);
+		{
+			GameManager.getInstance.ShowRecipeOnUI(test);
+
+		}
 		if (CheckIfCompletedRecipe(test))
 			Debug.LogError("Collected all materials required: Instantiateing item: " + "ItemName");
 		else
@@ -129,11 +156,7 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	}
 
-	[PunRPC]
-	void RPC_ShowRecipeOnUI(int[] _array)
-	{
-		uiManager.shop.ShowRecipe(_array);
-	}
+
 
 	bool CheckIfCompletedRecipe(int[] intArray)
 	{

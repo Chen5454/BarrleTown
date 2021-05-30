@@ -13,7 +13,7 @@ public enum GamePhases
 	talk,
 	Vote
 }
-public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
+public class GameManager : MonoBehaviourPunCallbacks
 {
 	private static GameManager _instance;
 	public static GameManager getInstance => _instance;
@@ -303,18 +303,27 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 
-	public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	#region PUNRPC
+	public void ShowRecipeOnUI(int[] test)
 	{
-		if (stream.IsReading)
-		{
-			gamePhase = (GamePhases)stream.ReceiveNext();
-
-		}
-		else if (stream.IsWriting)
-		{
-			stream.SendNext(gamePhase);
-		}
+		photonView.RPC("RPC_ShowRecipeOnUI", RpcTarget.AllBufferedViaServer, test);
 	}
+	public void CheckIfRecipeCompleted()
+	{
+		photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+	}
+
+	[PunRPC]
+	void RPC_ShowRecipeOnUI(int[] _array)
+	{
+		UIManager.getInstance.shop.ShowRecipe(_array);
+	}
+	[PunRPC]
+	void RPC_CheckIfRecipeCompleted()
+	{
+		UIManager.getInstance.shop.shopRef.CheckIfRecipeCompleted();
+	}
+	#endregion
 }
 [Serializable]
 public class VotePhase

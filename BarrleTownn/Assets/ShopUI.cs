@@ -10,7 +10,7 @@ public class ShopUI : MonoBehaviour
 	public Image[] itemImage;
 	public TextMeshProUGUI[] itemAmountText;
 	public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
-
+	public GameObject recipeUI;
 	public void ShowRecipe(int[] amountAquired)
 	{
 		for (int i = 0; i < shopRef.currentRecipe.recipe.Count; i++)
@@ -31,7 +31,10 @@ public class ShopUI : MonoBehaviour
 
 
 
-
+	public void ShowRecipePanel(bool _show)
+	{
+		recipeUI.SetActive(_show);
+	}
 
 
 	void ShowNeededAmountOfRecipe(int[] amountAquired)
