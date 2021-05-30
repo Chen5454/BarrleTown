@@ -37,8 +37,9 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			if (PhotonNetwork.IsMasterClient)
 			{
-				CheckDropSite();
-				GameManager.getInstance.CheckIfRecipeCompleted();
+				
+				//CheckDropSite();
+				//GameManager.getInstance.CheckIfRecipeCompleted();
 				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
 			}
 		}
@@ -109,7 +110,11 @@ public class Shop : MonoBehaviourPunCallbacks
 	}
 
 
-
+	public void GenerateNewRecipe()
+	{
+		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
+		currentRecipe = shopRecipe.RecipeList[randomizer];
+	}
 
 
 	public void GenerateNewShopRecipe()

@@ -17,9 +17,9 @@ public class ShopUI : MonoBehaviour
 		{
 			if (i < shopRef.currentRecipe.recipe.Count)
 			{
-				itemImage[i].gameObject.SetActive(true);
 				itemImage[i].color = GetColorByItemType(shopRef.currentRecipe.recipe[i]);
 				itemAmountText[i].text = shopRef.currentRecipe.amountRequired[i].ToString();
+				itemImage[i].gameObject.SetActive(true);
 			}
 			else
 			{

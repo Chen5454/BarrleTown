@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -841,9 +841,15 @@ MonoBehaviour:
     m_Bits: 1024
   shopRecipe:
     RecipeList:
-    - recipe: 
-      amountRequired: 
-      recipeReward: {fileID: 0}
+    - recipe: 0100000003000000
+      amountRequired: 0100000002000000
+      recipeReward: {fileID: 11400000, guid: e25f4dea770e0cb419e73ecf38cf98c0, type: 2}
+    - recipe: 0100000002000000
+      amountRequired: 0200000001000000
+      recipeReward: {fileID: 11400000, guid: d2639614ef589c44daabd73badb1de93, type: 2}
+    - recipe: 0100000002000000
+      amountRequired: 0200000001000000
+      recipeReward: {fileID: 11400000, guid: 84e1dff44033c2e43b126ffabbade289, type: 2}
   currentRecipe:
     recipe: 0100000002000000
     amountRequired: 0200000003000000
@@ -852,10 +858,11 @@ MonoBehaviour:
     recipe: 
     amountRequired: 
     recipeReward: {fileID: 0}
-  itemInside: 
+  itemInside: []
   rewardSpawnPosition: {fileID: 467791141}
   uiManager: {fileID: 454505791}
   itemBank: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
+  canGetReward: 0
 --- !u!1 &454505790
 GameObject:
   m_ObjectHideFlags: 0

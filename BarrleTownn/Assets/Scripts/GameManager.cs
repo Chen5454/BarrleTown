@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
+		barrelManager.GenerateBarrels();
 	}
 
 
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
+				ShowNewGeneratedRecipe();
 				barrelManager.GenerateBarrels();
 				break;
 			case GamePhases.talk://switches to Vote
@@ -303,6 +305,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	#region PUNRPC
+	public void ShowNewGeneratedRecipe()
+	{
+		if (PhotonNetwork.IsMasterClient)
+			photonView.RPC("RPC_ShowNewGeneratedRecipe", RpcTarget.AllBufferedViaServer);
+	}
+
 	public void ShowRecipeOnUI(int[] test)
 	{
 		photonView.RPC("RPC_ShowRecipeOnUI", RpcTarget.AllBufferedViaServer, test);
@@ -310,6 +318,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void CheckIfRecipeCompleted()
 	{
 		photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+	}
+	[PunRPC]
+	void RPC_ShowNewGeneratedRecipe()
+	{
+		UIManager.getInstance.shop.shopRef.GenerateNewRecipe();
 	}
 
 	[PunRPC]
