@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -929,7 +929,7 @@ MonoBehaviour:
   minPlayersToStart: 2
   roomCountDisplay: {fileID: 1786244888}
   timerToStartDisplay: {fileID: 1785093796}
-  maxWaitTime: 5
+  maxWaitTime: 10
   maxFullGameWaitTime: 5
 --- !u!4 &679583362
 Transform:
@@ -1912,6 +1912,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 679583361}
+    - target: {fileID: 2991955243708854636, guid: ddad781d59180a846bfbb4491067daa3,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeaveRoom
       objectReference: {fileID: 0}
     - target: {fileID: 4970579262635200858, guid: ddad781d59180a846bfbb4491067daa3,
         type: 3}
