@@ -139,6 +139,12 @@ public class LobbyController : MonoBehaviourPunCallbacks
             }
         }
 
+
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+            SceneManager.LoadScene(menuSceneIndex);
+        }
         private void ResetTimer()
         {
             timerToStartGame = maxWaitTime;
