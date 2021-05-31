@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3212625945752258771}
   - component: {fileID: -6168727787695638968}
   - component: {fileID: 2509538891122064824}
+  - component: {fileID: 1250729672}
   m_Layer: 31
   m_Name: Barrel
   m_TagString: Pickup
@@ -99,10 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contain: 1
-  player: {fileID: 0}
-  canHide: 0
-  barrel: 1
-  bush: 0
+  player: {fileID: 8091340677481369612, guid: 77c9e7e6c30aff4458370805b443056b, type: 3}
   spriteRenderer: {fileID: 2509538891122064827}
   transfer: {fileID: -6168727787695638968}
 --- !u!114 &75972220418790823
@@ -125,7 +123,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3212625945752258771}
-  sceneViewId: 1
+  sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3212625945752258771
@@ -181,4 +179,30 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.44, y: 0.36249924}
+  m_EdgeRadius: 0
+--- !u!61 &1250729672
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2509538891122064825}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.020263925, y: 0.026754618}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.44, y: 0.46}
+    newSize: {x: 0.44, y: 0.46}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.75279117, y: 0.6755272}
   m_EdgeRadius: 0
