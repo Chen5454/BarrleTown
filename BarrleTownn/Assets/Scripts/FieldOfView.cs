@@ -101,11 +101,11 @@ public class FieldOfView : MonoBehaviour
 		isNightTime = true;
 		if (_IsWerewolf)
 		{
-			//viewDistance = GameManager.getInstance.wolfViewRange;
+			viewDistance = GameManager.getInstance.wolfViewRange;
 		}
 		else
 		{
-			//viewDistance = GameManager.getInstance.VillageViewRange;
+			viewDistance = GameManager.getInstance.VillageViewRange;
 		}
 	}
 

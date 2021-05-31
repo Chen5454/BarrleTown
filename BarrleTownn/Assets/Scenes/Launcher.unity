@@ -816,8 +816,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
         type: 3}
+      propertyPath: timer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: canVote
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: voteTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
       propertyPath: isGameActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: wolfViewRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: waitForVoteTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: VillageViewRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: playersNameList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: playersNameList.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: playersNameList.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2091848494673899823, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
         type: 3}
@@ -850,23 +895,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 1159640609}
+  ObservedComponents: []
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1159640609 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1159640606}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159640607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420bdf8def8b5da4ab1ec2a79dcdf70b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1248270514
 GameObject:
   m_ObjectHideFlags: 0

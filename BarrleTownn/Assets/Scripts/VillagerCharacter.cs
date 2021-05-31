@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
-
 	public float speed;
 	float horiznotal;
 	float vertical;
-	private Rigidbody2D rb2D;
+	public Rigidbody2D rb2D;
 	private bool isFacingRight;
 	private bool isFacingUp;
 	public bool canMove;
@@ -172,6 +171,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			//animator.SetFloat("horizontal",movement.x);
 			//animator.SetFloat("vertical",movement.y);
 			//animator.SetFloat("Speed",movement.sqrMagnitude);
+		}
+		else
+		{
+			if(movement.x != 0 && movement.y != 0)
+			{
+				movement.x = 0;
+				movement.y = 0;
+			}
 		}
 	}
 
