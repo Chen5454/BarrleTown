@@ -37,7 +37,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			if (PhotonNetwork.IsMasterClient)
 			{
-				
+
 				//CheckDropSite();
 				//GameManager.getInstance.CheckIfRecipeCompleted();
 				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
@@ -112,9 +112,12 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	public void GenerateNewRecipe()
 	{
-		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
-		currentRecipe = shopRecipe.RecipeList[randomizer];
-		canGenerateNewRecipe = false;
+		if (PhotonNetwork.IsMasterClient)
+		{
+			int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
+			currentRecipe = shopRecipe.RecipeList[randomizer];
+			canGenerateNewRecipe = false;
+		}
 	}
 
 
@@ -179,24 +182,65 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	public void DeleteBarrelsFromDropZone()
 	{
+
+		List<InteractItem> destroyableBarrels = new List<InteractItem>();
+
 		for (int i = 0; i < currentRecipe.amountRequired.Count; i++)
 		{
-			for (int k = 0; k < itemInside.Count; k++)
+			for (int j = 0; j < itemInside.Count; j++)
 			{
-				if (currentRecipe.recipe[i] == itemInside[k].contain)
+				if (currentRecipe.recipe[i] == itemInside[j].contain)
 				{
-					PhotonNetwork.Destroy(itemInside[k].photonView);
+
+
+					//Debug.Log("Preparing to destroy barrels");
+					destroyableBarrels.Add(itemInside[j]);
+					checkList(destroyableBarrels);
+					
+
+
 				}
 			}
 		}
-		for (int i = 0; i < itemInside.Count; i++)
+
+		
+
+		
+
+	}
+
+	void checkList(List<InteractItem> _barrels)
+	{
+		int[] amountChecker = new int[currentRecipe.amountRequired.Count];
+
+		for (int i = 0; i < amountChecker.Length; i++)
 		{
-			if (itemInside[i] == null)
-				itemInside.RemoveAt(i);
+			for (int j = 0; j < _barrels.Count; j++)
+			{
+				if(_barrels[j].contain == currentRecipe.recipe[i])
+				{
+					amountChecker[i]++;
+					if(amountChecker[i] <= currentRecipe.amountRequired[i])
+					{
+						Debug.Log("Destroying barrels: " + i);
+						PhotonNetwork.Destroy(_barrels[j].gameObject.GetPhotonView());
+					}
+				}
+			}
 		}
 
 
+
+
+		//for (int i = itemInside.Count; i > 0; i--)
+		//{
+		//	if(itemInside[i] == null)
+		//	{
+		//		itemInside.RemoveAt(i);
+		//	}
+		//}
 	}
+
 
 
 	bool CheckIfCompletedRecipe(int[] intArray)
