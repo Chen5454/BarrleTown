@@ -1170,7 +1170,11 @@ MonoBehaviour:
   - {fileID: 698704929}
   - {fileID: 512109911}
   maxWaitTime: 30
+<<<<<<< Updated upstream
   maxFullGameWaitTime: 5
+=======
+  maxFullGameWaitTime: 20
+>>>>>>> Stashed changes
 --- !u!4 &679583362
 Transform:
   m_ObjectHideFlags: 0
