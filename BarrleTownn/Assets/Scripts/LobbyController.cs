@@ -173,6 +173,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < playerNameFields.Length; i++)
             {
+<<<<<<< HEAD
 
 				//   1 > 0 = true
 				if (i < GameManager.getInstance.playersNameList.Count)
@@ -186,6 +187,19 @@ public class LobbyController : MonoBehaviourPunCallbacks
 				//}
 
 			}
+=======
+                //   1 > 0 = true
+                //if (i < GameManager.getInstance.playersNameList.Count)
+                //{
+                    playerNameFields[i].SetActive(true);
+                    playerNameFields[i].transform.GetChild(0).GetComponent<Text>().text = GM.playersNameList[i];
+                //}
+                //else
+                //{
+                //    playerNameFields[i].SetActive(false);
+                //}
+            }
+>>>>>>> parent of 2969ba1 (trying stufgf)
              
         }
 
