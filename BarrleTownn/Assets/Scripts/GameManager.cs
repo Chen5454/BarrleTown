@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		}
 		else if (_instance != this)
 		{
-			Destroy(this);
+			Destroy(this.gameObject);
 		}
 	}
 

@@ -149,6 +149,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
 
         public void LeaveRoom()
         {
+            Destroy(GameManager.getInstance.gameObject);
             PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene(menuSceneIndex);
         }
