@@ -422,7 +422,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
 
-		lobbyCon.ShowPlayerName();
+		if (lobbyCon != null)
+			lobbyCon.ShowPlayerName();
 
 	}
 	public void RemovePlayerFromList(string playerName)
@@ -434,7 +435,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		int listIndex = playersNameList.IndexOf(playerName);
 		playersNameList.RemoveAt(listIndex);
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
-		lobbyCon.ShowPlayerName();
+		if (lobbyCon != null)
+			lobbyCon.ShowPlayerName();
 	}
 
 	#region PUNRPC
