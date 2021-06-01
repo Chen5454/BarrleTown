@@ -123,6 +123,10 @@ namespace Afik.MultiProject.BarrelTown
 		{
 			Debug.Log("Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
 				GameManager.getInstance.AddToPlayerList(playerInput.playerName);
+
+
+
+
 			// We only load if we are the first player, else we rely on `PhotonNetwork.AutomaticallySyncScene` to sync our instance scene.
 			if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
 			{

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1160,8 +1160,16 @@ MonoBehaviour:
   minPlayersToStart: 2
   roomCountDisplay: {fileID: 1786244888}
   timerToStartDisplay: {fileID: 1785093796}
-  playerNameFields: []
-  maxWaitTime: 10
+  playerNameFields:
+  - {fileID: 60826071}
+  - {fileID: 1930983868}
+  - {fileID: 425760014}
+  - {fileID: 1621849763}
+  - {fileID: 537774690}
+  - {fileID: 1238378398}
+  - {fileID: 698704929}
+  - {fileID: 512109911}
+  maxWaitTime: 30
   maxFullGameWaitTime: 5
 --- !u!4 &679583362
 Transform:

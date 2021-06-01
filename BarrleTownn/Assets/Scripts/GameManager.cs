@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Afik.MultiProject.BarrelTown;
 #region Elor's work
 public enum GamePhases
 {
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] BarrelManager barrelManager;
 	[SerializeField] CameraController camera;
 	[SerializeField] VotingArea votingArea;
+	[SerializeField] LobbyController lobbyCon;
+	
 	[Header("Phases")]
 	public List<string> playersNameList;
 	public List<VillagerCharacter> playersList;
@@ -407,6 +409,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void AddToPlayerList(string playerName)
 	{
+		if (lobbyCon == null)
+			lobbyCon = FindObjectOfType<LobbyController>();
+
+		
+
 		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 	[PunRPC]
@@ -414,12 +421,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
+
+		lobbyCon.ShowPlayerName();
+
 	}
 	public void RemovePlayerFromList(string playerName)
 	{
+		if (lobbyCon == null)
+			lobbyCon = FindObjectOfType<LobbyController>();
+
+
 		int listIndex = playersNameList.IndexOf(playerName);
 		playersNameList.RemoveAt(listIndex);
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
+		lobbyCon.ShowPlayerName();
 	}
 
 	#region PUNRPC
