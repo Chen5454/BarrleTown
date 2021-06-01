@@ -29,9 +29,12 @@ public class LobbyController : MonoBehaviourPunCallbacks
     private Text roomCountDisplay;
     [SerializeField]
     private Text timerToStartDisplay;
+   [SerializeField]
+    private GameObject[] playerNameFields;
+    
 
-    // timer bools
-    private bool readyToCountDown; 
+        // timer bools
+        private bool readyToCountDown; 
     private bool readyToStart;
     private bool startingGame;
 
@@ -46,6 +49,8 @@ public class LobbyController : MonoBehaviourPunCallbacks
     private float maxWaitTime;
     [SerializeField]
     private float maxFullGameWaitTime;
+
+        GameManager GM => GameManager.getInstance;
 
 
     void Start()
@@ -77,6 +82,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
             readyToCountDown = false;
             readyToStart = false;
         }
+            ShowPlayerName();
     }
 
 
@@ -104,6 +110,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
             PlayerCountUpdate();
+
     }
 
     private void Update()
@@ -160,6 +167,24 @@ public class LobbyController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.LoadLevel(multiplayerSceneIndex);
         }
+
+        public void ShowPlayerName() 
+        {
+            for (int i = 0; i < playerNameFields.Length; i++)
+            {
+                if (GM.playersNameList.Count > i)
+                {
+                    playerNameFields[i].SetActive(true);
+                    playerNameFields[i].transform.GetChild(0).GetComponent<Text>().text = GM.playersNameList[i];
+                }
+                else
+                {
+                    playerNameFields[i].SetActive(false);
+                }
+            }
+             
+        }
+
 
 
 
