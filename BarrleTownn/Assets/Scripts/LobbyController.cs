@@ -173,22 +173,19 @@ public class LobbyController : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < playerNameFields.Length; i++)
             {
-<<<<<<< Updated upstream
-                //   1 > 0 = true
-                //if (i < GameManager.getInstance.playersNameList.Count)
-                //{
-                    playerNameFields[i].SetActive(true);
+
+				//   1 > 0 = true
+				if (i < GameManager.getInstance.playersNameList.Count)
+				{
+					playerNameFields[i].SetActive(true);
                     playerNameFields[i].transform.GetChild(0).GetComponent<Text>().text = GM.playersNameList[i];
-                //}
-                //else
-                //{
-                //    playerNameFields[i].SetActive(false);
-                //}
-=======
-                    playerNameFields[i].SetActive(true);
-                    playerNameFields[i].transform.GetChild(0).GetComponent<Text>().text = GM.playersNameList[i];
->>>>>>> Stashed changes
-            }
+				}
+				//else
+				//{
+				//    playerNameFields[i].SetActive(false);
+				//}
+
+			}
              
         }
 
