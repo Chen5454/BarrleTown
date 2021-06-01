@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Afik.MultiProject.BarrelTown;
+using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Afik.MultiProject.BarrelTown;
 #region Elor's work
 public enum GamePhases
 {
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] CameraController camera;
 	[SerializeField] VotingArea votingArea;
 	[SerializeField] LobbyController lobbyCon;
-	
+
 	[Header("Phases")]
 	public List<string> playersNameList;
 	public List<VillagerCharacter> playersList;
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		}
 		StartCoroutine(delayedList());
 
-		
+
 	}
 
 	IEnumerator delayedList()
@@ -295,7 +295,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	
+
 
 	#endregion
 
@@ -343,7 +343,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void KillVotedPlayer(int playerIndex)
 	{
-		photonView.RPC("RPC_KillVotedPlayer",RpcTarget.AllBufferedViaServer,playerIndex);
+		photonView.RPC("RPC_KillVotedPlayer", RpcTarget.AllBufferedViaServer, playerIndex);
 	}
 
 	[PunRPC]
@@ -357,9 +357,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-	public void GetPlayerVotes(int index,int amount)
+	public void GetPlayerVotes(int index, int amount)
 	{
-		photonView.RPC("RPC_GetVotes",RpcTarget.AllBufferedViaServer,index,amount);
+		photonView.RPC("RPC_GetVotes", RpcTarget.AllBufferedViaServer, index, amount);
 	}
 	[PunRPC]
 	void RPC_GetVotes(int index, int amount)
@@ -395,7 +395,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[PunRPC]
 	void RPC_SetPlayersAtVotingPosition()
 	{
-			votingArea.MovePlayersToVotingArea(this.playersList);
+		votingArea.MovePlayersToVotingArea(this.playersList);
 	}
 
 
@@ -409,10 +409,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void AddToPlayerList(string playerName)
 	{
-		if (lobbyCon == null)
-			lobbyCon = FindObjectOfType<LobbyController>();
 
-		
+
+
 
 		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
@@ -422,8 +421,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
 
-		if (lobbyCon != null)
-			lobbyCon.ShowPlayerName();
+
 
 	}
 	public void RemovePlayerFromList(string playerName)
@@ -435,8 +433,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 		int listIndex = playersNameList.IndexOf(playerName);
 		playersNameList.RemoveAt(listIndex);
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
+
+	}
+
+
+	public void TryToShowPlayerNames()
+	{
+		if (lobbyCon == null && FindObjectOfType<LobbyController>() != null)
+			lobbyCon = FindObjectOfType<LobbyController>();
 		if (lobbyCon != null)
+		{
 			lobbyCon.ShowPlayerName();
+		}
+
 	}
 
 	#region PUNRPC
@@ -471,6 +480,24 @@ public class GameManager : MonoBehaviourPunCallbacks
 		UIManager.getInstance.shop.shopRef.CheckIfRecipeCompleted();
 	}
 	#endregion
+
+
+	public override void OnJoinedRoom()
+	{
+		TryToShowPlayerNames();
+	}
+	public override void OnJoinedLobby()
+	{
+		TryToShowPlayerNames();
+	}
+
+	public override void OnLeftLobby()
+	{
+		TryToShowPlayerNames();
+	}
+
+
+
 }
 [Serializable]
 public class VotePhase
