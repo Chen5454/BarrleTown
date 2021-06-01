@@ -174,6 +174,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
             for (int i = 0; i < playerNameFields.Length; i++)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 				//   1 > 0 = true
 				if (i < GameManager.getInstance.playersNameList.Count)
@@ -188,6 +189,8 @@ public class LobbyController : MonoBehaviourPunCallbacks
 
 			}
 =======
+=======
+>>>>>>> parent of 2969ba1 (trying stufgf)
                 //   1 > 0 = true
                 //if (i < GameManager.getInstance.playersNameList.Count)
                 //{
