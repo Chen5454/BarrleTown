@@ -176,11 +176,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	[PunRPC]
-	void RPC_ChooseWereWolf(int )
+	void RPC_ChooseWereWolf(int randomName)
 	{
 
 
-
+		// I just put random name there coz it gave an error
 
 
 
