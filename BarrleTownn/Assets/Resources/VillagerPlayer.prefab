@@ -104,10 +104,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  rb2D: {fileID: 0}
   canMove: 0
   distance: 0.35
-  currentHp: 0
-  Maxhp: 0
+  currentHp: 1
+  Maxhp: 1
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playeRenderer: {fileID: 8091340677481369613}

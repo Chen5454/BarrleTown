@@ -47,7 +47,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 
 
-		Debug.Log("Loop: " + loopIndex);
+		//Debug.Log("Loop: " + loopIndex);
 		for (int i = 0; i < spawnLocations.Length; i++)
 		{
 			if (loopIndex > 0)
@@ -59,7 +59,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 					if (hasBarrelNearBy[spawnLocationIndex])
 					{
 
-						Debug.Log("Can't generate barrel at: " + spawnLocationIndex + " Remaining attempts: " + loopIndex);
+						//Debug.Log("Can't generate barrel at: " + spawnLocationIndex + " Remaining attempts: " + loopIndex);
 						RandomizeBarrelsSpawn(loopIndex);
 						break;
 					}
@@ -69,7 +69,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 						//spawn barrel at location
 						InstantiateBarrel(spawnLocations[spawnLocationIndex]);
 						loopIndex -= 1;
-						Debug.Log("Generating Barrels: " + spawnLocationIndex + " Remaining attempts: " + loopIndex);
+						//Debug.Log("Generating Barrels: " + spawnLocationIndex + " Remaining attempts: " + loopIndex);
 						if (loopIndex > 0)
 							RandomizeBarrelsSpawn(loopIndex);
 
@@ -95,12 +95,12 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 		if (barrelAmount == hasBarrelNearBy.Length)
 		{
-			Debug.Log("Region is full");
+		//	Debug.Log("Region is full");
 			return true;
 		}
 		else
 		{
-			Debug.Log("Region is not full");
+			//Debug.Log("Region is not full");
 			return false;
 		}
 

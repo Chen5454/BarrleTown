@@ -15,25 +15,31 @@ public class Shop : MonoBehaviourPunCallbacks
 	public ShopRecipe shopRecipe;
 	public Recipe currentRecipe;
 	public Recipe amountRequired;
-	public List<RecipeItems> itemInside = new List<RecipeItems>();
+	public List<InteractItem> itemInside;
+
+	[Header("Reward Related")]
+	public Transform rewardSpawnPosition;
 
 	[Header("references")]
 	public UIManager uiManager;
+	public ItemBankSO itemBank;
+
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
 	int playersInsideShopRegion;
 	int barrelsInsideShopRegion;
-
-
+	public bool canGetReward;
+	public bool canGenerateNewRecipe;
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.V))
 		{
 			if (PhotonNetwork.IsMasterClient)
 			{
-				CheckDropSite();
-				GameManager.getInstance.CheckIfRecipeCompleted();
+
+				//CheckDropSite();
+				//GameManager.getInstance.CheckIfRecipeCompleted();
 				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
 			}
 		}
@@ -83,7 +89,7 @@ public class Shop : MonoBehaviourPunCallbacks
 					}
 				}
 
-				if(playerIndex != -1)
+				if (playerIndex != -1)
 				{
 					uiManager.shop.ShowRecipePanel(true);
 				}
@@ -96,31 +102,42 @@ public class Shop : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			//uiManager.shop.ShowRecipePanel(false);
+			if (uiManager.shop.recipeUI.activeInHierarchy)
+				uiManager.shop.ShowRecipePanel(false);
 			playersInsideShopRegion = 0;
 		}
 
 	}
 
 
+	public void GenerateNewRecipe()
+	{
+		if (PhotonNetwork.IsMasterClient)
+		{
+			int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
+			currentRecipe = shopRecipe.RecipeList[randomizer];
+			canGenerateNewRecipe = false;
+		}
+	}
+
+
+	public void GenerateNewShopRecipe()
+	{
+		canGetReward = true;
+	}
 
 
 	public void CheckDropSite()
 	{
-		itemInside = new List<RecipeItems>();
+		itemInside = new List<InteractItem>();
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
 		for (int i = 0; i < insideBarrels.Length; i++)
 		{
-			itemInside.Add(insideBarrels[i].GetComponent<InteractItem>().contain);
+			itemInside.Add(insideBarrels[i].GetComponent<InteractItem>());
 		}
 
 
 	}
-
-
-
-
-
 	public void CheckIfRecipeCompleted()
 	{
 		int correctAmountOfItems = 0;
@@ -131,7 +148,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			for (int j = 0; j < itemInside.Count; j++)
 			{
-				if (amountRequired.recipe[i] == itemInside[j])
+				if (amountRequired.recipe[i] == itemInside[j].contain)
 				{
 					test[i] += 1;
 
@@ -146,14 +163,82 @@ public class Shop : MonoBehaviourPunCallbacks
 			GameManager.getInstance.ShowRecipeOnUI(test);
 
 		}
-		if (CheckIfCompletedRecipe(test))
+		if (CheckIfCompletedRecipe(test) && canGetReward)
+		{
 			Debug.LogError("Collected all materials required: Instantiateing item: " + "ItemName");
+			canGetReward = false;
+			canGenerateNewRecipe = true;
+			SpawnItemRecipe();
+			DeleteBarrelsFromDropZone();
+		}
 		else
 		{
 			Debug.LogError("Didn't collected all required materials");
 		}
 
 
+	}
+
+
+	public void DeleteBarrelsFromDropZone()
+	{
+
+		List<InteractItem> destroyableBarrels = new List<InteractItem>();
+
+		for (int i = 0; i < currentRecipe.amountRequired.Count; i++)
+		{
+			for (int j = 0; j < itemInside.Count; j++)
+			{
+				if (currentRecipe.recipe[i] == itemInside[j].contain)
+				{
+
+
+					//Debug.Log("Preparing to destroy barrels");
+					destroyableBarrels.Add(itemInside[j]);
+					checkList(destroyableBarrels);
+					
+
+
+				}
+			}
+		}
+
+		
+
+		
+
+	}
+
+	void checkList(List<InteractItem> _barrels)
+	{
+		int[] amountChecker = new int[currentRecipe.amountRequired.Count];
+
+		for (int i = 0; i < amountChecker.Length; i++)
+		{
+			for (int j = 0; j < _barrels.Count; j++)
+			{
+				if(_barrels[j].contain == currentRecipe.recipe[i])
+				{
+					amountChecker[i]++;
+					if(amountChecker[i] <= currentRecipe.amountRequired[i])
+					{
+						Debug.Log("Destroying barrels: " + i);
+						PhotonNetwork.Destroy(_barrels[j].gameObject.GetPhotonView());
+					}
+				}
+			}
+		}
+
+
+
+
+		//for (int i = itemInside.Count; i > 0; i--)
+		//{
+		//	if(itemInside[i] == null)
+		//	{
+		//		itemInside.RemoveAt(i);
+		//	}
+		//}
 	}
 
 
@@ -172,6 +257,21 @@ public class Shop : MonoBehaviourPunCallbacks
 			return false;
 
 	}
+
+
+
+
+	public void SpawnItemRecipe()
+	{
+		GameObject reward = PhotonNetwork.Instantiate("Pickable", rewardSpawnPosition.position, new Quaternion());
+		reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
+	}
+
+
+
+
+
+
 
 	private void OnDrawGizmos()
 	{
@@ -200,7 +300,7 @@ public class Recipe
 {
 	public List<RecipeItems> recipe;
 	public List<int> amountRequired;
-
+	public ItemSO recipeReward;
 
 
 	//item 

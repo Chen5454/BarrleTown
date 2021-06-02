@@ -13,13 +13,13 @@ public class ShopUI : MonoBehaviour
 	public GameObject recipeUI;
 	public void ShowRecipe(int[] amountAquired)
 	{
-		for (int i = 0; i < shopRef.currentRecipe.recipe.Count; i++)
+		for (int i = 0; i < itemImage.Length; i++)
 		{
 			if (i < shopRef.currentRecipe.recipe.Count)
 			{
-				itemImage[i].gameObject.SetActive(true);
 				itemImage[i].color = GetColorByItemType(shopRef.currentRecipe.recipe[i]);
 				itemAmountText[i].text = shopRef.currentRecipe.amountRequired[i].ToString();
+				itemImage[i].gameObject.SetActive(true);
 			}
 			else
 			{
@@ -33,7 +33,15 @@ public class ShopUI : MonoBehaviour
 
 	public void ShowRecipePanel(bool _show)
 	{
-		recipeUI.SetActive(_show);
+		if (shopRef.canGetReward)
+		{
+			recipeUI.SetActive(_show);
+		}
+		else
+		{
+			recipeUI.SetActive(false);
+		}
+		
 	}
 
 

@@ -1,10 +1,12 @@
-﻿using Photon.Pun;
+﻿using Afik.MultiProject.BarrelTown;
+using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 #region Elor's work
 public enum GamePhases
 {
@@ -21,9 +23,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[Header("References")]
 	[SerializeField] FieldOfView fov;
 	[SerializeField] BarrelManager barrelManager;
+	[SerializeField] CameraController camera;
+	[SerializeField] VotingArea votingArea;
+	[SerializeField] LobbyController lobbyCon;
+
 	[Header("Phases")]
 	public List<string> playersNameList;
-	public List<GameObject> playersList;
+	public List<VillagerCharacter> playersList;
 	public VotePhase votePhase;
 	[SerializeField] bool isGameActive = false;
 	[Header("Current Phase")]
@@ -60,7 +66,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		}
 		else if (_instance != this)
 		{
-			Destroy(this);
+			Destroy(this.gameObject);
 		}
 	}
 
@@ -75,7 +81,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		if (isGameActive)
 		{
-				GameTimers();
+			GameTimers();
 			if (fov != null)
 			{
 				fov.SetOrigin();
@@ -116,12 +122,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 			fov = FindObjectOfType<FieldOfView>();
 		if (barrelManager == null)
 			barrelManager = FindObjectOfType<BarrelManager>();
+		if (camera == null)
+			camera = FindObjectOfType<CameraController>();
+		if (votingArea == null)
+			votingArea = FindObjectOfType<VotingArea>();
+
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
+		barrelManager.GenerateBarrels();
+		ShowNewGeneratedRecipe();
+		if (PhotonNetwork.IsMasterClient)
+		{
+			photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
+		}
+		StartCoroutine(delayedList());
+
+
 	}
 
-
+	IEnumerator delayedList()
+	{
+		yield return new WaitForSeconds(1f);
+		playersList = new List<VillagerCharacter>(FindObjectsOfType<VillagerCharacter>());
+		photonView.RPC("RPC_GetPlayerList", RpcTarget.AllBufferedViaServer);
+	}
 	public void SwitchGamePhases()
 	{
 		switch (gamePhase)
@@ -130,7 +155,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 				gamePhase = GamePhases.Night;
 				timer = nightTime;
 				Debug.Log("Switching to Night");
-				fov.SetNightFOV(true);
+
+				if (player as WereWolfCharacter)
+				{
+					fov.SetNightFOV(true);
+				}
+				else
+				{
+					fov.SetNightFOV(false);
+				}
+
 				if (!barrelManager.canStartGeneration)
 					barrelManager.canStartGeneration = true;
 				break;
@@ -140,10 +174,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
-
+				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
+				if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
+					ShowNewGeneratedRecipe();
 				barrelManager.GenerateBarrels();
+
+				camera.setCameraToGamePhase(true);
+				SetPlayersAtVotingPosition();
 				break;
 			case GamePhases.talk://switches to Vote
+				votingArea.ShowVotingButtons(true);
+
+
 
 				gamePhase = GamePhases.Vote;
 				timer = voteTime;
@@ -151,6 +193,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //switches to Day
+				camera.setCameraToGamePhase(false);
+				votingArea.ShowVotingButtons(false);
+				votingArea.PlayersCanMove();
+				votingArea.CheckVotes();
+
 				canVote = false;
 				gamePhase = GamePhases.Day;
 				timer = dayTime;
@@ -162,7 +209,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 
-	
+
 
 
 
@@ -190,7 +237,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void StartTalkPhase()
 	{
-		votePhase.SetPlayersAtTheirVotingSpots(playersList);
+		//votePhase.SetPlayersAtTheirVotingSpots(playersList);
 		//disable players movement
 
 
@@ -218,14 +265,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 
 
-		Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
+		//Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
 
 		if (photonView.IsMine)
 			AddToPlayerList(other.NickName);
 
 		if (PhotonNetwork.IsMasterClient)
 		{
-			Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
+			//Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
 			LoadArena();
@@ -233,16 +280,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 	public override void OnPlayerLeftRoom(Player other)
 	{
-		Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
+		//Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
 		RemovePlayerFromList(other.NickName);
 
 		if (PhotonNetwork.IsMasterClient)
 		{
-			Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
+			//Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
+
+			//LoadArena();
 
 
-			LoadArena();
+			//future::Check win condition 
 		}
 	}
 
@@ -286,8 +335,84 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	#endregion
+
+
+
+
+
+
+	public void KillVotedPlayer(int playerIndex)
+	{
+		photonView.RPC("RPC_KillVotedPlayer", RpcTarget.AllBufferedViaServer, playerIndex);
+	}
+
+	[PunRPC]
+	void RPC_KillVotedPlayer(int playerIndex)
+	{
+		playersList[playerIndex].currentHp = 0;
+		playersList[playerIndex].canMove = false;
+	}
+
+
+
+
+
+	public void GetPlayerVotes(int index, int amount)
+	{
+		photonView.RPC("RPC_GetVotes", RpcTarget.AllBufferedViaServer, index, amount);
+	}
+	[PunRPC]
+	void RPC_GetVotes(int index, int amount)
+	{
+		votingArea.VoteToPlayer(index, amount);
+	}
+
+
+
+	public void ResetVotes()
+	{
+		photonView.RPC("RPC_ResetVotes", RpcTarget.AllBufferedViaServer);
+	}
+	[PunRPC]
+	void RPC_ResetVotes()
+	{
+		votingArea.ResetVotes();
+	}
+
+
+	[PunRPC]
+	void RPC_test()
+	{
+		StartCoroutine(delayedList());
+	}
+
+	public void SetPlayersAtVotingPosition()
+	{
+		if (PhotonNetwork.IsMasterClient)
+			photonView.RPC("RPC_SetPlayersAtVotingPosition", RpcTarget.AllBufferedViaServer);
+	}
+
+	[PunRPC]
+	void RPC_SetPlayersAtVotingPosition()
+	{
+		votingArea.MovePlayersToVotingArea(this.playersList);
+	}
+
+
+	[PunRPC]
+	void RPC_GetPlayerList()
+	{
+		playersList = playersList.OrderBy(x => x.photonView.ViewID).ToList();
+	}
+
+
+
 	public void AddToPlayerList(string playerName)
 	{
+
+
+
+
 		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 	[PunRPC]
@@ -295,15 +420,41 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
+
+
+
 	}
 	public void RemovePlayerFromList(string playerName)
 	{
+		if (lobbyCon == null)
+			lobbyCon = FindObjectOfType<LobbyController>();
+
+
 		int listIndex = playersNameList.IndexOf(playerName);
 		playersNameList.RemoveAt(listIndex);
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
+
+	}
+
+
+	public void TryToShowPlayerNames()
+	{
+		if (lobbyCon == null && FindObjectOfType<LobbyController>() != null)
+			lobbyCon = FindObjectOfType<LobbyController>();
+		if (lobbyCon != null)
+		{
+			lobbyCon.ShowPlayerName();
+		}
+
 	}
 
 	#region PUNRPC
+	public void ShowNewGeneratedRecipe()
+	{
+		if (PhotonNetwork.IsMasterClient)
+			photonView.RPC("RPC_ShowNewGeneratedRecipe", RpcTarget.AllBufferedViaServer);
+	}
+
 	public void ShowRecipeOnUI(int[] test)
 	{
 		photonView.RPC("RPC_ShowRecipeOnUI", RpcTarget.AllBufferedViaServer, test);
@@ -311,6 +462,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void CheckIfRecipeCompleted()
 	{
 		photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+	}
+	[PunRPC]
+	void RPC_ShowNewGeneratedRecipe()
+	{
+		UIManager.getInstance.shop.shopRef.GenerateNewRecipe();
 	}
 
 	[PunRPC]
@@ -324,6 +480,24 @@ public class GameManager : MonoBehaviourPunCallbacks
 		UIManager.getInstance.shop.shopRef.CheckIfRecipeCompleted();
 	}
 	#endregion
+
+
+	public override void OnJoinedRoom()
+	{
+		TryToShowPlayerNames();
+	}
+	public override void OnJoinedLobby()
+	{
+		TryToShowPlayerNames();
+	}
+
+	public override void OnLeftLobby()
+	{
+		TryToShowPlayerNames();
+	}
+
+
+
 }
 [Serializable]
 public class VotePhase
