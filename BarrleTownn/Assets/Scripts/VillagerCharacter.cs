@@ -93,17 +93,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			transform.localScale = scale;
 		}
 
-
-
-
-		//if (vertical > 0 &&!isFacingUp || vertical<0 && isFacingUp)
-		//{
-		//    isFacingUp = !isFacingUp;
-
-		//    Vector3 scale = transform.localScale;
-		//    scale.y *= -1;
-		//    transform.localScale = scale;
-		//}
 	}
 
 	public void PickUp()
