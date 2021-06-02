@@ -55,6 +55,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 	bool canVote;
 
 
+
+	//to generate who is the werewolf
+	public bool[] isWereWolf;
+
+
+
 	public VillagerCharacter player;
 
 	private void Awake()
@@ -115,8 +121,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void InitGame()
 	{
-		GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-		player = _player.GetComponent<VillagerCharacter>();
+
+
+		InstantiatePlayer(GenerateWereWolf());
+
+
+
+		
 
 		if (fov == null)
 			fov = FindObjectOfType<FieldOfView>();
@@ -140,6 +151,59 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	}
+	
+	bool GenerateWereWolf()
+	{
+		isWereWolf = new bool[playersNameList.Count];
+		int randomIndex = UnityEngine.Random.Range(0, playersNameList.Count);
+		isWereWolf[randomIndex] = true;
+
+		for (int i = 0; i < playersNameList.Count; i++)
+		{
+			if(playersNameList[i] == PhotonNetwork.NickName && isWereWolf[i])
+			{
+				Debug.Log("WEREWOLF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				return true;
+			}
+			else
+			{
+				Debug.Log("VILLAGER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				return false;
+			}
+		}
+		return false;
+
+	}
+
+	[PunRPC]
+	void RPC_ChooseWereWolf(int )
+	{
+
+
+
+
+
+
+
+	}
+
+	void InstantiatePlayer(bool _IsWereWolf)
+	{
+		if (_IsWereWolf)
+		{
+			GameObject _player = PhotonNetwork.Instantiate("WerewolfPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+			player = _player.GetComponent<VillagerCharacter>();
+		}
+		else
+		{
+			GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+			player = _player.GetComponent<VillagerCharacter>();
+		}
+
+
+	}
+
+
 
 	IEnumerator delayedList()
 	{
