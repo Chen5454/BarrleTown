@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 			photonView.RPC("RPC_ChooseWereWolf", RpcTarget.AllBufferedViaServer, isWereWolf);
 		}
-		
+
 
 
 
@@ -156,29 +156,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	}
-	
-	bool GenerateWereWolf()
-	{
-		isWereWolf = new bool[playersNameList.Count];
-		int randomIndex = UnityEngine.Random.Range(0, playersNameList.Count);
-		isWereWolf[randomIndex] = true;
-
-		for (int i = 0; i < playersNameList.Count; i++)
-		{
-			if(playersNameList[i] == PhotonNetwork.NickName && isWereWolf[i])
-			{
-				Debug.Log("WEREWOLF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				return true;
-			}
-			else
-			{
-				Debug.Log("VILLAGER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				return false;
-			}
-		}
-		return false;
-
-	}
 
 	[PunRPC]
 
@@ -188,20 +165,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		for (int i = 0; i < isWereWolf.Length; i++)
 		{
-			if (isWereWolf[i])
+			// iswerewolf[0]= true && (playernamelist = "silverpoop" == nickname = "silverpoop") = true 
+			if (isWereWolf[i] && playersNameList[i] == PhotonNetwork.NickName)
 			{
-				if(playersNameList[i] == PhotonNetwork.NickName)
-				{
-					Debug.Log("werewolf at index of: " + i + " playername: " + playersNameList[i] + " network nickname: " + PhotonNetwork.NickName);
-					InstantiatePlayer(true);
-				}
+				Debug.Log("werewolf at index of: " + i + " playername: " + playersNameList[i] + " network nickname: " + PhotonNetwork.NickName);
+				InstantiatePlayer(true);
+				break;
 			}
-			else
+			else if(!isWereWolf[i] && playersNameList[i] == PhotonNetwork.NickName)
 			{
-				Debug.Log("villager at index of: " + i + " playername: " + playersNameList[i] + " network nickname: " + PhotonNetwork.NickName);
-				InstantiatePlayer(false);
+				InstantiatePlayer(true);
+				break;
 			}
 			
+
 		}
 
 
@@ -214,17 +191,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
-		if (_IsWereWolf)
-		{
-			GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-			player = _player.GetComponent<VillagerCharacter>();
-		}
-		else
-		{
-			GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-			player = _player.GetComponent<VillagerCharacter>();
-		}
 
+		GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+		player = _player.GetComponent<VillagerCharacter>();
+		//player.isWerewolf = _IsWereWolf;
 
 	}
 

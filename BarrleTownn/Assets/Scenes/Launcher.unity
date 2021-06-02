@@ -826,8 +826,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
         type: 3}
+      propertyPath: dayTime
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
       propertyPath: voteTime
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: gamePhase
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
+        type: 3}
+      propertyPath: nightTime
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
         type: 3}

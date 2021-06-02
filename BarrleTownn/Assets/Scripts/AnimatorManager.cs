@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class AnimatorManager : MonoBehaviour
+using Photon.Pun;
+public class AnimatorManager : MonoBehaviourPunCallbacks
 {
     public Animator animator;
     
@@ -18,8 +18,11 @@ public class AnimatorManager : MonoBehaviour
 
     private void Update()
     {
-        Player();
-        //WerewolfAttack();
+        if (photonView.IsMine)
+        {
+            Player();
+            //WerewolfAttack();
+        }
     }
 
     public void Player()
