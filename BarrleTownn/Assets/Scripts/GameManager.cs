@@ -181,11 +181,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	[PunRPC]
-<<<<<<< Updated upstream
-	void RPC_ChooseWereWolf(int )
-=======
+
 	void RPC_ChooseWereWolf(bool[] boolArray)
->>>>>>> Stashed changes
 	{
 		this.isWereWolf = boolArray;
 
