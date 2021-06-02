@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		if (_IsWereWolf)
 		{
-			GameObject _player = PhotonNetwork.Instantiate("WerewolfPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+			GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
 			player = _player.GetComponent<VillagerCharacter>();
 		}
 		else
