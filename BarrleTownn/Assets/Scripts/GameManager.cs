@@ -121,13 +121,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void InitGame()
 	{
+		if (PhotonNetwork.IsMasterClient)
+		{
+			isWereWolf = new bool[playersNameList.Count];
+			int randomIndex = UnityEngine.Random.Range(0, playersNameList.Count);
+			isWereWolf[randomIndex] = true;
 
-
-		InstantiatePlayer(GenerateWereWolf());
-
-
-
+			photonView.RPC("RPC_ChooseWereWolf", RpcTarget.AllBufferedViaServer, isWereWolf);
+		}
 		
+
+
+
 
 		if (fov == null)
 			fov = FindObjectOfType<FieldOfView>();
@@ -176,8 +181,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	[PunRPC]
+<<<<<<< Updated upstream
 	void RPC_ChooseWereWolf(int )
+=======
+	void RPC_ChooseWereWolf(bool[] boolArray)
+>>>>>>> Stashed changes
 	{
+		this.isWereWolf = boolArray;
+
+		for (int i = 0; i < isWereWolf.Length; i++)
+		{
+			if (isWereWolf[i])
+			{
+				if(playersNameList[i] == PhotonNetwork.NickName)
+				{
+					Debug.Log("werewolf at index of: " + i + " playername: " + playersNameList[i] + " network nickname: " + PhotonNetwork.NickName);
+					InstantiatePlayer(true);
+				}
+			}
+			else
+			{
+				Debug.Log("villager at index of: " + i + " playername: " + playersNameList[i] + " network nickname: " + PhotonNetwork.NickName);
+				InstantiatePlayer(false);
+			}
+			
+		}
 
 
 
