@@ -8,12 +8,9 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
     public Animator animator;
     
      VillagerCharacter player;
-     WereWolfCharacter wereWolf;
-
     private void Awake()
     {
         player = GetComponent<VillagerCharacter>();
-        wereWolf = GetComponent<WereWolfCharacter>();
     }
 
     private void Update()
@@ -21,32 +18,50 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             Player();
-            //WerewolfAttack();
+            WereWolf();
         }
     }
 
     public void Player()
     {
-        animator.SetFloat("horizontal", player.movement.x);
-        animator.SetFloat("vertical", player.movement.y);
-        animator.SetFloat("Speed", player.movement.sqrMagnitude);
-        if (Input.GetAxisRaw("Horizontal")==1 || Input.GetAxisRaw("Horizontal") == -1 || Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)
+        if (!player.isWerewolf)
         {
-            animator.SetFloat("LastHorizontal",Input.GetAxisRaw("Horizontal"));
-            animator.SetFloat("LastVertical", Input.GetAxisRaw("Vertical"));
+            animator.SetBool("isHuman",true);
+            animator.SetBool("isWolf",false);
+            animator.SetFloat("horizontal", player.movement.x);
+            animator.SetFloat("vertical", player.movement.y);
+            animator.SetFloat("Speed", player.movement.sqrMagnitude);
+            if (Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1 ||
+                Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)
+            {
+                animator.SetFloat("LastHorizontal", Input.GetAxisRaw("Horizontal"));
+                animator.SetFloat("LastVertical", Input.GetAxisRaw("Vertical"));
+            }
         }
+     
     }
-
-    
-    
-
-
+    public void WereWolf()
+    {
+        if (player.isWerewolf)
+        {
+            animator.SetBool("isWolf",true);
+            animator.SetBool("isHuman",false);
+            animator.SetFloat("horizontal", player.movement.x);
+            animator.SetFloat("vertical", player.movement.y);
+            animator.SetFloat("Speed", player.movement.sqrMagnitude);
+            if (Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1 ||
+                Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)
+            {
+                animator.SetFloat("LastHorizontal", Input.GetAxisRaw("Horizontal"));
+                animator.SetFloat("LastVertical", Input.GetAxisRaw("Vertical"));
+            }
+        }
+       
+    }
     public void WerewolfAttack()  
     {
         animator.SetTrigger("attack");
     }
-
-
 
     private IEnumerator WaitAndAnimation(float waitTime)
     {

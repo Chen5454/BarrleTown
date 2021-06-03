@@ -177,17 +177,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				InstantiatePlayer(true);
 				break;
 			}
-			
-
-		}
-
-
-
-
-
-
-
-	}
+        }
+    }
 
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
@@ -215,7 +206,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 
-				if (player as WereWolfCharacter)
+				if (!player.isWerewolf)
 				{
 					fov.SetNightFOV(true);
 				}

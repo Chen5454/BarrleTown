@@ -17,17 +17,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public int currentHp;
 	public int Maxhp;
     public bool canHide;
+    public bool isWerewolf;
 
-	[HideInInspector]
+    [SerializeField]
+    public WereWolf wereWolf;
+
+    [HideInInspector]
 	public Vector2 movement;
 
-    //public OwnerShipTranfer transfer;
-
-	public InteractItem hidebehind;
+    public InteractItem hidebehind;
 	public SpriteRenderer playeRenderer;
 	private GameManager gameManager;
 	public GameObject box;
-	//public Animator animator;
 	UIManager uiManager; 
 
 	public bool GETIsPicked
@@ -47,24 +48,26 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
     {
-		rb2D = GetComponent<Rigidbody2D>();
+        isWerewolf = false;
+        rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
-		
-	}
+    }
 
-	public virtual void Update()
+	public void Update()
 	{
 		if (photonView.IsMine)
 		{
 			MovementHandler();
 			PickUp();
             Hide();
+            wereWolf.Transform();
         }
+
     }
 
 
 
-	public virtual void FixedUpdate()
+	public void FixedUpdate()
 	{
 		if (photonView.IsMine)
 		{
@@ -143,7 +146,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
     }
 
 
-
 	public void Hide()
     {
         if (canHide)
@@ -173,44 +175,55 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
        
     }
 
-
-	public virtual void GetDamage(int amount)
+	public void GetDamage(int amount)
 	{
 
 		currentHp -= amount;
 
 	}
 
-	public virtual void Hp()
+	public void Hp()
 	{
-
-		if (currentHp > Maxhp)
+        if (currentHp > Maxhp)
 		{
 			currentHp = Maxhp;
 		}
 	}
 
-	//private void OnDrawGizmos()  //to see the RayCast
-	//{
-	//    Gizmos.color = Color.yellow;
-	//    Gizmos.DrawLine(transform.position,movement * distance);
-	//}
-
-	public virtual void MovementHandler()
+	public void MovementHandler()
 	{
 		if (canMove)
 		{
 			movement.x = Input.GetAxisRaw("Horizontal");
 			movement.y = Input.GetAxisRaw("Vertical");
-			//animator.SetFloat("horizontal",movement.x);
-			//animator.SetFloat("vertical",movement.y);
-			//animator.SetFloat("Speed",movement.sqrMagnitude);
-		}
+        }
         else
         {
             movement.x = 0;
             movement.y = 0;
             canMove = false;
+        }
+	}
+
+
+
+    public void Transform2()
+    {
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (!isWerewolf)
+            {
+                isWerewolf = true;
+            }
+            else
+            {
+                if (isWerewolf)
+                {
+                    isWerewolf = false;
+                }
+            }
+
         }
 	}
 
@@ -222,8 +235,33 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	#endregion
 
+}
+[System.Serializable]
+public class WereWolf
+{
 
+    [SerializeField]
+    public Rigidbody2D rb2DWereWolf;
 
+    public VillagerCharacter player;
 
+    public void Transform()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (!player.isWerewolf)
+            {
+                player.isWerewolf = true;
+            }
+            else
+            {
+                if (player.isWerewolf)
+                {
+                    player.isWerewolf = false;
+                }
+            }
 
+        }
+
+    }
 }

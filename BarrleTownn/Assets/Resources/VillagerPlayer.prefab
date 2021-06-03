@@ -25,7 +25,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8091340677481369614
 Transform:
   m_ObjectHideFlags: 0
@@ -109,6 +109,11 @@ MonoBehaviour:
   distance: 0.35
   currentHp: 1
   Maxhp: 1
+  canHide: 0
+  isWerewolf: 0
+  wereWolf:
+    rb2DWereWolf: {fileID: 8091340677481369619}
+    player: {fileID: 8091340677481369612}
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playeRenderer: {fileID: 8091340677481369613}
@@ -214,7 +219,7 @@ MonoBehaviour:
   - {fileID: 7119081440643323838}
   - {fileID: 1181764942976010831}
   - {fileID: 8916331224686799536}
-  sceneViewId: 1
+  sceneViewId: 5
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &7119081440643323838

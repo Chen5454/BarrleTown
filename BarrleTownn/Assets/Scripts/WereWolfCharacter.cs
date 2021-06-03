@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WereWolfCharacter : VillagerCharacter
+public class WereWolfCharacter : MonoBehaviour
 {
     public AnimatorManager animator;
     public Rigidbody2D rb2DWereWolf;
     
-    public override void Update()
+    public  void Update()
     {
-        base.Update();
         Attack();
     }
 
-    public override void FixedUpdate()
+    public  void FixedUpdate()
     {
-        base.FixedUpdate();
     }
 
     public void Attack()
