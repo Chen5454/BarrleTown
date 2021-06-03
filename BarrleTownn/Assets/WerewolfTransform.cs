@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class WerewolfTransform : MonoBehaviour
+public class WerewolfTransform : MonoBehaviourPunCallbacks
 {
     public GameObject villager;
     public GameObject wereWolf;
@@ -13,9 +13,13 @@ public class WerewolfTransform : MonoBehaviour
 
     private void Awake()
     {
-        villager.SetActive(true);
-        wereWolf.SetActive(false);
-        formSwitch = 1;
+        if (photonView.IsMine)
+        {
+            villager.SetActive(true);
+            wereWolf.SetActive(false);
+            formSwitch = 1;
+        }
+      
     }
 
     //public bool getIsWereWolf
@@ -45,7 +49,11 @@ public class WerewolfTransform : MonoBehaviour
 
     private void Update()
     {
-        Transformation();
+        if (photonView.IsMine)
+        {
+            Transformation();
+
+        }
     }
 
     public void Transformation()

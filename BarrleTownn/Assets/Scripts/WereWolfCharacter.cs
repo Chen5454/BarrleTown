@@ -9,13 +9,21 @@ public class WereWolfCharacter : VillagerCharacter
     
     public override void Update()
     {
-        base.Update();
-        Attack();
+        if (photonView.IsMine)
+        {
+            base.Update();
+            Attack();
+        }
+     
     }
 
     public override void FixedUpdate()
     {
-        base.FixedUpdate();
+        if (photonView.IsMine)
+        {
+            base.FixedUpdate();
+        }
+        
     }
 
     public void Attack()

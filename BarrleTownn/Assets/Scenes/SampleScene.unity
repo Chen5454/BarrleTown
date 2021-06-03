@@ -729,6 +729,31 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5367894807829207014, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367894807829207014, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367894807829207014, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367894807829207014, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5367894807829207014, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5457705157796104687, guid: 01ce23c5064b20c47a6a9418fa23460b,
         type: 3}
       propertyPath: box
@@ -747,6 +772,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8091340677481369613, guid: 77c9e7e6c30aff4458370805b443056b,
         type: 3}
+    - target: {fileID: 6429891562954296925, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6429891562954296925, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6429891562954296925, guid: 01ce23c5064b20c47a6a9418fa23460b,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[4].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01ce23c5064b20c47a6a9418fa23460b, type: 3}
 --- !u!1001 &8091340676579890204
