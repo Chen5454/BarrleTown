@@ -20,14 +20,14 @@ public class VotingUI : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.B))
-		{
-			SetVotingButtons(true);
-		}
-		if (Input.GetKeyDown(KeyCode.N))
-		{
-			SetVotingButtons(false);
-		}
+		//if (Input.GetKeyDown(KeyCode.B))
+		//{
+		//	SetVotingButtons(true);
+		//}
+		//if (Input.GetKeyDown(KeyCode.N))
+		//{
+		//	SetVotingButtons(false);
+		//}
 	}
 
 	public void SetVotingButtons(bool _show)

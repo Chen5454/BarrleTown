@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] CameraController camera;
 	[SerializeField] VotingArea votingArea;
 	[SerializeField] LobbyController lobbyCon;
+	[SerializeField] ChatUI chat;
 
 	[Header("Phases")]
 	public List<string> playersNameList;
@@ -142,6 +143,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 			camera = FindObjectOfType<CameraController>();
 		if (votingArea == null)
 			votingArea = FindObjectOfType<VotingArea>();
+		if (chat == null)
+			chat = FindObjectOfType<ChatUI>();
+
 
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
@@ -158,7 +162,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	[PunRPC]
-
 	void RPC_ChooseWereWolf(bool[] boolArray)
 	{
 		this.isWereWolf = boolArray;
@@ -183,7 +186,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
 
-		GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+		GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
 		//player.isWerewolf = _IsWereWolf;
 
@@ -220,6 +223,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
+				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
@@ -243,6 +247,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //switches to Day
+				chat.SetChatVisibility(false);
 				camera.setCameraToGamePhase(false);
 				votingArea.ShowVotingButtons(false);
 				votingArea.PlayersCanMove();
@@ -386,11 +391,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	#endregion
 
+	#region chat 
+
+	public void SendMessageToAll(string message, string senderName)
+	{
+		photonView.RPC("RPC_SendMessage", RpcTarget.AllBufferedViaServer,message, senderName);
+	}
+
+	[PunRPC]
+	void RPC_SendMessage(string message,string senderName)
+	{
+		chat.ShowMessage(message, senderName);
+	}
 
 
+	#endregion
 
-
-
+	#region vote pun
 	public void KillVotedPlayer(int playerIndex)
 	{
 		photonView.RPC("RPC_KillVotedPlayer", RpcTarget.AllBufferedViaServer, playerIndex);
@@ -448,7 +465,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 		votingArea.MovePlayersToVotingArea(this.playersList);
 	}
 
+	#endregion
 
+	#region player list
 	[PunRPC]
 	void RPC_GetPlayerList()
 	{
@@ -459,10 +478,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void AddToPlayerList(string playerName)
 	{
-
-
-
-
 		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 	[PunRPC]
@@ -470,9 +485,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		playersNameList.Add(playerName);
 		Debug.Log("Added name: " + playerName);
-
-
-
 	}
 	public void RemovePlayerFromList(string playerName)
 	{
@@ -495,8 +507,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			lobbyCon.ShowPlayerName();
 		}
-
 	}
+	#endregion
 
 	#region PUNRPC
 	public void ShowNewGeneratedRecipe()
