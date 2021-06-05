@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	public VillagerCharacter player;
-
+	public VillagerCharacter werewolf;
 	private void Awake()
 	{
 		if (_instance == null)
@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 			}
 			else if(!isWereWolf[i] && playersNameList[i] == PhotonNetwork.NickName)
 			{
-				InstantiatePlayer(true);
+				InstantiatePlayer(false);
 				break;
 			}
         }
@@ -186,10 +186,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
 
-		GameObject _player = PhotonNetwork.Instantiate("VillagerPlayer", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+		GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
-		//player.isWerewolf = _IsWereWolf;
-
+		player.isWerewolf = _IsWereWolf;
 	}
 
 
@@ -205,11 +204,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 		switch (gamePhase)
 		{
 			case GamePhases.Day: //switches to night
+				if (player.isWerewolf)
+					player.wereWolf.Transform();
+
+
 				gamePhase = GamePhases.Night;
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 
-				if (!player.isWerewolf)
+				if (!player.isWerewolfState)
 				{
 					fov.SetNightFOV(true);
 				}
@@ -222,6 +225,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 					barrelManager.canStartGeneration = true;
 				break;
 			case GamePhases.Night://switches to talk
+				if (player.isWerewolf)
+					player.wereWolf.Transform();
+
 				gamePhase = GamePhases.talk;
 				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
@@ -247,6 +253,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //switches to Day
+			
+
 				chat.SetChatVisibility(false);
 				camera.setCameraToGamePhase(false);
 				votingArea.ShowVotingButtons(false);

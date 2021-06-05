@@ -142,11 +142,12 @@ MonoBehaviour:
   Maxhp: 1
   canHide: 0
   isWerewolf: 1
+  isWerewolfState: 0
   wereWolf:
     rb2DWereWolf: {fileID: 6196262404252525881}
     player: {fileID: 6196262404252525862}
     attackPos: {fileID: 1541186396}
-    attackRange: 0.72
+    attackRange: 0.5
     enemy:
       serializedVersion: 2
       m_Bits: 1024

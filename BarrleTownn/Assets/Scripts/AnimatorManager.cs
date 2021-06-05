@@ -25,7 +25,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
 
     public void PlayerDeadAnimation()
     {
-        if (!player.isWerewolf)
+        if (!player.isWerewolfState)
         {
             if (player.currentHp == 0)
             {
@@ -37,7 +37,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
 
     public void Player()
     {
-        if (!player.isWerewolf)
+        if (!player.isWerewolfState)
         {
             animator.SetBool("isHuman",true);
             animator.SetBool("isWolf",false);
@@ -55,7 +55,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
     }
     public void WereWolf()
     {
-        if (player.isWerewolf)
+        if (player.isWerewolfState)
         {
             animator.SetBool("isWolf",true);
             animator.SetBool("isHuman",false);
