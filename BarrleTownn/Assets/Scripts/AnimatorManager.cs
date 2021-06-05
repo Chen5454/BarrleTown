@@ -19,6 +19,19 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
         {
             Player();
             WereWolf();
+            PlayerDeadAnimation();
+        }
+    }
+
+    public void PlayerDeadAnimation()
+    {
+        if (!player.isWerewolf)
+        {
+            if (player.currentHp == 0)
+            {
+                player.canMove = false;
+                animator.SetBool("isDead",true);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Black
   - Pickup
+  - Werewolf
   layers:
   - Default
   - TransparentFX

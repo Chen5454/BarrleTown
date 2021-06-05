@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
@@ -58,16 +59,35 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		if (photonView.IsMine)
 		{
 			MovementHandler();
-			PickUp();
-            Hide();
+            if (!isWerewolf)
+            {
+                PickUp();
+                Hide();
+            }
             wereWolf.Transform();
+            wereWolf.WerewolfAttack();
+            ChangeWerewolfTag();
+            
+        }
+
+        
+    }
+
+    public void ChangeWerewolfTag()
+    {
+        if (isWerewolf)
+        {
+            gameObject.tag = "Werewolf";
+        }
+
+        else if (!isWerewolf)
+        {
+            gameObject.tag = "Player";
         }
 
     }
 
-
-
-	public void FixedUpdate()
+    public void FixedUpdate()
 	{
 		if (photonView.IsMine)
 		{
@@ -175,7 +195,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
        
     }
 
-	public void GetDamage(int amount)
+    public void GetDamage(int amount)
+    {
+        photonView.RPC("RPC_GetDamage", RpcTarget.AllBufferedViaServer,amount);
+    }
+
+
+    [PunRPC]
+	public void RPC_GetDamage(int amount)
 	{
 
 		currentHp -= amount;
@@ -205,33 +232,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
         }
 	}
 
-
-
-    public void Transform2()
+    private void OnDrawGizmosSelected()
     {
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (!isWerewolf)
-            {
-                isWerewolf = true;
-            }
-            else
-            {
-                if (isWerewolf)
-                {
-                    isWerewolf = false;
-                }
-            }
-
-        }
-	}
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(wereWolf.attackPos.position,wereWolf.attackRange);
+    }
 
 
-
-
-
-	#region PunRPC
+    #region PunRPC
 
 	#endregion
 
@@ -242,8 +250,29 @@ public class WereWolf
 
     [SerializeField]
     public Rigidbody2D rb2DWereWolf;
-
     public VillagerCharacter player;
+
+
+    public Transform attackPos;
+    public float attackRange;
+    public LayerMask enemy;
+
+    public void WerewolfAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolf)
+        {
+            Collider2D[] enemiestoDmg = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
+
+            for (int i = 0; i < enemiestoDmg.Length; i++)
+            {
+                if (enemiestoDmg[i].transform.tag =="Player")
+                {
+                    enemiestoDmg[i].GetComponent<VillagerCharacter>().GetDamage(1);
+                }
+            }
+        }
+    }
+
 
     public void Transform()
     {

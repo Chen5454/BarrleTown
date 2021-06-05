@@ -25,7 +25,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8091340677481369614
 Transform:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0f4b182f4f2564f8a169f7bbf88fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 0
   rb2D: {fileID: 0}
   canMove: 0
   distance: 0.35
@@ -114,6 +114,11 @@ MonoBehaviour:
   wereWolf:
     rb2DWereWolf: {fileID: 8091340677481369619}
     player: {fileID: 8091340677481369612}
+    attackPos: {fileID: 0}
+    attackRange: 0
+    enemy:
+      serializedVersion: 2
+      m_Bits: 1024
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playeRenderer: {fileID: 8091340677481369613}
@@ -219,7 +224,7 @@ MonoBehaviour:
   - {fileID: 7119081440643323838}
   - {fileID: 1181764942976010831}
   - {fileID: 8916331224686799536}
-  sceneViewId: 5
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &7119081440643323838
@@ -235,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
+  ShowParameterInspector: 0
   m_SynchronizeParameters:
   - Type: 1
     SynchronizeType: 2
@@ -246,6 +251,21 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 2
     Name: Speed
+  - Type: 1
+    SynchronizeType: 1
+    Name: LastHorizontal
+  - Type: 1
+    SynchronizeType: 1
+    Name: LastVertical
+  - Type: 4
+    SynchronizeType: 1
+    Name: isWolf
+  - Type: 4
+    SynchronizeType: 1
+    Name: isHuman
+  - Type: 4
+    SynchronizeType: 1
+    Name: isDead
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
