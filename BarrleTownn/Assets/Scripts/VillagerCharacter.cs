@@ -71,8 +71,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				if (!isWerewolfState)
 					PickUp();
 
-				if (Input.GetKeyDown(KeyCode.T))
-					wereWolf.Transform();
+				//if (Input.GetKeyDown(KeyCode.T))
+				//	wereWolf.Transform();
 
 				//transformed
 				if (isWerewolfState)

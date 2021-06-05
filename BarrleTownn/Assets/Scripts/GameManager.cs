@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	//to generate who is the werewolf
 	public bool[] isWereWolf;
 
-
+	NameHolder[] nameHolders;
 
 	public VillagerCharacter player;
 	public VillagerCharacter werewolf;
@@ -93,6 +93,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 			{
 				fov.SetOrigin();
 			}
+
+			if (Input.GetKeyDown(KeyCode.V))
+			{
+				RPC_ShowNames();
+				//photonView.RPC("RPC_ShowNames", RpcTarget.AllBufferedViaServer);
+			}
+
 		}
 
 
@@ -154,7 +161,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		ShowNewGeneratedRecipe();
 		if (PhotonNetwork.IsMasterClient)
 		{
-			photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
+			//photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
 		}
 		StartCoroutine(delayedList());
 
@@ -175,13 +182,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 				InstantiatePlayer(true);
 				break;
 			}
-			else if(!isWereWolf[i] && playersNameList[i] == PhotonNetwork.NickName)
+			else if (!isWereWolf[i] && playersNameList[i] == PhotonNetwork.NickName)
 			{
 				InstantiatePlayer(false);
 				break;
 			}
-        }
-    }
+		}
+	}
 
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
@@ -189,15 +196,22 @@ public class GameManager : MonoBehaviourPunCallbacks
 		GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
+
+
 	}
 
 
 
 	IEnumerator delayedList()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(0.4f);
 		playersList = new List<VillagerCharacter>(FindObjectsOfType<VillagerCharacter>());
 		photonView.RPC("RPC_GetPlayerList", RpcTarget.AllBufferedViaServer);
+		yield return new WaitForSeconds(0.4f);
+		RPC_ShowNames();
+
+
+
 	}
 	public void SwitchGamePhases()
 	{
@@ -207,19 +221,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 				if (player.isWerewolf)
 					player.wereWolf.Transform();
 
+				ShowNames(false);
 
 				gamePhase = GamePhases.Night;
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 
-				if (!player.isWerewolfState)
-				{
-					fov.SetNightFOV(true);
-				}
-				else
-				{
-					fov.SetNightFOV(false);
-				}
+
+				fov.SetNightFOV(player.isWerewolf);
 
 				if (!barrelManager.canStartGeneration)
 					barrelManager.canStartGeneration = true;
@@ -227,6 +236,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 			case GamePhases.Night://switches to talk
 				if (player.isWerewolf)
 					player.wereWolf.Transform();
+
+				ShowNames(true);
 
 				gamePhase = GamePhases.talk;
 				chat.SetChatVisibility(true);
@@ -253,7 +264,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //switches to Day
-			
+
 
 				chat.SetChatVisibility(false);
 				camera.setCameraToGamePhase(false);
@@ -273,7 +284,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-
+	public void ShowNames(bool _show)
+	{
+		for (int i = 0; i < nameHolders.Length; i++)
+		{
+			nameHolders[i].gameObject.SetActive(_show);
+		}
+	}
 
 
 
@@ -403,11 +420,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void SendMessageToAll(string message, string senderName)
 	{
-		photonView.RPC("RPC_SendMessage", RpcTarget.AllBufferedViaServer,message, senderName);
+		photonView.RPC("RPC_SendMessage", RpcTarget.AllBufferedViaServer, message, senderName);
 	}
 
 	[PunRPC]
-	void RPC_SendMessage(string message,string senderName)
+	void RPC_SendMessage(string message, string senderName)
 	{
 		chat.ShowMessage(message, senderName);
 	}
@@ -458,7 +475,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[PunRPC]
 	void RPC_test()
 	{
-		StartCoroutine(delayedList());
+		//StartCoroutine(delayedList());
 	}
 
 	public void SetPlayersAtVotingPosition()
@@ -482,6 +499,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 		playersList = playersList.OrderBy(x => x.photonView.ViewID).ToList();
 	}
 
+
+	public GameObject playerName;
+	void RPC_ShowNames()
+	{
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			Transform parent = GameObject.Find("PlayerNameHolders").transform;
+			GameObject nameHolder = Instantiate(playerName, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), parent);
+
+			//nameHolder.transform.SetParent(parent);
+			nameHolder.GetComponent<NameHolder>().playerPos = playersList[i].transform;
+			nameHolder.GetComponent<NameHolder>().nameText.text = playersNameList[i];
+		}
+
+
+		nameHolders = FindObjectsOfType<NameHolder>();
+	}
 
 
 	public void AddToPlayerList(string playerName)
