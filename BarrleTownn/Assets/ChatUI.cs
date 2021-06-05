@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
-public class ChatUI : MonoBehaviour
+using Photon.Pun;
+public class ChatUI : MonoBehaviourPun
 {
 	public GameObject chat;
 	public GameObject messagePrefab;
@@ -16,6 +16,15 @@ public class ChatUI : MonoBehaviour
 	public void SetChatVisibility(bool _setActive)
 	{
 		chat.SetActive(_setActive);
+
+
+		if (!_setActive)
+		{
+			for (int i = 0; i < messagePool.Count; i++)
+			{
+				messagePool[i].SetActive(false);
+			}
+		}
 	}
 
 
@@ -32,7 +41,9 @@ public class ChatUI : MonoBehaviour
 	{
 		if (playerMessage != "" && playerMessage != null)
 		{
-			GameManager.getInstance.SendMessage(playerMessage);
+			GameManager.getInstance.SendMessageToAll(playerMessage,PhotonNetwork.NickName);
+			playerMessage = "";
+			inputField.text = playerMessage;
 		}
 		else
 		{
@@ -41,14 +52,14 @@ public class ChatUI : MonoBehaviour
 	}
 
 	//put this function in a pun
-	public void SendMessage(string message)
+	public void ShowMessage(string message,string senderName)
 	{
 
 		bool hasUsedExisted = false;
 		if (messagePool.Count == 0)
 		{
-			GameObject newMessage = Instantiate(messagePrefab, parent);                       // 2 spaces
-			newMessage.transform.GetComponentInChildren<TextMeshProUGUI>().text = "  " + "SilverPoop: " + message;
+			GameObject newMessage = Instantiate(messagePrefab, parent);         
+			newMessage.transform.GetComponentInChildren<TextMeshProUGUI>().text = "  " + senderName + ": " + message;
 			messagePool.Add(newMessage);
 			hasUsedExisted = true;
 		}
@@ -58,7 +69,7 @@ public class ChatUI : MonoBehaviour
 			{
 				if (!messagePool[i].activeInHierarchy)
 				{
-					messagePool[i].GetComponentInChildren<TextMeshProUGUI>().text = "  " + "SilverPoop: " + message;
+					messagePool[i].GetComponentInChildren<TextMeshProUGUI>().text = "  " + senderName + ": " + message;
 					messagePool[i].SetActive(true);
 					hasUsedExisted = true;
 					break;
@@ -69,15 +80,14 @@ public class ChatUI : MonoBehaviour
 		}
 		if (!hasUsedExisted)
 		{
-			GameObject newMessage = Instantiate(messagePrefab, parent);                       // 2 spaces
-			newMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "  " + "SilverPoop: " + message;
+			GameObject newMessage = Instantiate(messagePrefab, parent);                       
+			newMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "  " + senderName + ": " + message;
 			messagePool.Add(newMessage);
 		}
 
 
 
-		playerMessage = "";
-		inputField.text = playerMessage;
+		
 
 
 

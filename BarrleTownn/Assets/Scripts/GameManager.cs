@@ -232,6 +232,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
+				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
@@ -255,6 +256,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //switches to Day
+				chat.SetChatVisibility(false);
 				camera.setCameraToGamePhase(false);
 				votingArea.ShowVotingButtons(false);
 				votingArea.PlayersCanMove();
@@ -400,15 +402,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	#region chat 
 
-	public void SendMessageToAll(string message)
+	public void SendMessageToAll(string message, string senderName)
 	{
-		photonView.RPC("RPC_SendMessage", RpcTarget.AllBufferedViaServer,message);
+		photonView.RPC("RPC_SendMessage", RpcTarget.AllBufferedViaServer,message, senderName);
 	}
 
 	[PunRPC]
-	void RPC_SendMessage(string message)
+	void RPC_SendMessage(string message,string senderName)
 	{
-		chat.SendMessage(message);
+		chat.ShowMessage(message, senderName);
 	}
 
 
