@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
