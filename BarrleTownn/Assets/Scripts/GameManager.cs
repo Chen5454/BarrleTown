@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		ShowNewGeneratedRecipe();
 		if (PhotonNetwork.IsMasterClient)
 		{
-			//photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
+			photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
 		}
 		StartCoroutine(delayedList());
 
