@@ -50,10 +50,10 @@ public class Shop : MonoBehaviourPunCallbacks
 		//barrels
 		if (insideBarrels.Length > 0)
 		{
-			Debug.Log("Barrel Inside: " + insideBarrels.Length);
-			if (barrelsInsideShopRegion != insideBarrels.Length)
+			Debug.Log("Barrel Inside: " + insideBarrels.Length / 2);
+			if (barrelsInsideShopRegion != insideBarrels.Length / 2)
 			{
-				barrelsInsideShopRegion = insideBarrels.Length;
+				barrelsInsideShopRegion = insideBarrels.Length/ 2;
 				if (PhotonNetwork.IsMasterClient)
 				{
 					CheckDropSite();
@@ -133,7 +133,8 @@ public class Shop : MonoBehaviourPunCallbacks
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
 		for (int i = 0; i < insideBarrels.Length; i++)
 		{
-			itemInside.Add(insideBarrels[i].GetComponent<InteractItem>());
+			if (insideBarrels[i].isTrigger)
+				itemInside.Add(insideBarrels[i].GetComponent<InteractItem>());
 		}
 
 
@@ -196,16 +197,16 @@ public class Shop : MonoBehaviourPunCallbacks
 					//Debug.Log("Preparing to destroy barrels");
 					destroyableBarrels.Add(itemInside[j]);
 					checkList(destroyableBarrels);
-					
+
 
 
 				}
 			}
 		}
 
-		
 
-		
+
+
 
 	}
 
@@ -217,10 +218,10 @@ public class Shop : MonoBehaviourPunCallbacks
 		{
 			for (int j = 0; j < _barrels.Count; j++)
 			{
-				if(_barrels[j].contain == currentRecipe.recipe[i])
+				if (_barrels[j].contain == currentRecipe.recipe[i])
 				{
 					amountChecker[i]++;
-					if(amountChecker[i] <= currentRecipe.amountRequired[i])
+					if (amountChecker[i] <= currentRecipe.amountRequired[i])
 					{
 						Debug.Log("Destroying barrels: " + i);
 						PhotonNetwork.Destroy(_barrels[j].gameObject.GetPhotonView());
