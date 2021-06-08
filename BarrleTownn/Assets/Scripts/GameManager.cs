@@ -160,7 +160,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
 		barrelManager.GenerateBarrels();
-		ShowNewGeneratedRecipe();
+
+
+		shop.canGenerateNewRecipe = true;
+		if (shop.canGenerateNewRecipe)
+			if (PhotonNetwork.IsMasterClient)
+				shop.GenerateNewRecipe();
+
+
+
 		if (PhotonNetwork.IsMasterClient)
 		{
 			photonView.RPC("RPC_test", RpcTarget.AllBufferedViaServer);
@@ -194,8 +202,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
+		int spawnIndex = -1;
+		for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+		{
+			if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.NickName)
+			{
+				spawnIndex = i+1;
+				break;
+			}
 
-		GameObject _player = PhotonNetwork.Instantiate("WereWolf", new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
+		}
+		Transform spawn = GameObject.Find("Spawn" + spawnIndex.ToString()).transform;
+
+		GameObject _player = PhotonNetwork.Instantiate("WereWolf", spawn.position, new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
 
