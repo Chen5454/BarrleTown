@@ -33,16 +33,16 @@ public class Shop : MonoBehaviourPunCallbacks
 	public bool canGenerateNewRecipe;
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.V))
-		{
-			if (PhotonNetwork.IsMasterClient)
-			{
+		//if (Input.GetKeyDown(KeyCode.V))
+		//{
+		//	if (PhotonNetwork.IsMasterClient)
+		//	{
 
-				//CheckDropSite();
-				//GameManager.getInstance.CheckIfRecipeCompleted();
-				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
-			}
-		}
+		//		//CheckDropSite();
+		//		//GameManager.getInstance.CheckIfRecipeCompleted();
+		//		//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+		//	}
+		//}
 
 
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
@@ -102,8 +102,8 @@ public class Shop : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			if (uiManager.shop.recipeUI.activeInHierarchy)
-				uiManager.shop.ShowRecipePanel(false);
+			//if (uiManager.shop.recipeUI.activeInHierarchy)
+			//	uiManager.shop.ShowRecipePanel(false);
 			playersInsideShopRegion = 0;
 		}
 

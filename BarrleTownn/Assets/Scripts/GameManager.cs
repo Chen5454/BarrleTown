@@ -165,7 +165,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 		shop.canGenerateNewRecipe = true;
 		if (shop.canGenerateNewRecipe)
 			if (PhotonNetwork.IsMasterClient)
+			{
+				shop.canGetReward = true;
 				shop.GenerateNewRecipe();
+			}
+
 
 
 
@@ -207,7 +211,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			if (PhotonNetwork.PlayerList[i].NickName == PhotonNetwork.NickName)
 			{
-				spawnIndex = i+1;
+				spawnIndex = i + 1;
 				break;
 			}
 
