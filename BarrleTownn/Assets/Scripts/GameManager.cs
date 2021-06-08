@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] VotingArea votingArea;
 	[SerializeField] LobbyController lobbyCon;
 	[SerializeField] ChatUI chat;
+	Shop shop;
 
 	[Header("Phases")]
 	public List<string> playersNameList;
@@ -152,7 +153,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 			votingArea = FindObjectOfType<VotingArea>();
 		if (chat == null)
 			chat = FindObjectOfType<ChatUI>();
-
+		if (shop == null)
+			shop = FindObjectOfType<Shop>();
 
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
@@ -247,7 +249,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				fov.SetDayFOV();
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
 				if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
-					ShowNewGeneratedRecipe();
+					if (PhotonNetwork.IsMasterClient)
+						shop.GenerateNewRecipe();
 				barrelManager.GenerateBarrels();
 
 				camera.setCameraToGamePhase(true);
@@ -550,6 +553,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 			lobbyCon.ShowPlayerName();
 		}
 	}
+	#endregion
+
+	public void ShowRecipeToAll(int _index)
+	{
+		photonView.RPC("RPC_ShowRecipeToAll", RpcTarget.AllBufferedViaServer, _index);
+	}
+
+	#region shop
+	[PunRPC]
+	void RPC_ShowRecipeToAll(int _index)
+	{
+		shop.GetNewGeneratedRecipeIndex(_index);
+	}
+
 	#endregion
 
 	#region PUNRPC

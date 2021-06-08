@@ -53,7 +53,7 @@ public class Shop : MonoBehaviourPunCallbacks
 			Debug.Log("Barrel Inside: " + insideBarrels.Length / 2);
 			if (barrelsInsideShopRegion != insideBarrels.Length / 2)
 			{
-				barrelsInsideShopRegion = insideBarrels.Length/ 2;
+				barrelsInsideShopRegion = insideBarrels.Length / 2;
 				if (PhotonNetwork.IsMasterClient)
 				{
 					CheckDropSite();
@@ -112,14 +112,20 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	public void GenerateNewRecipe()
 	{
+		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
 		if (PhotonNetwork.IsMasterClient)
 		{
-			int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
-			currentRecipe = shopRecipe.RecipeList[randomizer];
-			canGenerateNewRecipe = false;
+		 GameManager.getInstance.ShowRecipeToAll(randomizer);
 		}
+		//currentRecipe = shopRecipe.RecipeList[randomizer];
+		//canGenerateNewRecipe = false;
 	}
 
+	public void GetNewGeneratedRecipeIndex(int _index)
+	{
+		currentRecipe = shopRecipe.RecipeList[_index];
+		canGenerateNewRecipe = false;
+	}
 
 	public void GenerateNewShopRecipe()
 	{
