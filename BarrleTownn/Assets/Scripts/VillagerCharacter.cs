@@ -84,16 +84,17 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void ChangeWerewolfTag()
 	{
-		if (isWerewolfState)
+		if (photonView.IsMine)
 		{
-			gameObject.tag = "Werewolf";
+			if (isWerewolfState)
+			{
+				gameObject.tag = "Werewolf";
+			}
+			else if (!isWerewolf)
+			{
+				gameObject.tag = "Player";
+			}
 		}
-
-		else if (!isWerewolfState)
-		{
-			gameObject.tag = "Player";
-		}
-
 	}
 
 	public void FixedUpdate()
