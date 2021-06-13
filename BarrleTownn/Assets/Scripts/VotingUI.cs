@@ -34,26 +34,34 @@ public class VotingUI : MonoBehaviour
 	{
 		if (GameManager.getInstance != null)
 		{
+
 			votingIndex = -1;
-			if (_show)
+
+			if (GameManager.getInstance.player.currentHp > 0)
 			{
-				for (int i = 0; i < playerVotingButtons.Length; i++)
+			
+				if (_show)
 				{
-					if (i < GameManager.getInstance.playersList.Count)
-						if (GameManager.getInstance.playersList[i].currentHp > 0)
-							if (!GameManager.getInstance.playersList[i].photonView.IsMine)
-								playerVotingButtons[i].gameObject.SetActive(_show);
+					for (int i = 0; i < playerVotingButtons.Length; i++)
+					{
+						if (i < GameManager.getInstance.playersList.Count)
+							if (GameManager.getInstance.playersList[i].currentHp > 0)
+								if (!GameManager.getInstance.playersList[i].photonView.IsMine)
+									playerVotingButtons[i].gameObject.SetActive(_show);
+					}
+					isVotedFor = new bool[playerVotingButtons.Length];
+					ChangeButtonText();
 				}
-				isVotedFor = new bool[playerVotingButtons.Length];
-				ChangeButtonText();
-			}
-			else
-			{
-				for (int i = 0; i < playerVotingButtons.Length; i++)
+				else
 				{
-					playerVotingButtons[i].gameObject.SetActive(_show);
+					for (int i = 0; i < playerVotingButtons.Length; i++)
+					{
+						playerVotingButtons[i].gameObject.SetActive(_show);
+					}
 				}
 			}
+
+			
 		}
 	}
 
