@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
 
-
+		
 	}
 
 
@@ -546,6 +546,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void RPC_GetPlayerList()
 	{
 		playersList = playersList.OrderBy(x => x.photonView.ViewID).ToList();
+
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if (playersList[i].isWerewolf)
+				playersList[i].tag = "Werewolf";
+			else
+				playersList[i].tag = "Player";
+		}
 	}
 
 
