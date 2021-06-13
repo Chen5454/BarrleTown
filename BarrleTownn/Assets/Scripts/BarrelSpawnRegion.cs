@@ -136,7 +136,8 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 	}
 	RecipeItems RandomizeBarrelType()
 	{
-		int randomizer = Random.Range(1, 3);
+		
+		int randomizer = Random.Range(1, 4);
 		RecipeItems test = (RecipeItems)randomizer;
 		return test;
 	}

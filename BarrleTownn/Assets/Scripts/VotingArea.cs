@@ -20,7 +20,7 @@ public class VotingArea : MonoBehaviour
 			{
 
 				_players[i].canMove = false;
-				Debug.LogError("moving Character: " + _players[i].name);
+				//Debug.LogError("moving Character: " + _players[i].name);
 				_players[i].rb2D.velocity = new Vector2(0, 0);
 				if (_players[i].photonView.IsMine)
 					_players[i].gameObject.transform.position = playerPositions[i].position;

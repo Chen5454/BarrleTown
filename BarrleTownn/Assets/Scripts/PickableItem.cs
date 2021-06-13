@@ -16,6 +16,7 @@ public class PickableItem : MonoBehaviourPunCallbacks
 
 	public void ShowItemOnFloor(ItemSO _item)
 	{
+		gameObject.SetActive(true);
 		pickableItem = _item;
 		spriteRenderer.sprite = _item.itemSprite;
 	}

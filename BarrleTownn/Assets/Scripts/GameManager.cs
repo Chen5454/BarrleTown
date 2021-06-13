@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public static GameManager getInstance => _instance;
 
 	[Header("References")]
+	[SerializeField] ItemBankSO bankSO;
 	[SerializeField] FieldOfView fov;
 	[SerializeField] BarrelManager barrelManager;
 	[SerializeField] CameraController camera;
@@ -139,10 +140,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 			photonView.RPC("RPC_ChooseWereWolf", RpcTarget.AllBufferedViaServer, isWereWolf);
 		}
 
-
-
-
-
 		if (fov == null)
 			fov = FindObjectOfType<FieldOfView>();
 		if (barrelManager == null)
@@ -159,6 +156,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
+
+		barrelManager.canStartGeneration = true;
 		barrelManager.GenerateBarrels();
 
 
@@ -243,12 +242,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 		switch (gamePhase)
 		{
 			case GamePhases.Day: //switches to night
+				gamePhase = GamePhases.Night;
 				if (player.isWerewolf)
 					player.wereWolf.Transform();
 
 				ShowNames(false);
 
-				gamePhase = GamePhases.Night;
+			
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 
@@ -259,12 +259,22 @@ public class GameManager : MonoBehaviourPunCallbacks
 					barrelManager.canStartGeneration = true;
 				break;
 			case GamePhases.Night://switches to talk
+				gamePhase = GamePhases.talk;
 				if (player.isWerewolf)
 					player.wereWolf.Transform();
 
 				ShowNames(true);
 
-				gamePhase = GamePhases.talk;
+				if(player.GETIsPicked)
+					if(player.box != null)
+					{
+						player.box.transform.parent = null;
+						player.speed = player.speed * 2;
+						player.GETIsPicked = false;
+					}
+					
+
+
 				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
 				StartTalkPhase();
@@ -578,12 +588,32 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 	#endregion
 
+
+
+
+
+
+
+	#region shop
+	public PickableItem item;
+	public void ShowDroppedItemInfo(int _index)
+	{
+		if (PhotonNetwork.IsMasterClient)
+			photonView.RPC("RPC_ShowDroppedItemInfo", RpcTarget.AllBufferedViaServer, _index);
+	}
+
+	[PunRPC]
+	public void RPC_ShowDroppedItemInfo(int _index)
+	{
+		shop.ChangeRewardInfo(bankSO.itemList[_index]);
+		
+	}
+
 	public void ShowRecipeToAll(int _index)
 	{
 		photonView.RPC("RPC_ShowRecipeToAll", RpcTarget.AllBufferedViaServer, _index);
 	}
 
-	#region shop
 	[PunRPC]
 	void RPC_ShowRecipeToAll(int _index)
 	{

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -814,77 +814,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: timer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: canVote
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: dayTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: voteTime
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: gamePhase
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: nightTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: playerName
-      value: 
-      objectReference: {fileID: 991857482718824612, guid: 1ed0dedb29d81ca46ba624205e138fb9,
-        type: 3}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: isGameActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: wolfViewRange
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: waitForVoteTime
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: VillageViewRange
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: playersNameList.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: playersNameList.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2091848494673899822, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-        type: 3}
-      propertyPath: playersNameList.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2091848494673899823, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
         type: 3}
       propertyPath: m_Name
@@ -892,34 +821,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3, type: 3}
---- !u!1 &1159640607 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2091848494673899823, guid: 884e4b10c5a2f9347ab37d3d8ec4f6e3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1159640606}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1159640608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159640607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 2
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &1248270514
 GameObject:
   m_ObjectHideFlags: 0

@@ -42,4 +42,16 @@ public class OwnerShipTranfer : MonoBehaviourPun, IPunOwnershipCallbacks
 	{
 		base.photonView.RequestOwnership();
 	}
+	public void ReturnToMaster()
+	{
+		base.photonView.TransferOwnership(PhotonNetwork.MasterClient);
+	}
+
+
+
+	public void DestroyThisGameObject()
+	{
+		PhotonNetwork.Destroy(this.gameObject);
+	}
+
 }

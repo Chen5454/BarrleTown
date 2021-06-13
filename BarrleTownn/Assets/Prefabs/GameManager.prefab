@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2091848494673899821}
   - component: {fileID: 2091848494673899822}
+  - component: {fileID: 1159640608}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -43,15 +44,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420bdf8def8b5da4ab1ec2a79dcdf70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bankSO: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
   fov: {fileID: 0}
+  barrelManager: {fileID: 0}
+  camera: {fileID: 0}
+  votingArea: {fileID: 0}
+  lobbyCon: {fileID: 0}
+  chat: {fileID: 0}
+  playersNameList: []
   playersList: []
   votePhase:
     playerVoteSpots: []
-  player: {fileID: 0}
-  gamePhase: 0
-  dayTime: 5
-  nightTime: 5
-  waitForVoteTime: 2.5
+  isGameActive: 0
+  gamePhase: 3
+  dayTime: 20
+  nightTime: 20
   voteTime: 5
-  timer: 0
+  waitForVoteTime: 5
+  wolfViewRange: 4
+  VillageViewRange: 2
+  timer: 5
   canVote: 0
+  isWereWolf: 
+  player: {fileID: 0}
+  werewolf: {fileID: 0}
+  playerName: {fileID: 991857482718824612, guid: 1ed0dedb29d81ca46ba624205e138fb9,
+    type: 3}
+--- !u!114 &1159640608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091848494673899823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

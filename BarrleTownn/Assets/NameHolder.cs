@@ -22,9 +22,8 @@ public class NameHolder : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
     }
 
 
@@ -43,6 +42,10 @@ public class NameHolder : MonoBehaviour
         {
             this.transform.position = Camera.main.WorldToScreenPoint(playerPos.position) + offset;
         }
+        if (playerPos == null)
+            Destroy(this.gameObject);
+
+
     }
 
 }

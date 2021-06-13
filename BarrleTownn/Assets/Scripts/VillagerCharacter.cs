@@ -141,7 +141,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 		else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
 		{
-			box.transform.parent = null;
+			if (box != null)
+				box.transform.parent = null;
 			speed = speed * 2;
 			GETIsPicked = false;
 

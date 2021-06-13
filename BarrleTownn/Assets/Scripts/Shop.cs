@@ -23,14 +23,21 @@ public class Shop : MonoBehaviourPunCallbacks
 	[Header("references")]
 	public UIManager uiManager;
 	public ItemBankSO itemBank;
-
+	[SerializeField] GameObject _reward;
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
+	[Header("Debug")]
 	int playersInsideShopRegion;
 	int barrelsInsideShopRegion;
 	public bool canGetReward;
 	public bool canGenerateNewRecipe;
+
+	private void Awake()
+	{
+		_reward.SetActive(false);
+	}
+
 	void Update()
 	{
 		//if (Input.GetKeyDown(KeyCode.V))
@@ -102,8 +109,8 @@ public class Shop : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			//if (uiManager.shop.recipeUI.activeInHierarchy)
-			//	uiManager.shop.ShowRecipePanel(false);
+			if (uiManager.shop.recipeUI.activeInHierarchy)
+				uiManager.shop.ShowRecipePanel(false);
 			playersInsideShopRegion = 0;
 		}
 
@@ -115,7 +122,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
 		if (PhotonNetwork.IsMasterClient)
 		{
-		 GameManager.getInstance.ShowRecipeToAll(randomizer);
+			GameManager.getInstance.ShowRecipeToAll(randomizer);
 		}
 		//currentRecipe = shopRecipe.RecipeList[randomizer];
 		//canGenerateNewRecipe = false;
@@ -124,6 +131,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	public void GetNewGeneratedRecipeIndex(int _index)
 	{
 		currentRecipe = shopRecipe.RecipeList[_index];
+		Debug.LogError(" the new recipe is for: " + currentRecipe.recipeReward.itemName);
 		canGenerateNewRecipe = false;
 	}
 
@@ -163,7 +171,6 @@ public class Shop : MonoBehaviourPunCallbacks
 
 
 			}
-			Debug.Log("Aquired: " + test[i]);
 		}
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -172,15 +179,17 @@ public class Shop : MonoBehaviourPunCallbacks
 		}
 		if (CheckIfCompletedRecipe(test) && canGetReward)
 		{
-			Debug.LogError("Collected all materials required: Instantiateing item: " + "ItemName");
 			canGetReward = false;
 			canGenerateNewRecipe = true;
-			SpawnItemRecipe();
+
+
+			if (PhotonNetwork.IsMasterClient)
+				SpawnItemRecipe();
+
 			DeleteBarrelsFromDropZone();
 		}
 		else
 		{
-			Debug.LogError("Didn't collected all required materials");
 		}
 
 
@@ -226,12 +235,22 @@ public class Shop : MonoBehaviourPunCallbacks
 			{
 				if (_barrels[j].contain == currentRecipe.recipe[i])
 				{
+
+					//_barrels[j].transfer.ReturnToMaster();
 					amountChecker[i]++;
+
 					if (amountChecker[i] <= currentRecipe.amountRequired[i])
 					{
+
 						Debug.Log("Destroying barrels: " + i);
-						PhotonNetwork.Destroy(_barrels[j].gameObject.GetPhotonView());
+						if (_barrels[i].photonView.IsMine)
+						{
+							if (_barrels[i] != null)
+								PhotonNetwork.Destroy(_barrels[j].gameObject.GetPhotonView());
+						}
+
 					}
+
 				}
 			}
 		}
@@ -267,13 +286,22 @@ public class Shop : MonoBehaviourPunCallbacks
 
 
 
-
 	public void SpawnItemRecipe()
 	{
-		GameObject reward = PhotonNetwork.Instantiate("Pickable", rewardSpawnPosition.position, new Quaternion());
-		reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
+
+	
+		int _index = itemBank.itemList.FindIndex(x => x.itemName == currentRecipe.recipeReward.itemName);
+
+		GameManager.getInstance.ShowDroppedItemInfo(_index);
+
+		//reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
 	}
 
+	public void ChangeRewardInfo(ItemSO _itemInfo)
+	{
+		_reward.GetComponent<PickableItem>().ShowItemOnFloor(_itemInfo);
+		Debug.Log("Reward: " + _reward.GetComponent<PickableItem>().pickableItem.itemName);
+	}
 
 
 
