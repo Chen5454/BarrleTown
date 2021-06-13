@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 				ShowNames(false);
 
-			
+
 				timer = nightTime;
 				Debug.Log("Switching to Night");
 
@@ -265,14 +265,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 				ShowNames(true);
 
-				if(player.GETIsPicked)
-					if(player.box != null)
+				if (player.GETIsPicked)
+					if (player.box != null)
 					{
 						player.box.transform.parent = null;
 						player.speed = player.speed * 2;
 						player.GETIsPicked = false;
 					}
-					
+
 
 
 				chat.SetChatVisibility(true);
@@ -324,7 +324,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		for (int i = 0; i < nameHolders.Length; i++)
 		{
-			nameHolders[i].gameObject.SetActive(_show);
+			if (nameHolders[i] != null)
+				nameHolders[i].gameObject.SetActive(_show);
 		}
 	}
 
@@ -399,6 +400,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 		//Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
 		RemovePlayerFromList(other.NickName);
+
+
+	
+
 
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -572,6 +577,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		int listIndex = playersNameList.IndexOf(playerName);
 		playersNameList.RemoveAt(listIndex);
+		playersList.RemoveAt(listIndex);
 		//photonView.RPC("RPC_RemovePlayerFromList", RpcTarget.AllBufferedViaServer, playerName);
 
 	}
@@ -606,7 +612,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void RPC_ShowDroppedItemInfo(int _index)
 	{
 		shop.ChangeRewardInfo(bankSO.itemList[_index]);
-		
+
 	}
 
 	public void ShowRecipeToAll(int _index)
