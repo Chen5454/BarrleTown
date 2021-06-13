@@ -49,7 +49,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-        gameObject.tag = "Werewolf";
+        gameObject.tag = "Player";
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
