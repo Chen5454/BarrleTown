@@ -84,17 +84,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void ChangeWerewolfTag()
 	{
-		if (photonView.IsMine)
-		{
-			if (isWerewolfState)
+		
+			if (this.isWerewolfState)
 			{
-				gameObject.tag = "Werewolf";
+			if(this.gameObject.tag != "Werewolf")
+				this.gameObject.tag = "Werewolf";
 			}
-			else if (!isWerewolf)
+			else if (!this.isWerewolfState)
 			{
-				gameObject.tag = "Player";
+			if (this.gameObject.tag != "Player")
+				this.gameObject.tag = "Player";
 			}
-		}
+		
 	}
 
 	public void FixedUpdate()
@@ -110,6 +111,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			Flip(horiznotal);
 		}
+
+		ChangeWerewolfTag();
+
+
+
 	}
 
 
