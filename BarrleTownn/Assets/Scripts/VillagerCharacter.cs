@@ -83,12 +83,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void ChangeWerewolfTag()
 	{
-		if (isWerewolf)
+		if (isWerewolfState)
 		{
 			gameObject.tag = "Werewolf";
 		}
 
-		else if (!isWerewolf)
+		else if (!isWerewolfState)
 		{
 			gameObject.tag = "Player";
 		}
@@ -108,6 +108,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			Flip(horiznotal);
 		}
+		ChangeWerewolfTag();
 	}
 
 

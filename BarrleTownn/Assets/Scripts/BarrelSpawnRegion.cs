@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 {
@@ -8,6 +9,9 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 	public LayerMask barrelMask;
 	public Transform barrelParent;
 	public GameObject barrelPF;
+
+	public List<GameObject> barrelList = new List<GameObject>();
+
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.T))
@@ -95,7 +99,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 		if (barrelAmount == hasBarrelNearBy.Length)
 		{
-		//	Debug.Log("Region is full");
+			//	Debug.Log("Region is full");
 			return true;
 		}
 		else
@@ -113,30 +117,72 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 		//multiplayer instantiate
 		if (PhotonNetwork.IsMasterClient)
+			spawnBarrels(trans);
+		//photonView.RPC("RPC_RandomizeBarrel", RpcTarget.AllBufferedViaServer,RandomizeBarrelType());
+		//barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
+
+
+
+	}
+
+
+	void spawnBarrels(Transform trans)
+	{
+
+
+		bool canUseExisted = false;
+		if (barrelList.Count == 0)
 		{
 			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
 			_barrel = barrel;
 			_barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
-			//photonView.RPC("RPC_RandomizeBarrel", RpcTarget.AllBufferedViaServer,RandomizeBarrelType());
-			//barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
-			barrel.transform.SetParent(barrelParent);
+			_barrel.transform.SetParent(barrelParent);
+			barrelList.Add(_barrel);
+
+
 		}
+		else
+		{
+			for (int i = 0; i < barrelList.Count; i++)
+			{
+				if (!barrelList[i].activeInHierarchy)
+				{
+					barrelList[i].GetComponent<InteractItem>().contain = RandomizeBarrelType();
+					barrelList[i].GetComponent<InteractItem>().SetGameObjectActive(true, trans.position);
+					barrelList[i].transform.position = trans.position;
+					barrelList[i].SetActive(true);
+					canUseExisted = true;
+					break;
+				}
+			}
+
+
+			if (!canUseExisted)
+			{
+				GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
+				_barrel = barrel;
+				_barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
+				_barrel.transform.SetParent(barrelParent);
+				barrelList.Add(_barrel);
+			}
+
+
+		}
+
+
+
 	}
-
-
-
 
 
 	GameObject _barrel;
 	[PunRPC]
 	void RPC_RandomizeBarrel(RecipeItems _item)
 	{
-		
 		_barrel.GetComponent<InteractItem>().contain = _item;
 	}
 	RecipeItems RandomizeBarrelType()
 	{
-		
+
 		int randomizer = Random.Range(1, 4);
 		RecipeItems test = (RecipeItems)randomizer;
 		return test;

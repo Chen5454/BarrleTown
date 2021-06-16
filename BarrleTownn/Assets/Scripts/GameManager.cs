@@ -243,8 +243,25 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			case GamePhases.Day: //switches to night
 				gamePhase = GamePhases.Night;
-				if (player.isWerewolf)
+
+
+				//shop.TeleportPlayersOutsideOfShop();
+
+				SetShopDoorActive(true);
+
+
+				if (player.isWerewolf) 
+				{
+					if (player.GETIsPicked)
+						if (player.box != null)
+						{
+							player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
+							player.speed = player.speed * 2;
+							player.GETIsPicked = false;
+						}
 					player.wereWolf.Transform();
+				}
+					
 
 				ShowNames(false);
 
@@ -268,7 +285,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				if (player.GETIsPicked)
 					if (player.box != null)
 					{
-						player.box.transform.parent = null;
+						player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
 						player.speed = player.speed * 2;
 						player.GETIsPicked = false;
 					}
@@ -281,17 +298,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
-				if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
-					if (PhotonNetwork.IsMasterClient)
-						shop.GenerateNewRecipe();
+				//if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
+				//	if (PhotonNetwork.IsMasterClient)
+				//		shop.GenerateNewRecipe();
 				barrelManager.GenerateBarrels();
 
 				camera.setCameraToGamePhase(true);
 				SetPlayersAtVotingPosition();
+
 				break;
 			case GamePhases.talk://switches to Vote
 				votingArea.ShowVotingButtons(true);
-
+				SetShopDoorActive(false);
 
 
 				gamePhase = GamePhases.Vote;
@@ -325,7 +343,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 		for (int i = 0; i < nameHolders.Length; i++)
 		{
 			if (nameHolders[i] != null)
+			{
 				nameHolders[i].gameObject.SetActive(_show);
+			}
+				
 		}
 	}
 
@@ -548,14 +569,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			Transform parent = GameObject.Find("PlayerNameHolders").transform;
 			GameObject nameHolder = Instantiate(playerName, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), parent);
-
+			
 			//nameHolder.transform.SetParent(parent);
 			nameHolder.GetComponent<NameHolder>().playerPos = playersList[i].transform;
 			nameHolder.GetComponent<NameHolder>().nameText.text = playersNameList[i];
+			if (playersList[i].photonView.IsMine && player.isWerewolf)
+			{
+				nameHolder.GetComponent<NameHolder>().nameText.color = Color.red;
+			}
 		}
 
 
 		nameHolders = FindObjectsOfType<NameHolder>();
+		
 	}
 
 
@@ -601,6 +627,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	#region shop
+
+	
+
+	public void SetShopDoorActive(bool _setActive)
+	{
+		photonView.RPC("RPC_SetShopDoorActive",RpcTarget.AllBufferedViaServer,_setActive);
+	}
+
+	[PunRPC]
+	void RPC_SetShopDoorActive(bool _setActive)
+	{
+		shop.SetDoor(_setActive);
+	}
+
 	public PickableItem item;
 	public void ShowDroppedItemInfo(int _index)
 	{

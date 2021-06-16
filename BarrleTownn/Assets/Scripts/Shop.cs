@@ -24,49 +24,44 @@ public class Shop : MonoBehaviourPunCallbacks
 	public UIManager uiManager;
 	public ItemBankSO itemBank;
 	[SerializeField] GameObject _reward;
+	[SerializeField] GameObject shopDoor;
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
 	[Header("Debug")]
+	public int doorStartHP;
+	public int doorHP;
 	int playersInsideShopRegion;
 	int barrelsInsideShopRegion;
 	public bool canGetReward;
 	public bool canGenerateNewRecipe;
-
+	Collider2D[] insidePlayers;
+	[SerializeField] Transform kickFromShopPlace;
 	private void Awake()
 	{
 		_reward.SetActive(false);
+		canGetReward = true;
+		doorHP = doorStartHP;
 	}
 
 	void Update()
 	{
-		//if (Input.GetKeyDown(KeyCode.V))
-		//{
-		//	if (PhotonNetwork.IsMasterClient)
-		//	{
-
-		//		//CheckDropSite();
-		//		//GameManager.getInstance.CheckIfRecipeCompleted();
-		//		//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
-		//	}
-		//}
-
-
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
-		Collider2D[] insidePlayers = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, playerMask);
+		insidePlayers = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, playerMask);
 		//barrels
 		if (insideBarrels.Length > 0)
 		{
-			Debug.Log("Barrel Inside: " + insideBarrels.Length / 2);
 			if (barrelsInsideShopRegion != insideBarrels.Length / 2)
 			{
 				barrelsInsideShopRegion = insideBarrels.Length / 2;
 				if (PhotonNetwork.IsMasterClient)
 				{
 					CheckDropSite();
-					GameManager.getInstance.CheckIfRecipeCompleted();
+					//GameManager.getInstance.CheckIfRecipeCompleted();
 					//GameManager.getInstance.CheckIfRecipeCompleted();photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
+
 				}
+				CheckIfRecipeCompleted();
 			}
 
 		}
@@ -78,15 +73,14 @@ public class Shop : MonoBehaviourPunCallbacks
 		//players
 		if (insidePlayers.Length > 0)
 		{
-			Debug.Log("People Inside: " + insidePlayers.Length);
 			if (playersInsideShopRegion != insidePlayers.Length)
 			{
 				playersInsideShopRegion = insidePlayers.Length;
 
 				CheckDropSite();
-				GameManager.getInstance.CheckIfRecipeCompleted();
+				//GameManager.getInstance.CheckIfRecipeCompleted();
 				//photonView.RPC("RPC_CheckIfRecipeCompleted", RpcTarget.AllBufferedViaServer);
-
+				CheckIfRecipeCompleted();
 				int playerIndex = -1;
 				for (int i = 0; i < insidePlayers.Length; i++)
 				{
@@ -114,11 +108,37 @@ public class Shop : MonoBehaviourPunCallbacks
 			playersInsideShopRegion = 0;
 		}
 
+
+		if (canGenerateNewRecipe)
+			if (PhotonNetwork.IsMasterClient)
+				GenerateNewRecipe();
+
 	}
 
-
+	public void SetDoor(bool _setActive)
+	{
+		if (insidePlayers.Length > 0)
+		{
+			shopDoor.SetActive(false);
+		}
+		else
+			shopDoor.SetActive(_setActive);
+	}
+	void checkIfDoorDestroyed()
+	{
+		if (doorStartHP <= 0)
+		{
+			GameManager.getInstance.SetShopDoorActive(false);
+		}
+	}
+	public void DamageDoor(int damage)
+	{
+		doorStartHP -= damage;
+		checkIfDoorDestroyed();
+	}
 	public void GenerateNewRecipe()
 	{
+		canGenerateNewRecipe = false;
 		int randomizer = UnityEngine.Random.Range(0, shopRecipe.RecipeList.Count);
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -201,23 +221,16 @@ public class Shop : MonoBehaviourPunCallbacks
 
 		List<InteractItem> destroyableBarrels = new List<InteractItem>();
 
-		for (int i = 0; i < currentRecipe.amountRequired.Count; i++)
+
+		for (int i = 0; i < itemInside.Count; i++)
 		{
-			for (int j = 0; j < itemInside.Count; j++)
-			{
-				if (currentRecipe.recipe[i] == itemInside[j].contain)
-				{
-
-
-					//Debug.Log("Preparing to destroy barrels");
-					destroyableBarrels.Add(itemInside[j]);
-					checkList(destroyableBarrels);
-
-
-
-				}
-			}
+			//Debug.Log("Preparing to destroy barrels");
+			//destroyableBarrels.Add(itemInside[i]);
+			//checkList(destroyableBarrels);
+			//itemInside[i].gameObject.SetActive(false);
+			itemInside[i].GetComponent<InteractItem>().SetGameObjectActive(false,new Vector3(0,0,0));
 		}
+
 
 
 
@@ -289,7 +302,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	public void SpawnItemRecipe()
 	{
 
-	
+
 		int _index = itemBank.itemList.FindIndex(x => x.itemName == currentRecipe.recipeReward.itemName);
 
 		GameManager.getInstance.ShowDroppedItemInfo(_index);
@@ -304,7 +317,14 @@ public class Shop : MonoBehaviourPunCallbacks
 	}
 
 
-
+	public void TeleportPlayersOutsideOfShop()
+	{
+		for (int i = 0; i < insidePlayers.Length; i++)
+		{
+			if (insidePlayers[i].gameObject.GetPhotonView().IsMine)
+				insidePlayers[i].transform.position = kickFromShopPlace.position;
+		}
+	}
 
 
 

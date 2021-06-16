@@ -29,7 +29,7 @@ public class VotingArea : MonoBehaviour
 	}
 	public void ResetVotes()
 	{
-		voteAmount = new int[votingUI.playerVotingButtons.Length];
+		voteAmount = new int[votingUI.playerVotingButtons.Length + 1];
 	}
 
 	public void VoteToPlayer(int playerIndex, int vote)
@@ -55,6 +55,7 @@ public class VotingArea : MonoBehaviour
 		int highestIndex = 0;
 		int highestPoint = 0;
 		bool hasTie = false;
+		bool skip = false;
 		for (int i = 0; i < voteAmount.Length; i++)
 		{         
 			// -1 < 0 
@@ -83,7 +84,11 @@ public class VotingArea : MonoBehaviour
 				}
 			}
 		}
-		if (hasTie || highestPoint == 0)
+		if (voteAmount[8] == highestPoint)
+			skip = true;
+
+
+		if (hasTie || highestPoint == 0 || skip)
 		{
 			Debug.Log("Tie! or No Votes");
 		}

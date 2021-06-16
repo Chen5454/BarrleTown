@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BarrelManager : MonoBehaviour
@@ -8,6 +9,9 @@ public class BarrelManager : MonoBehaviour
 	public int minBarrelsSpawn;
 	public int maxBarrelsSpawn;
 	public bool canStartGeneration;
+
+
+
 	public void GenerateBarrels()
 	{
 		if (canStartGeneration)

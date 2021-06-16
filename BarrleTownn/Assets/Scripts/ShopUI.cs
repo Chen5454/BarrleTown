@@ -33,15 +33,7 @@ public class ShopUI : MonoBehaviour
 
 	public void ShowRecipePanel(bool _show)
 	{
-		if (shopRef.canGetReward)
-		{
 			recipeUI.SetActive(_show);
-		}
-		else
-		{
-			recipeUI.SetActive(false);
-		}
-		
 	}
 
 
