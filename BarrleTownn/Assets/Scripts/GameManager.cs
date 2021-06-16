@@ -109,6 +109,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	private void OnLevelWasLoaded(int level)
 	{
+		if (level == 1)
+        {
+			lobbyCon = FindObjectOfType<LobbyController>();
+		}
 		if (level == 2)
 		{
 			InitGame();
@@ -221,7 +225,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
 
-
+		
 	}
 
 
@@ -413,8 +417,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 			//Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
-			LoadArena();
+			//LoadArena();
 		}
+
+		
+		
+
 	}
 	public override void OnPlayerLeftRoom(Player other)
 	{

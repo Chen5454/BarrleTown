@@ -88,10 +88,14 @@ namespace Afik.MultiProject.BarrelTown
 		{
 			PlayerCountUpdate();
 
-			if (PhotonNetwork.IsMasterClient)
+			/*if (PhotonNetwork.IsMasterClient)
 			{
 				myPhotonView.RPC("RPC_SendTimer", RpcTarget.Others, timerToStartGame);
-			}
+			}*/
+
+			fullGameTimer = maxFullGameWaitTime;
+			notFullGameTimer = maxWaitTime;
+			timerToStartGame = maxWaitTime;
 		}
 
 		[PunRPC]
@@ -107,6 +111,10 @@ namespace Afik.MultiProject.BarrelTown
 
 		public override void OnPlayerLeftRoom(Player otherPlayer)
 		{
+			fullGameTimer = maxFullGameWaitTime;
+			notFullGameTimer = maxWaitTime;
+			timerToStartGame = maxWaitTime;
+
 			PlayerCountUpdate();
 			ShowPlayerName();
 

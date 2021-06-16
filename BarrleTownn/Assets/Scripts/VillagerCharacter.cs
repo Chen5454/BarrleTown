@@ -49,6 +49,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
+        gameObject.tag = "Player";
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
@@ -83,16 +84,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void ChangeWerewolfTag()
 	{
-		if (isWerewolfState)
-		{
-			gameObject.tag = "Werewolf";
-		}
 
-		else if (!isWerewolfState)
-		{
-			gameObject.tag = "Player";
-		}
-
+			if (this.isWerewolfState)
+			{
+			if(this.gameObject.tag != "Werewolf")
+				this.gameObject.tag = "Werewolf";
+			}
+			else if (!this.isWerewolfState)
+			{
+			if (this.gameObject.tag != "Player")
+				this.gameObject.tag = "Player";
+			}
+		
 	}
 
 	public void FixedUpdate()
@@ -108,7 +111,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			Flip(horiznotal);
 		}
+
+
 		ChangeWerewolfTag();
+
+
+
 	}
 
 
