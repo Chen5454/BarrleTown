@@ -2409,8 +2409,8 @@ MonoBehaviour:
   itemBank: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
   _reward: {fileID: 1768300826}
   shopDoor: {fileID: 2052869169}
-  doorStartHP: 0
-  doorHP: 0
+  doorStartHP: 3
+  doorHP: 3
   canGetReward: 0
   canGenerateNewRecipe: 0
   kickFromShopPlace: {fileID: 972188031}

@@ -19,8 +19,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool canHide;
 	public bool isWerewolf;
 	public bool isWerewolfState;
-
-
+	public bool nightHide;
+	public bool dayPickUp;
+	public bool isVulnerable;
 	[SerializeField]
 	public WereWolf wereWolf;
 
@@ -28,12 +29,16 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public Vector2 movement;
 
 	public InteractItem hidebehind;
-    private SpriteRenderer playerRenderer;
+
+	private Shop shop;
+	public SpriteRenderer playerRenderer;
 	private GameManager gameManager;
 	public GameObject box;
 	UIManager uiManager;
 
-	public bool GETIsPicked
+    #region Getters Setters
+
+    public bool GETIsPicked
 	{
 		set
 		{
@@ -61,18 +66,35 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
         get { return canMove; }
     }
 
+	//public bool GETcanHide
+	//{
+	//	get { return canHide; }
 
-	private void Start()
+	//	set
+	//	{
+	//		if (canHide != value)
+	//		{
+	//			canHide = value;
+	//		}
+	//	}
+
+	//}
+
+    #endregion
+
+    private void Start()
     {
-
+		
 		gameObject.tag = "Player";
+		dayPickUp = true;
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
-        playerRenderer = GetComponent<SpriteRenderer>();
+       // playerRenderer = GetComponent<SpriteRenderer>();
 
 		ChangeWerewolfTag();
 	}
+
 
 	public void Update()
 	{
@@ -84,12 +106,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			{
 				PickUp();
 
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-					Hide();
-                }
-				
-			}
+				if (nightHide)
+				{
+					if (Input.GetKeyDown(KeyCode.E))
+					{
+						Hide();
+					}
+					
+				}
+            }
 			else
 			{
 				// didn't transformed
@@ -163,24 +188,26 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void PickUp()
 	{
-
-		if (Input.GetKeyDown(KeyCode.Q) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+		if (dayPickUp)
 		{
-			GETIsPicked = true;
-			box = GetBarrleCollider().gameObject;
-			box.transform.parent = this.gameObject.transform;
-			box.GetComponent<InteractItem>().transfer.PickingUp();
-			speed = speed / 2;
-		}
+			if (Input.GetKeyDown(KeyCode.Q) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+			{
+				GETIsPicked = true;
+				box = GetBarrleCollider().gameObject;
+				box.transform.parent = this.gameObject.transform;
+				box.GetComponent<InteractItem>().transfer.PickingUp();
+				speed = speed / 2;
+			}
 
 
-		else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
-		{
-			if (box != null)
-				box.transform.parent = null;
-			speed = speed * 2;
-			GETIsPicked = false;
+			else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
+			{
+				if (box != null)
+					box.transform.parent = null;
+				speed = speed * 2;
+				GETIsPicked = false;
 
+			}
 		}
 	}
 
@@ -199,20 +226,20 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
         {
             if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
             {
-                canHide = true;
+				canHide = true;
             }
         }
     }
+
+
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (photonView.IsMine)
         {
-
-
             if (other.gameObject.CompareTag("Pickup"))
             {
-                canHide = false;
+				canHide = false;
             }
         }
     }
@@ -229,66 +256,66 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-
-		currentHp -= amount;
-
+		if (isVulnerable)
+		{
+			currentHp -= amount;
+		}
 	}
 
     public void Hide()
     {
 
-        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer,canHide);
+        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, canHide);
 
     }
 
 	[PunRPC]
-    public void RPC_Hide(bool _canHide)
+	public void RPC_Hide(bool _canHide)
+	{
+		//Color tmp = playerRenderer.color;
+
+		if (_canHide)
+		{
+			playerRenderer.enabled = false;
+			GETcanMove = false;
+			isVulnerable = false;
+			canHide = false;
+		}
+		else
+		{
+			GETcanMove = true;
+			playerRenderer.enabled = true;
+			isVulnerable = true;
+
+		}
+
+
+	}
+
+	public void PlayerAppear(int id)
     {
+		photonView.RPC("RPC_PlayerAppear", RpcTarget.AllBufferedViaServer,id);
 
-		
-            Color tmp = playerRenderer.color;
-
-			if (_canHide)
-            {
-               // hidebehind.spriteRenderer.sortingOrder = 2;
-               // playerRenderer.enabled = false;
-                tmp.a = 0;
-                GETcanMove = false;
-			// hidebehind.transfer.PickingUp();
-                canHide = false;
-                playerRenderer.color = tmp;
-
-			}
-			else
-            {
-                tmp.a = 255;
-				GETcanMove = true;
-				// hidebehind.spriteRenderer.sortingOrder = 0;
-				playerRenderer.color = tmp;
-               // playerRenderer.enabled = true;
-			}
-
-
-		
+	}
 
 
 
-
-        //if (!_canHide)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.E))
-        //    {
-
-        //        GETcanMove = true;
-        //        hidebehind.spriteRenderer.sortingOrder = 0;
-
-        //        playerRenderer.enabled = true;
-        //    }
-        //}
-    }
+	[PunRPC]
+	public void RPC_PlayerAppear(int id)
+	{
+		GameObject _barrel = PhotonView.Find(id).gameObject;
 
 
-    public void Hp()
+		_barrel.GetComponent<InteractItem>().DestoryBerrel();
+		canHide = true;
+		GETcanMove = true;
+		playerRenderer.enabled = true;
+		isVulnerable = true;
+	}
+
+
+
+	public void Hp()
 	{
 		if (currentHp > Maxhp)
 		{
@@ -338,8 +365,11 @@ public class WereWolf
 
 	public void WerewolfAttack()
 	{
+		enemy = (1 << 10) | (1 << 31 )|(1<<12);
+
 		if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolfState)
 		{
+
 			Collider2D[] enemiestoDmg = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
 
 			for (int i = 0; i < enemiestoDmg.Length; i++)
@@ -348,6 +378,14 @@ public class WereWolf
 				{
 					enemiestoDmg[i].GetComponent<VillagerCharacter>().GetDamage(1);
 				}
+                else if (enemiestoDmg[i].transform.tag == "Pickup")
+                {
+					enemiestoDmg[i].GetComponent<InteractItem>().BerrelGetDamage(1);
+				}
+                else if (enemiestoDmg[i].transform.tag == "ShopDoor")
+                {
+					GameManager.getInstance.GetShop.DamageDoor(1);
+                }
 			}
 		}
 	}

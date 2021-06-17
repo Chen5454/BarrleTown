@@ -126,14 +126,14 @@ public class Shop : MonoBehaviourPunCallbacks
 	}
 	void checkIfDoorDestroyed()
 	{
-		if (doorStartHP <= 0)
+		if (doorHP <= 0)
 		{
 			GameManager.getInstance.SetShopDoorActive(false);
 		}
 	}
 	public void DamageDoor(int damage)
 	{
-		doorStartHP -= damage;
+		doorHP -= damage;
 		checkIfDoorDestroyed();
 	}
 	public void GenerateNewRecipe()

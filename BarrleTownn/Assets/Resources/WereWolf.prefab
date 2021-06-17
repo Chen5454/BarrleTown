@@ -143,6 +143,9 @@ MonoBehaviour:
   canHide: 0
   isWerewolf: 1
   isWerewolfState: 0
+  nightHide: 0
+  dayPickUp: 0
+  isVulnerable: 0
   wereWolf:
     rb2DWereWolf: {fileID: 6196262404252525881}
     player: {fileID: 6196262404252525862}
@@ -153,6 +156,7 @@ MonoBehaviour:
       m_Bits: 1024
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
+  playerRenderer: {fileID: 6196262404252525863}
   box: {fileID: 2509538891122064825, guid: af5c48bb499112945b751a6d54866c90, type: 3}
 --- !u!50 &6196262404252525881
 Rigidbody2D:
