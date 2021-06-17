@@ -20,6 +20,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool isWerewolf;
 	public bool isWerewolfState;
 
+
 	[SerializeField]
 	public WereWolf wereWolf;
 
@@ -27,7 +28,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public Vector2 movement;
 
 	public InteractItem hidebehind;
-	public SpriteRenderer playeRenderer;
+    private SpriteRenderer playerRenderer;
 	private GameManager gameManager;
 	public GameObject box;
 	UIManager uiManager;
@@ -47,12 +48,29 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
+    public bool GETcanMove
+    {
+
+		set{
+            if (canMove!=value)
+            {
+                canMove=value;
+            }
+        }
+
+        get { return canMove; }
+    }
+
+
 	private void Start()
-	{
-        gameObject.tag = "Player";
+    {
+
+		gameObject.tag = "Player";
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
+        playerRenderer = GetComponent<SpriteRenderer>();
+
 		ChangeWerewolfTag();
 	}
 
@@ -60,11 +78,17 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
+
 			MovementHandler();
-			if (!isWerewolf)
+			if (!isWerewolfState)
 			{
 				PickUp();
-				Hide();
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+					Hide();
+                }
+				
 			}
 			else
 			{
@@ -82,46 +106,48 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-	public void ChangeWerewolfTag()
-	{
+    public void ChangeWerewolfTag()
+    {
 
-			if (this.isWerewolfState)
-			{
-			if(this.gameObject.tag != "Werewolf")
-				this.gameObject.tag = "Werewolf";
-			}
-			else if (!this.isWerewolfState)
-			{
-			if (this.gameObject.tag != "Player")
-				this.gameObject.tag = "Player";
-			}
+        if (this.isWerewolfState)
+        {
+            if (this.gameObject.tag != "Werewolf")
+                this.gameObject.tag = "Werewolf";
+        }
+        else if (!this.isWerewolfState)
+        {
+            if (this.gameObject.tag != "Player")
+                this.gameObject.tag = "Player";
+        }
 		
-	}
 
-	public void FixedUpdate()
-	{
-		if (photonView.IsMine)
-		{
-			if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
-			{
-				horiznotal *= 0.7f;
-				vertical *= 0.7f;
-			}
-			rb2D.MovePosition(rb2D.position + movement * speed * Time.deltaTime);
+    }
 
-			Flip(horiznotal);
-		}
+    public void FixedUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+            {
+                horiznotal *= 0.7f;
+                vertical *= 0.7f;
+            }
 
+            rb2D.MovePosition(rb2D.position + movement * speed * Time.deltaTime);
 
-		ChangeWerewolfTag();
-
+            Flip(horiznotal);
+        }
 
 
-	}
+        ChangeWerewolfTag();
 
 
 
-	public void Flip(float horiznotal)
+    }
+
+
+
+    public void Flip(float horiznotal)
 	{
 		if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
 		{
@@ -169,51 +195,32 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void OnTriggerEnter2D(Collider2D other)
 	{
-		if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
-		{
-			canHide = true;
-		}
-	}
+        if (photonView.IsMine)
+        {
+            if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+            {
+                canHide = true;
+            }
+        }
+    }
 
-	private void OnTriggerExit2D(Collider2D other)
-	{
-		if (GetBarrleCollider())
-		{
-			canHide = false;
-		}
-	}
-
-
-	public void Hide()
-	{
-		if (canHide)
-		{
-			if (Input.GetKeyDown(KeyCode.E))
-			{
-				hidebehind.spriteRenderer.sortingOrder = 2;
-				playeRenderer.enabled = false;
-				canMove = false;
-				hidebehind.transfer.PickingUp();
-				canHide = false;
-			}
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (photonView.IsMine)
+        {
 
 
-		}
+            if (other.gameObject.CompareTag("Pickup"))
+            {
+                canHide = false;
+            }
+        }
+    }
 
-		else if (!canHide)
-		{
-			if (Input.GetKeyDown(KeyCode.E))
-			{
 
-				hidebehind.spriteRenderer.sortingOrder = 0;
-				canMove = true;
-				playeRenderer.enabled = true;
-			}
-		}
 
-	}
 
-	public void GetDamage(int amount)
+    public void GetDamage(int amount)
 	{
 		photonView.RPC("RPC_GetDamage", RpcTarget.AllBufferedViaServer, amount);
 	}
@@ -227,7 +234,61 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	}
 
-	public void Hp()
+    public void Hide()
+    {
+
+        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer,canHide);
+
+    }
+
+	[PunRPC]
+    public void RPC_Hide(bool _canHide)
+    {
+
+		
+            Color tmp = playerRenderer.color;
+
+			if (_canHide)
+            {
+               // hidebehind.spriteRenderer.sortingOrder = 2;
+               // playerRenderer.enabled = false;
+                tmp.a = 0;
+                GETcanMove = false;
+			// hidebehind.transfer.PickingUp();
+                canHide = false;
+                playerRenderer.color = tmp;
+
+			}
+			else
+            {
+                tmp.a = 255;
+				GETcanMove = true;
+				// hidebehind.spriteRenderer.sortingOrder = 0;
+				playerRenderer.color = tmp;
+               // playerRenderer.enabled = true;
+			}
+
+
+		
+
+
+
+
+        //if (!_canHide)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.E))
+        //    {
+
+        //        GETcanMove = true;
+        //        hidebehind.spriteRenderer.sortingOrder = 0;
+
+        //        playerRenderer.enabled = true;
+        //    }
+        //}
+    }
+
+
+    public void Hp()
 	{
 		if (currentHp > Maxhp)
 		{
