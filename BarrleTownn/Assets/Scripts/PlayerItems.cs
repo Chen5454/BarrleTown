@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public class PlayerItems
 {
 	[SerializeField] GunSO playerGun;
@@ -22,6 +24,8 @@ public class PlayerItems
 
 		return false;
 	}
+
+
 
 	public bool CanDamageArmor(int damage)
 	{

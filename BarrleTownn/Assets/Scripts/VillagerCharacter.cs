@@ -12,7 +12,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			return speed + playerItems.GetShoeSpeed();
 		}
-		
 	}
 
 	float horiznotal;
@@ -43,7 +42,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	UIManager uiManager;
 
 	[Header("Player Items")]
-	PlayerItems playerItems;
+	[SerializeField]PlayerItems playerItems;
 
 	public bool GETIsPicked
 	{
