@@ -110,7 +110,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				{
 					if (Input.GetKeyDown(KeyCode.E))
 					{
-						Hide();
+						Hide(canHide);
 					}
 					
 				}
@@ -262,19 +262,19 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-    public void Hide()
+    public void Hide(bool _canHide)
     {
 
-        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, canHide);
+        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
 
     }
 
 	[PunRPC]
 	public void RPC_Hide(bool _canHide)
 	{
-		//Color tmp = playerRenderer.color;
+		canHide = _canHide;
 
-		if (_canHide)
+		if (canHide)
 		{
 			playerRenderer.enabled = false;
 			GETcanMove = false;
@@ -286,6 +286,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			GETcanMove = true;
 			playerRenderer.enabled = true;
 			isVulnerable = true;
+			canHide = true;
 
 		}
 
@@ -295,7 +296,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void PlayerAppear(int id)
     {
 		photonView.RPC("RPC_PlayerAppear", RpcTarget.AllBufferedViaServer,id);
-
 	}
 
 
@@ -304,13 +304,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void RPC_PlayerAppear(int id)
 	{
 		GameObject _barrel = PhotonView.Find(id).gameObject;
-
-
 		_barrel.GetComponent<InteractItem>().DestoryBerrel();
-		canHide = true;
-		GETcanMove = true;
-		playerRenderer.enabled = true;
-		isVulnerable = true;
+
+		Hide(false);
+		//canHide = true;
+		//GETcanMove = true;
+		//playerRenderer.enabled = true;
+		//isVulnerable = true;
+		
 	}
 
 
