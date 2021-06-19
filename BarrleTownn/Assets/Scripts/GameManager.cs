@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] LobbyController lobbyCon;
 	[SerializeField] ChatUI chat;
 	[SerializeField] Shop shop;
-	Shop shop;
 	public Shop GetShop => shop;
 
 	[Header("Phases")]

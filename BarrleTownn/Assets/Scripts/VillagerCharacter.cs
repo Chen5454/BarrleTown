@@ -126,6 +126,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				if (isWerewolfState)
 					wereWolf.WerewolfAttack();
 			}
+
+			ChangeWerewolfTag();
+
 		}
 	}
 
