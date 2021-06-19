@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] LobbyController lobbyCon;
 	[SerializeField] ChatUI chat;
 	[SerializeField] Shop shop;
+	Shop shop;
+	public Shop GetShop => shop;
 
 	[Header("Phases")]
 	public List<string> playersNameList;
@@ -270,6 +272,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 				}
+				else
+				{
+					player.nightHide = true;
+					
+					if (player.GETIsPicked)
+						if (player.box != null)
+						{
+							player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
+							player.speed = player.speed * 2;
+							player.GETIsPicked = false;
+						}
+					player.dayPickUp = false;
+				}
 
 
 				ShowNames(false);
@@ -339,6 +354,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				votingArea.PlayersCanMove();
 				votingArea.CheckVotes();
 
+				player.dayPickUp = true;
+				player.nightHide = false;
 				canVote = false;
 				gamePhase = GamePhases.Day;
 				timer = dayTime;
@@ -706,6 +723,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void RPC_SetShopDoorActive(bool _setActive)
 	{
 		shop.SetDoor(_setActive);
+		shop.doorHP = shop.doorStartHP;
 	}
 
 	public PickableItem item;

@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using System.Collections;
 public class InteractItem : MonoBehaviourPunCallbacks
 {
 	public RecipeItems contain;
@@ -8,8 +9,23 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	//public bool canHide;
 	public SpriteRenderer spriteRenderer;
 	public OwnerShipTranfer transfer;
+	public int barrleCurrentHp;
+	public int barrleMaxHp;
 
-	public void SetGameObjectActive(bool _active,Vector3 pos)
+	public bool IsBarrelALive()
+    {
+        if (this.barrleCurrentHp>0)
+        {
+			return true;
+        }
+        else
+        {
+			return false;
+        }
+		
+    }
+
+    public void SetGameObjectActive(bool _active,Vector3 pos)
 	{
 		if (PhotonNetwork.IsMasterClient)
 			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos);
@@ -21,6 +37,45 @@ public class InteractItem : MonoBehaviourPunCallbacks
 		gameObject.SetActive(_active);
 		gameObject.transform.position = pos;
 	}
+
+
+	public void HpBarrel()
+    {
+        if (barrleCurrentHp > barrleMaxHp)
+        {
+			barrleCurrentHp = barrleMaxHp;
+		}
+    }
+
+	public void BerrelGetDamage(int amount)
+    {
+		photonView.RPC("RPC_BerrelGetDamage", RpcTarget.AllBufferedViaServer, amount);
+	}
+
+
+	[PunRPC]
+	public void RPC_BerrelGetDamage(int amount)
+	{
+		this.barrleCurrentHp -= amount;
+        if (!IsBarrelALive())
+        {
+			GameManager.getInstance.player.PlayerAppear(this.photonView.ViewID);
+        }
+	}
+
+
+	public void DestoryBerrel()
+    {
+		this.gameObject.SetActive(false);
+	}
+
+	IEnumerator WaitBeforeDestory()
+    {
+
+		yield return new WaitForSeconds(0.5f);
+
+	}
+
 
 	//private void OnCollisionStay2D(Collision2D other)
 	//{
