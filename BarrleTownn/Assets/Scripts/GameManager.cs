@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] VotingArea votingArea;
 	[SerializeField] LobbyController lobbyCon;
 	[SerializeField] ChatUI chat;
-	Shop shop;
+	[SerializeField] Shop shop;
 
 	[Header("Phases")]
 	public List<string> playersNameList;
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	private void OnLevelWasLoaded(int level)
 	{
 		if (level == 1)
-        {
+		{
 			lobbyCon = FindObjectOfType<LobbyController>();
 		}
 		if (level == 2)
@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
 
-		
+
 	}
 
 
@@ -254,7 +254,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				SetShopDoorActive(true);
 
 
-				if (player.isWerewolf) 
+				if (player.isWerewolf)
 				{
 					if (player.GETIsPicked)
 						if (player.box != null)
@@ -264,8 +264,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 							player.GETIsPicked = false;
 						}
 					player.wereWolf.Transform();
+
+
+					ShowWolfHPBar(true);
+
+
 				}
-					
+
 
 				ShowNames(false);
 
@@ -282,8 +287,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
 				if (player.isWerewolf)
+				{
 					player.wereWolf.Transform();
-
+					ShowWolfHPBar(false);
+				}
 				ShowNames(true);
 
 				if (player.GETIsPicked)
@@ -292,6 +299,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 						player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
 						player.speed = player.speed * 2;
 						player.GETIsPicked = false;
+
+
 					}
 
 
@@ -348,14 +357,33 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			if (nameHolders[i] != null)
 			{
-				nameHolders[i].gameObject.SetActive(_show);
+				//nameHolders[i].gameObject.SetActive(_show);
+				if (_show)
+				{
+					nameHolders[i].DayPhase();
+				}
+				else
+					nameHolders[i].NightPhase();
 			}
-				
+
+		}
+	}
+
+	void ShowWolfHPBar(bool _active)
+	{
+		for (int i = 0; i < nameHolders.Length; i++)
+		{
+			if (player == nameHolders[i].playerPos.gameObject.GetComponent<VillagerCharacter>())
+				photonView.RPC("RPC_ShowHPBar", RpcTarget.AllBufferedViaServer, _active, i);
 		}
 	}
 
 
-
+	[PunRPC]
+	public void RPC_ShowHPBar(bool _active, int index)
+	{
+		nameHolders[index].ShowHPBar(_active);
+	}
 
 	#region Day_Region
 
@@ -420,8 +448,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 			//LoadArena();
 		}
 
-		
-		
+
+
 
 	}
 	public override void OnPlayerLeftRoom(Player other)
@@ -431,7 +459,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		RemovePlayerFromList(other.NickName);
 
 
-	
+
 
 
 		if (PhotonNetwork.IsMasterClient)
@@ -577,7 +605,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			Transform parent = GameObject.Find("PlayerNameHolders").transform;
 			GameObject nameHolder = Instantiate(playerName, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), parent);
-			
+
 			//nameHolder.transform.SetParent(parent);
 			nameHolder.GetComponent<NameHolder>().playerPos = playersList[i].transform;
 			nameHolder.GetComponent<NameHolder>().nameText.text = playersNameList[i];
@@ -589,7 +617,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 		nameHolders = FindObjectsOfType<NameHolder>();
-		
+
 	}
 
 
@@ -628,7 +656,38 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 	#endregion
 
+	#region items
+	public void EquipItem(ItemSO item)
+	{
+		if (item as ArmorSO)
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,0);
+		else if (item as GunSO)
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,1);
+		else if (item as ShoeSO)
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,2);
+	}
+	[PunRPC]
+	void RPC_EquipItem(int equipType)
+	{
+		//armor
+		if(equipType == 0)
+		{
 
+		}
+		//gun
+		else if (equipType == 1)
+		{
+
+		}
+		//shoe
+		else if (equipType == 2)
+		{
+
+		}
+	}
+
+
+	#endregion
 
 
 
@@ -636,11 +695,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	#region shop
 
-	
+
 
 	public void SetShopDoorActive(bool _setActive)
 	{
-		photonView.RPC("RPC_SetShopDoorActive",RpcTarget.AllBufferedViaServer,_setActive);
+		photonView.RPC("RPC_SetShopDoorActive", RpcTarget.AllBufferedViaServer, _setActive);
 	}
 
 	[PunRPC]

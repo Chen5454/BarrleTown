@@ -5,6 +5,16 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
 
 	public float speed;
+
+	public float getPlayerMovementSpeed
+	{
+		get
+		{
+			return speed + playerItems.GetShoeSpeed();
+		}
+		
+	}
+
 	float horiznotal;
 	float vertical;
 	[HideInInspector]
@@ -32,6 +42,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public GameObject box;
 	UIManager uiManager;
 
+	[Header("Player Items")]
+	PlayerItems playerItems;
+
 	public bool GETIsPicked
 	{
 		set
@@ -49,7 +62,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-        gameObject.tag = "Player";
+		playerItems = new PlayerItems();
+
+		gameObject.tag = "Player";
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
@@ -107,7 +122,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				horiznotal *= 0.7f;
 				vertical *= 0.7f;
 			}
-			rb2D.MovePosition(rb2D.position + movement * speed * Time.deltaTime);
+			rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
 
 			Flip(horiznotal);
 		}
@@ -222,8 +237,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-
-		currentHp -= amount;
+		if(!playerItems.CanDamageArmor(amount))
+			currentHp -= amount;
 
 	}
 
