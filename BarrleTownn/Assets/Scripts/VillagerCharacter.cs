@@ -46,9 +46,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	UIManager uiManager;
 
 	[Header("Player Items")]
-	[SerializeField]PlayerItems playerItems;
+	[SerializeField] PlayerItems playerItems;
 
- #region Getters Setters
+	#region Getters Setters
 	public bool GETIsPicked
 	{
 		set
@@ -65,30 +65,30 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	}
 
 
-    public bool GETcanMove
-    {
+	public bool GETcanMove
+	{
 
-		set{
-            if (canMove!=value)
-            {
-                canMove=value;
-            }
-        }
+		set {
+			if (canMove != value)
+			{
+				canMove = value;
+			}
+		}
 
-        get { return canMove; }
-    }
+		get { return canMove; }
+	}
 
-    #endregion
+	#endregion
 
-    private void Start()
-    {
-		
+	private void Start()
+	{
+
 		gameObject.tag = "Player";
 		dayPickUp = true;
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
-       // playerRenderer = GetComponent<SpriteRenderer>();
+		// playerRenderer = GetComponent<SpriteRenderer>();
 
 		ChangeWerewolfTag();
 	}
@@ -110,9 +110,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 					{
 						Hide(canHide);
 					}
-					
+
 				}
-            }
+			}
 			else
 			{
 				// didn't transformed
@@ -129,21 +129,21 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-    public void ChangeWerewolfTag()
-    {
+	public void ChangeWerewolfTag()
+	{
 
-        if (this.isWerewolfState)
-        {
-            if (this.gameObject.tag != "Werewolf")
-                this.gameObject.tag = "Werewolf";
-        }
-        else if (!this.isWerewolfState)
-        {
-            if (this.gameObject.tag != "Player")
-                this.gameObject.tag = "Player";
-        }
-		
+		if (this.isWerewolfState)
+		{
+			if (this.gameObject.tag != "Werewolf")
+				this.gameObject.tag = "Werewolf";
+		}
+		else if (!this.isWerewolfState)
+		{
+			if (this.gameObject.tag != "Player")
+				this.gameObject.tag = "Player";
+		}
 
+	}
 
 	public void FixedUpdate()
 	{
@@ -155,7 +155,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				vertical *= 0.7f;
 			}
 			rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
-
+		}
     }
 
 
@@ -248,7 +248,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-		if (isVulnerable)
+			
+		if (isVulnerable && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
 		}
@@ -295,10 +296,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_PlayerAppear(int id)
 	{
-
-		if(!playerItems.CanDamageArmor(amount))
-			currentHp -= amount;
-
 		Hide(false);
 		GameObject _barrel = PhotonView.Find(id).gameObject;
 		_barrel.GetComponent<InteractItem>().DestoryBerrel();
