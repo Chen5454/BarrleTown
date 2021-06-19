@@ -303,10 +303,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_PlayerAppear(int id)
 	{
+		Hide(false);
 		GameObject _barrel = PhotonView.Find(id).gameObject;
 		_barrel.GetComponent<InteractItem>().DestoryBerrel();
 
-		Hide(false);
 		//canHide = true;
 		//GETcanMove = true;
 		//playerRenderer.enabled = true;

@@ -14,7 +14,7 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	public bool IsBarrelALive()
     {
-        if (barrleCurrentHp>0)
+        if (this.barrleCurrentHp>0)
         {
 			return true;
         }
@@ -56,8 +56,8 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_BerrelGetDamage(int amount)
 	{
-		barrleCurrentHp -= amount;
-        if (!IsBarrelALive() && PhotonNetwork.IsMasterClient)
+		this.barrleCurrentHp -= amount;
+        if (!IsBarrelALive())
         {
 			GameManager.getInstance.player.PlayerAppear(this.photonView.ViewID);
         }
