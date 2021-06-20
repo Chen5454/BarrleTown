@@ -141,7 +141,7 @@ MonoBehaviour:
   currentHp: 1
   Maxhp: 1
   canHide: 0
-  isWerewolf: 1
+  isWerewolf: 0
   isWerewolfState: 0
   nightHide: 0
   dayPickUp: 0

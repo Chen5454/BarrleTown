@@ -51,6 +51,8 @@ MonoBehaviour:
   votingArea: {fileID: 0}
   lobbyCon: {fileID: 0}
   chat: {fileID: 0}
+  shop: {fileID: 0}
+  gameTimeUI: {fileID: 0}
   playersNameList: []
   playersList: []
   votePhase:
@@ -68,8 +70,13 @@ MonoBehaviour:
   isWereWolf: 
   player: {fileID: 0}
   werewolf: {fileID: 0}
+  wereWolfMovementAddon: 0
+  isWerewolfFullHeal: 0
+  wolfStartHP: 3
+  showNightTime: 10
   playerName: {fileID: 991857482718824612, guid: 1ed0dedb29d81ca46ba624205e138fb9,
     type: 3}
+  item: {fileID: 0}
 --- !u!114 &1159640608
 MonoBehaviour:
   m_ObjectHideFlags: 0
