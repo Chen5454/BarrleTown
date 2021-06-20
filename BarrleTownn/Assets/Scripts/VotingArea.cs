@@ -45,6 +45,10 @@ public class VotingArea : MonoBehaviour
 			{
 				GameManager.getInstance.playersList[i].canMove = true;
 			}
+			else
+			{
+				GameManager.getInstance.playersList[i].canMove = false;
+			}
 		}
 
 		GameManager.getInstance.ResetVotes();

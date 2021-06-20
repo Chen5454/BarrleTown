@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	[Header("Changeable Variables")]
+	public float wereWolfMovementAddon;
 	[Tooltip("does the werewolf get fully heal each night?(true), or heal for 1 hp each night(false)")]
 	public bool isWerewolfFullHeal;
 	public int wolfStartHP;
