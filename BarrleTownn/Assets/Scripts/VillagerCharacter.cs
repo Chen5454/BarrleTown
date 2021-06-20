@@ -107,7 +107,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E))
+					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider()!=null)
 					{
 						Hide(canHide);
 					}
