@@ -207,9 +207,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public Collider2D GetBarrleCollider()
 	{
+      
 		Physics2D.queriesStartInColliders = false;
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, distance);
-		return hit.collider;
+        if (hit.collider.gameObject.CompareTag("Pickup"))
+        {
+			return hit.collider;
+        }
+        else
+        {
+			return null;
+        }
+		
 
 	}
 
