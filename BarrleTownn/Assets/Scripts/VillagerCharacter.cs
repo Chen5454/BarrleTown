@@ -68,7 +68,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool GETcanMove
 	{
 
-		set {
+		set
+		{
 			if (canMove != value)
 			{
 				canMove = value;
@@ -89,7 +90,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
 		// playerRenderer = GetComponent<SpriteRenderer>();
-
+		isVulnerable = true;
 		ChangeWerewolfTag();
 	}
 
@@ -128,25 +129,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 
 			ChangeWerewolfTag();
-
 		}
 	}
 
-	public void ChangeWerewolfTag()
-	{
-
-		if (this.isWerewolfState)
-		{
-			if (this.gameObject.tag != "Werewolf")
-				this.gameObject.tag = "Werewolf";
-		}
-		else if (!this.isWerewolfState)
-		{
-			if (this.gameObject.tag != "Player")
-				this.gameObject.tag = "Player";
-		}
-
-	}
 
 	public void FixedUpdate()
 	{
@@ -159,15 +144,28 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 			rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
 		}
-    }
+	}
 
 
 
-    
+	public void ChangeWerewolfTag()
+	{
+		if (this.isWerewolfState)
+		{
+			if (this.gameObject.tag != "Werewolf")
+				this.gameObject.tag = "Werewolf";
+		}
+		else if (!this.isWerewolfState)
+		{
+			if (this.gameObject.tag != "Player")
+				this.gameObject.tag = "Player";
+		}
+	}
 
 
 
-    public void Flip(float horiznotal)
+
+	public void Flip(float horiznotal)
 	{
 		if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
 		{
@@ -217,32 +215,32 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void OnTriggerEnter2D(Collider2D other)
 	{
-        if (photonView.IsMine)
-        {
-            if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
-            {
+		if (photonView.IsMine)
+		{
+			if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+			{
 				canHide = true;
-            }
-        }
-    }
+			}
+		}
+	}
 
 
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (photonView.IsMine)
-        {
-            if (other.gameObject.CompareTag("Pickup"))
-            {
+	private void OnTriggerExit2D(Collider2D other)
+	{
+		if (photonView.IsMine)
+		{
+			if (other.gameObject.CompareTag("Pickup"))
+			{
 				canHide = false;
-            }
-        }
-    }
+			}
+		}
+	}
 
 
 
 
-    public void GetDamage(int amount)
+	public void GetDamage(int amount)
 	{
 		photonView.RPC("RPC_GetDamage", RpcTarget.AllBufferedViaServer, amount);
 	}
@@ -251,19 +249,40 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-			
+
 		if (isVulnerable && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
 		}
 	}
 
-    public void Hide(bool _canHide)
-    {
 
-        photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
+	public void SetWereWolfHP(int amount, bool setMax)
+	{
+		photonView.RPC("RPC_SetWereWolfHP", RpcTarget.AllBuffered, amount, setMax);
+	}
+	[PunRPC]
+	public void RPC_SetWereWolfHP(int amount,bool setMax)
+	{
+		if (setMax)
+		{
+			Maxhp = amount;
+			currentHp = amount;
+		}
+		else
+		{
+			currentHp += amount;
+			if (currentHp > Maxhp)
+				currentHp = Maxhp;
+		}
+	}
 
-    }
+	public void Hide(bool _canHide)
+	{
+
+		photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
+
+	}
 
 	[PunRPC]
 	public void RPC_Hide(bool _canHide)
@@ -290,8 +309,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	}
 
 	public void PlayerAppear(int id)
-    {
-		photonView.RPC("RPC_PlayerAppear", RpcTarget.AllBufferedViaServer,id);
+	{
+		photonView.RPC("RPC_PlayerAppear", RpcTarget.AllBufferedViaServer, id);
 	}
 
 
@@ -307,7 +326,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		//GETcanMove = true;
 		//playerRenderer.enabled = true;
 		//isVulnerable = true;
-		
+
 	}
 
 
@@ -362,7 +381,7 @@ public class WereWolf
 
 	public void WerewolfAttack()
 	{
-		enemy = (1 << 10) | (1 << 31 )|(1<<12);
+		enemy = (1 << 10) | (1 << 31) | (1 << 12);
 
 		if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolfState)
 		{
@@ -375,14 +394,14 @@ public class WereWolf
 				{
 					enemiestoDmg[i].GetComponent<VillagerCharacter>().GetDamage(1);
 				}
-                else if (enemiestoDmg[i].transform.tag == "Pickup")
-                {
+				else if (enemiestoDmg[i].transform.tag == "Pickup")
+				{
 					enemiestoDmg[i].GetComponent<InteractItem>().BerrelGetDamage(1);
 				}
-                else if (enemiestoDmg[i].transform.tag == "ShopDoor")
-                {
+				else if (enemiestoDmg[i].transform.tag == "ShopDoor")
+				{
 					GameManager.getInstance.GetShop.DamageDoor(1);
-                }
+				}
 			}
 		}
 	}

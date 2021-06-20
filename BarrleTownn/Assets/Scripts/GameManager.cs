@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] ChatUI chat;
 	[SerializeField] Shop shop;
 	public Shop GetShop => shop;
+	[SerializeField] GameTimeUI gameTimeUI;
+
+
 
 	[Header("Phases")]
 	public List<string> playersNameList;
@@ -39,7 +42,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[Header("Current Phase")]
 	[SerializeField]
 	GamePhases gamePhase;
-
+	public GamePhases getGamePhase => gamePhase;
 	[Header("Timers")]
 	[SerializeField]
 	float dayTime;
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	[SerializeField]
 	private float timer;
+	public float getTimer => timer;
 	[SerializeField]
 	bool canVote;
 
@@ -67,6 +71,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public VillagerCharacter player;
 	public VillagerCharacter werewolf;
+
+
+	[Header("Changeable Variables")]
+	[Tooltip("does the werewolf get fully heal each night?(true), or heal for 1 hp each night(false)")]
+	public bool isWerewolfFullHeal;
+	public int wolfStartHP;
+	[Tooltip("when to show the werewolf the timer, if its 0 it will always show the timer for the werewolf, the timer will show when its going to be night and when the night is going to end")]
+	public int showNightTime;
 	private void Awake()
 	{
 		if (_instance == null)
@@ -99,14 +111,44 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 			if (Input.GetKeyDown(KeyCode.V))
 			{
-				RPC_ShowNames();
+				player.GetDamage(1);
 				//photonView.RPC("RPC_ShowNames", RpcTarget.AllBufferedViaServer);
 			}
 
+			if (player != null && player.photonView.IsMine)
+			{
+				if (gameTimeUI != null && getGamePhase == GamePhases.Day)
+				{
+					ShowNightOrDayTimer();
+				}
+				else if (gameTimeUI != null && getGamePhase == GamePhases.Night)
+				{
+					ShowNightOrDayTimer();
+				}
+			}
 		}
-
-
 	}
+
+	void ShowNightOrDayTimer()
+	{
+		if (player.isWerewolf)
+		{
+			if (showNightTime <= 0)
+			{
+				if (!gameTimeUI.isTimerShown)
+					gameTimeUI.isTimerShown = true;
+			}
+			else
+			{
+				if (timer <= showNightTime)
+				{
+					if (!gameTimeUI.isTimerShown)
+						gameTimeUI.isTimerShown = true;
+				}
+			}
+		}
+	}
+
 
 	private void OnLevelWasLoaded(int level)
 	{
@@ -157,7 +199,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 			chat = FindObjectOfType<ChatUI>();
 		if (shop == null)
 			shop = FindObjectOfType<Shop>();
-
+		if (gameTimeUI == null)
+			gameTimeUI = FindObjectOfType<GameTimeUI>();
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
@@ -225,6 +268,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 		GameObject _player = PhotonNetwork.Instantiate("WereWolf", spawn.position, new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
 		player.isWerewolf = _IsWereWolf;
+		if (_IsWereWolf)
+		{
+			player.SetWereWolfHP(wolfStartHP, true);
+		}
 
 
 	}
@@ -249,7 +296,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 			case GamePhases.Day: //switches to night
 				gamePhase = GamePhases.Night;
 
-
+				if (gameTimeUI.isTimerShown)
+					gameTimeUI.isTimerShown = false;
 				//shop.TeleportPlayersOutsideOfShop();
 
 				SetShopDoorActive(true);
@@ -274,7 +322,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				else
 				{
 					player.nightHide = true;
-					
+
 					if (player.GETIsPicked)
 						if (player.box != null)
 						{
@@ -300,10 +348,24 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
+
+				if (!gameTimeUI.isTimerShown)
+				{
+					gameTimeUI.isTimerShown = true;
+				}
+
+
 				if (player.isWerewolf)
 				{
 					player.wereWolf.Transform();
 					ShowWolfHPBar(false);
+
+					if (isWerewolfFullHeal)
+						player.SetWereWolfHP(wolfStartHP, false);
+					else
+					{
+						player.SetWereWolfHP(1, false);
+					}
 				}
 				ShowNames(true);
 
@@ -335,6 +397,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 				break;
 			case GamePhases.talk://switches to Vote
+
+				if (!gameTimeUI.isTimerShown)
+				{
+					gameTimeUI.isTimerShown = true;
+				}
+
+
 				votingArea.ShowVotingButtons(true);
 				SetShopDoorActive(false);
 
@@ -346,7 +415,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Vote: //switches to Day
 
-
+				if (gameTimeUI.isTimerShown)
+				{
+					gameTimeUI.isTimerShown = false;
+				}
 				chat.SetChatVisibility(false);
 				camera.setCameraToGamePhase(false);
 				votingArea.ShowVotingButtons(false);
@@ -390,7 +462,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 		for (int i = 0; i < nameHolders.Length; i++)
 		{
 			if (player == nameHolders[i].playerPos.gameObject.GetComponent<VillagerCharacter>())
-				photonView.RPC("RPC_ShowHPBar", RpcTarget.AllBufferedViaServer, _active, i);
+			{
+				nameHolders[i].ShowHPBar(_active);
+				break;
+			}
+
 		}
 	}
 
@@ -676,17 +752,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void EquipItem(ItemSO item)
 	{
 		if (item as ArmorSO)
-			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,0);
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer, 0);
 		else if (item as GunSO)
-			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,1);
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer, 1);
 		else if (item as ShoeSO)
-			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer,2);
+			photonView.RPC("RPC_EquipItem", RpcTarget.AllBufferedViaServer, 2);
 	}
 	[PunRPC]
 	void RPC_EquipItem(int equipType)
 	{
 		//armor
-		if(equipType == 0)
+		if (equipType == 0)
 		{
 
 		}
