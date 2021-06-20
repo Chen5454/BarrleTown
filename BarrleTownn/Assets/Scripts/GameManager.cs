@@ -110,11 +110,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 				fov.SetOrigin();
 			}
 
-			if (Input.GetKeyDown(KeyCode.V))
-			{
-				player.GetDamage(1);
-				//photonView.RPC("RPC_ShowNames", RpcTarget.AllBufferedViaServer);
-			}
+			//if (Input.GetKeyDown(KeyCode.V))
+			//{
+			//	player.GetDamage(1);
+			//	//photonView.RPC("RPC_ShowNames", RpcTarget.AllBufferedViaServer);
+			//}
 
 			if (player != null && player.photonView.IsMine)
 			{
