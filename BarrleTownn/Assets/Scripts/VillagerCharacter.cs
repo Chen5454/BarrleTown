@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
-
+	[SerializeField] Vector2 playerPickUpRange;
 	public float speed;
 
 	public float getPlayerMovementSpeed
@@ -47,6 +47,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	[Header("Player Items")]
 	[SerializeField] PlayerItems playerItems;
+	public PlayerItems getPlayerItems => playerItems;
 
 	#region Getters Setters
 	public bool GETIsPicked
@@ -358,6 +359,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(wereWolf.attackPos.position, wereWolf.attackRange);
+
+
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireCube(this.transform.position, playerPickUpRange);
+
+
 	}
 
 

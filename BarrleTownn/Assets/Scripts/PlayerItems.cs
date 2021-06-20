@@ -5,8 +5,11 @@ using UnityEngine;
 public class PlayerItems
 {
 	[SerializeField] GunSO playerGun;
+	public GunSO getGun => playerGun;
 	[SerializeField] ArmorSO playerArmor;
+	public ArmorSO getArmor => playerArmor;
 	[SerializeField] ShoeSO playerShoes;
+	public ShoeSO getShoes => playerShoes;
 	// Start is called before the first frame update
 
 	public bool CanShoot()

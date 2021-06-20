@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField] Shop shop;
 	public Shop GetShop => shop;
 	[SerializeField] GameTimeUI gameTimeUI;
-
+	[SerializeField] playerItemsUI playerItemsUI;
 
 
 	[Header("Phases")]
@@ -110,11 +110,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 				fov.SetOrigin();
 			}
 
-			//if (Input.GetKeyDown(KeyCode.V))
-			//{
-			//	player.GetDamage(1);
-			//	//photonView.RPC("RPC_ShowNames", RpcTarget.AllBufferedViaServer);
-			//}
+			if (Input.GetKeyDown(KeyCode.V))
+			{
+				playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
+			}
 
 			if (player != null && player.photonView.IsMine)
 			{
@@ -202,13 +201,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 			shop = FindObjectOfType<Shop>();
 		if (gameTimeUI == null)
 			gameTimeUI = FindObjectOfType<GameTimeUI>();
+		if (playerItemsUI == null)
+			playerItemsUI = FindObjectOfType<playerItemsUI>();
+
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 		isGameActive = true;
 
 		barrelManager.canStartGeneration = true;
 		barrelManager.GenerateBarrels();
-
+		
 
 		shop.canGenerateNewRecipe = true;
 		if (shop.canGenerateNewRecipe)
@@ -273,7 +275,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			player.SetWereWolfHP(wolfStartHP, true);
 		}
-
+		
 
 	}
 
@@ -286,7 +288,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		photonView.RPC("RPC_GetPlayerList", RpcTarget.AllBufferedViaServer);
 		yield return new WaitForSeconds(0.4f);
 		RPC_ShowNames();
-
+		playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
 
 
 	}
