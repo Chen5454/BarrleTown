@@ -8,6 +8,11 @@ namespace Afik.MultiProject.BarrelTown
 
 	public class Launcher : MonoBehaviourPunCallbacks
 	{
+		public GameManager gameManager;
+
+
+
+		
 
 		#region Private Serializable Fields
 
@@ -47,6 +52,13 @@ namespace Afik.MultiProject.BarrelTown
 		{
 			// makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
 			PhotonNetwork.AutomaticallySyncScene = true;
+
+
+			if(FindObjectOfType<GameManager>() == null)
+			{
+				Instantiate(gameManager);
+			}
+
 		}
 
 
