@@ -30,7 +30,7 @@ public class PickableItem : MonoBehaviourPunCallbacks
 
 	}
 
-	void VanishFromWorld()
+	public void VanishFromWorld()
 	{
 		this.gameObject.SetActive(false);
 		//make the item vanish from everyone's perspective

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420bdf8def8b5da4ab1ec2a79dcdf70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bankSO: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
+  itemBank: {fileID: 11400000, guid: c8abd95b7bf74a54585647671f0a5e33, type: 2}
   fov: {fileID: 0}
   barrelManager: {fileID: 0}
   camera: {fileID: 0}
@@ -53,6 +53,7 @@ MonoBehaviour:
   chat: {fileID: 0}
   shop: {fileID: 0}
   gameTimeUI: {fileID: 0}
+  playerItemsUI: {fileID: 0}
   playersNameList: []
   playersList: []
   votePhase:

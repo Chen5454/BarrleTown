@@ -23,7 +23,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	[Header("references")]
 	public UIManager uiManager;
 	public ItemBankSO itemBank;
-	[SerializeField] GameObject _reward;
+	public GameObject _reward;
 	[SerializeField] GameObject shopDoor;
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;

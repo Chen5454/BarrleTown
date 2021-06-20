@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public static GameManager getInstance => _instance;
 
 	[Header("References")]
-	[SerializeField] ItemBankSO bankSO;
+	public ItemBankSO itemBank;
 	[SerializeField] FieldOfView fov;
 	[SerializeField] BarrelManager barrelManager;
 	[SerializeField] CameraController camera;
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public Shop GetShop => shop;
 	[SerializeField] GameTimeUI gameTimeUI;
 	[SerializeField] playerItemsUI playerItemsUI;
+	public playerItemsUI getPlayerItemsUI => playerItemsUI;
 
 
 	[Header("Phases")]
@@ -814,7 +815,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_ShowDroppedItemInfo(int _index)
 	{
-		shop.ChangeRewardInfo(bankSO.itemList[_index]);
+		shop.ChangeRewardInfo(itemBank.itemList[_index]);
 
 	}
 

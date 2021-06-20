@@ -27,9 +27,6 @@ public class PlayerItems
 
 		return false;
 	}
-
-
-
 	public bool CanDamageArmor(int damage)
 	{
 		if (playerArmor != null)
@@ -41,7 +38,6 @@ public class PlayerItems
 		}
 		return false;
 	}
-
 	public float GetShoeSpeed()
 	{
 		if (playerShoes != null)
@@ -50,6 +46,76 @@ public class PlayerItems
 			return 0;
 	}
 
+	public bool CanEquipItem(ItemSO item)
+	{
+		if(item as ShoeSO)
+		{
+			if(playerShoes == null)
+			{
+				playerShoes = (ShoeSO)item;
+				return true;
+			}
+		}
+		else if(item as ArmorSO)
+		{
+			if (playerArmor == null)
+			{
+				playerArmor = (ArmorSO)item;
+				return true;
+			}
+		}
+		else if(item as GunSO)
+		{
+			if (playerGun == null)
+			{
+				playerGun = (GunSO)item;
+				return true;
+			}
+		}
+		return false;
+	}
 
+	public void EquipItem(ItemSO item)
+	{
+		if (item as ShoeSO)
+		{
+			if (playerShoes == null)
+			{
+				playerShoes = (ShoeSO)item;
+			}
+		}
+		else if (item as ArmorSO)
+		{
+			if (playerArmor == null)
+			{
+				playerArmor = (ArmorSO)item;
+			}
+		}
+		else if (item as GunSO)
+		{
+			if (playerGun == null)
+			{
+				playerGun = (GunSO)item;
+			}
+		}
+	
+	}
+
+
+	public void UnEquipItem(int index)
+	{
+		if (index == 0)
+		{
+			playerShoes = null;
+		}
+		else if (index == 1)
+		{
+			playerArmor = null;
+		}
+		else if (index == 2)
+		{
+			playerGun = null;
+		}
+	}
 
 }

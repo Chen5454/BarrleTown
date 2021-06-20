@@ -134,7 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0f4b182f4f2564f8a169f7bbf88fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPickUpRange: {x: 0, y: 0}
   speed: 4
   rb2D: {fileID: 0}
   canMove: 0
@@ -163,6 +162,10 @@ MonoBehaviour:
     playerGun: {fileID: 0}
     playerArmor: {fileID: 0}
     playerShoes: {fileID: 0}
+  playerPickUpRange: {x: 1, y: 1}
+  ItemLayers:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!50 &6196262404252525881
 Rigidbody2D:
   serializedVersion: 4
