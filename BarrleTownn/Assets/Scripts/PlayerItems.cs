@@ -7,6 +7,7 @@ public class PlayerItems
 	[SerializeField] GunSO playerGun;
 	public GunSO getGun => playerGun;
 	[SerializeField] ArmorSO playerArmor;
+	public int armor;
 	public ArmorSO getArmor => playerArmor;
 	[SerializeField] ShoeSO playerShoes;
 	public ShoeSO getShoes => playerShoes;
@@ -31,8 +32,8 @@ public class PlayerItems
 	{
 		if (playerArmor != null)
 		{
-			playerArmor.armourAmount -= damage;
-			if (playerArmor.armourAmount <= 0)
+			armor -= damage;
+			if (armor <= 0)
 				playerArmor = null;
 			return true;
 		}
@@ -89,6 +90,7 @@ public class PlayerItems
 			if (playerArmor == null)
 			{
 				playerArmor = (ArmorSO)item;
+				this.armor = playerArmor.armourAmount;
 			}
 		}
 		else if (item as GunSO)

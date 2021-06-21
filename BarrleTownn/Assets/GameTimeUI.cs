@@ -48,10 +48,8 @@ public class GameTimeUI : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("sssss");
 			return (GamePhases)phaseIndex+ 1;
 		}
-		Debug.Log("ddddd");
 		return (GamePhases)phaseIndex;
 	}
 

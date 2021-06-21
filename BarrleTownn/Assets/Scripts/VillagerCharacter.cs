@@ -40,7 +40,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private Shop shop;
 	public SpriteRenderer playerRenderer;
-	private GameManager gameManager;
+	private GameManager gameManager => GameManager.getInstance;
 	public GameObject box;
 	UIManager uiManager;
 
@@ -238,12 +238,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void PickUpItem()
 	{
 		Collider2D[] item = Physics2D.OverlapBoxAll(this.transform.position, playerPickUpRange, 0, ItemLayers);
-		int _index = gameManager.itemBank.itemList.FindIndex(x => x.itemName == item[0].gameObject.GetComponent<ShoeSO>().itemName);
-		if (playerItems.CanEquipItem(gameManager.itemBank.itemList[_index]))
+		if(item.Length != 0)
 		{
-			playerItems.EquipItem(gameManager.itemBank.itemList[_index]);
-			photonView.RPC("RPC_EquipItem", RpcTarget.AllBuffered, _index);
-			gameManager.getPlayerItemsUI.UpdatePlayerItemUI(gameManager.itemBank.itemList[_index]);
+			int _index = gameManager.itemBank.itemList.FindIndex(x => x.itemName == item[0].gameObject.GetComponent<PickableItem>().pickableItem.itemName);
+			if (playerItems.CanEquipItem(gameManager.itemBank.itemList[_index]))
+			{
+				playerItems.EquipItem(gameManager.itemBank.itemList[_index]);
+				photonView.RPC("RPC_EquipItem", RpcTarget.AllBuffered, _index);
+				gameManager.getPlayerItemsUI.UpdatePlayerItemUI(gameManager.itemBank.itemList[_index]);
+			}
 		}
 	}
 	[PunRPC]
