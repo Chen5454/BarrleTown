@@ -6,4 +6,7 @@ using UnityEngine;
 public class GunSO : ItemSO
 {
 	public int ammoAmount;
+	public Projectile proj;
+
+
 }

@@ -1,9 +1,9 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
-
 	public float speed;
 
 	public float getPlayerMovementSpeed
@@ -41,12 +41,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private Shop shop;
 	public SpriteRenderer playerRenderer;
-	private GameManager gameManager;
+	private GameManager gameManager => GameManager.getInstance;
 	public GameObject box;
 	UIManager uiManager;
 
 	[Header("Player Items")]
 	[SerializeField] PlayerItems playerItems;
+	public PlayerItems getPlayerItems => playerItems;
+	[SerializeField] Vector2 playerPickUpRange;
+	[SerializeField] LayerMask ItemLayers;
+
+	List<Projectile> projPool = new List<Projectile>();
+
 
 	#region Getters Setters
 	public bool GETIsPicked
@@ -99,7 +105,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
-
+			if (Input.GetKeyDown(KeyCode.F))
+			{
+				PickUpItem();
+				//PoolShoot();
+			}
 			MovementHandler();
 			if (!isWerewolfState)
 			{
@@ -107,12 +117,16 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider()!=null)
+					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider() != null)
 					{
 						Hide(canHide);
 					}
 
 				}
+
+
+
+
 			}
 			else
 			{
@@ -146,6 +160,37 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
+
+	public void PoolShoot(int direction)
+	{
+		bool canUsedExisted = false;
+		if(projPool.Count == 0)
+		{
+			Projectile proj = PhotonNetwork.Instantiate("Projectile",this.transform.position,this.transform.rotation).GetComponent<Projectile>();
+			proj.InitProjectile(this.transform, direction);
+			this.projPool.Add(proj);
+		}
+		else
+		{
+			for (int i = 0; i < projPool.Count; i++)
+			{
+				if (!projPool[i].gameObject.activeInHierarchy)
+				{
+					this.projPool[i].InitProjectile(this.transform, direction);
+					canUsedExisted = true;
+					break;
+				}
+			}
+
+			if (!canUsedExisted)
+			{
+				Projectile proj = PhotonNetwork.Instantiate("Projectile", this.transform.position, this.transform.rotation).GetComponent<Projectile>();
+				proj.InitProjectile(this.transform, direction);
+				this.projPool.Add(proj);
+			}
+
+		}
+	}
 
 
 	public void ChangeWerewolfTag()
@@ -207,21 +252,44 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public Collider2D GetBarrleCollider()
 	{
-      
+
 		Physics2D.queriesStartInColliders = false;
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, distance);
-        if (hit.collider.gameObject.CompareTag("Pickup"))
-        {
+		if (hit.collider != null && hit.collider.gameObject.CompareTag("Pickup"))
+		{
 			return hit.collider;
-        }
-        else
-        {
+		}
+		else
+		{
 			return null;
-        }
-		
+		}
+
 
 	}
 
+
+
+	public void PickUpItem()
+	{
+		Collider2D[] item = Physics2D.OverlapBoxAll(this.transform.position, playerPickUpRange, 0, ItemLayers);
+		if(item.Length != 0)
+		{
+			int _index = gameManager.itemBank.itemList.FindIndex(x => x.itemName == item[0].gameObject.GetComponent<PickableItem>().pickableItem.itemName);
+			if (playerItems.CanEquipItem(gameManager.itemBank.itemList[_index]))
+			{
+				playerItems.EquipItem(gameManager.itemBank.itemList[_index]);
+				photonView.RPC("RPC_EquipItem", RpcTarget.AllBuffered, _index);
+				gameManager.getPlayerItemsUI.UpdatePlayerItemUI(gameManager.itemBank.itemList[_index]);
+			}
+		}
+	}
+	[PunRPC]
+	void RPC_EquipItem(int index)
+	{
+		playerItems.EquipItem(gameManager.itemBank.itemList[index]);
+		gameManager.GetShop._reward.GetComponent<PickableItem>().VanishFromWorld();
+		
+	}
 	private void OnTriggerEnter2D(Collider2D other)
 	{
 		if (photonView.IsMine)
@@ -271,7 +339,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		photonView.RPC("RPC_SetWereWolfHP", RpcTarget.AllBuffered, amount, setMax);
 	}
 	[PunRPC]
-	public void RPC_SetWereWolfHP(int amount,bool setMax)
+	public void RPC_SetWereWolfHP(int amount, bool setMax)
 	{
 		if (setMax)
 		{
@@ -367,6 +435,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(wereWolf.attackPos.position, wereWolf.attackRange);
+
+
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireCube(this.transform.position, playerPickUpRange);
+
+
 	}
 
 
