@@ -14,7 +14,7 @@ public class PlayerItems
 	public ShoeSO getShoes => playerShoes;
 	// Start is called before the first frame update
 
-	public bool CanShoot(int direction)
+	public bool CanShoot()
 	{
 		if (playerGun != null)
 		{
