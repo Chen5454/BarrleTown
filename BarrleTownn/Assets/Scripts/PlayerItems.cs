@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -13,13 +14,14 @@ public class PlayerItems
 	public ShoeSO getShoes => playerShoes;
 	// Start is called before the first frame update
 
-	public bool CanShoot()
+	public bool CanShoot(int direction)
 	{
 		if (playerGun != null)
 		{
 			if (playerGun.ammoAmount > 0)
 			{
 				playerGun.ammoAmount -= 1;
+				
 				if (playerGun.ammoAmount <= 0)
 					playerGun = null;
 				return true;
@@ -28,6 +30,10 @@ public class PlayerItems
 
 		return false;
 	}
+
+	
+
+
 	public bool CanDamageArmor(int damage)
 	{
 		if (playerArmor != null)

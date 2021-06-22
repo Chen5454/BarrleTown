@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
@@ -50,6 +51,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[SerializeField] Vector2 playerPickUpRange;
 	[SerializeField] LayerMask ItemLayers;
 
+	List<Projectile> projPool = new List<Projectile>();
 
 
 	#region Getters Setters
@@ -106,6 +108,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			if (Input.GetKeyDown(KeyCode.F))
 			{
 				PickUpItem();
+				//PoolShoot();
 			}
 			MovementHandler();
 			if (!isWerewolfState)
@@ -157,6 +160,37 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
+
+	public void PoolShoot(int direction)
+	{
+		bool canUsedExisted = false;
+		if(projPool.Count == 0)
+		{
+			Projectile proj = PhotonNetwork.Instantiate("Projectile",this.transform.position,this.transform.rotation).GetComponent<Projectile>();
+			proj.InitProjectile(this.transform, direction);
+			this.projPool.Add(proj);
+		}
+		else
+		{
+			for (int i = 0; i < projPool.Count; i++)
+			{
+				if (!projPool[i].gameObject.activeInHierarchy)
+				{
+					this.projPool[i].InitProjectile(this.transform, direction);
+					canUsedExisted = true;
+					break;
+				}
+			}
+
+			if (!canUsedExisted)
+			{
+				Projectile proj = PhotonNetwork.Instantiate("Projectile", this.transform.position, this.transform.rotation).GetComponent<Projectile>();
+				proj.InitProjectile(this.transform, direction);
+				this.projPool.Add(proj);
+			}
+
+		}
+	}
 
 
 	public void ChangeWerewolfTag()
