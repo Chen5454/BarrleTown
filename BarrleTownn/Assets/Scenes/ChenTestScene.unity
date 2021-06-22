@@ -138,6 +138,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel
       objectReference: {fileID: 0}
+    - target: {fileID: 2509538891122064825, guid: af5c48bb499112945b751a6d54866c90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2509538891122064826, guid: af5c48bb499112945b751a6d54866c90,
         type: 3}
       propertyPath: m_RootOrder

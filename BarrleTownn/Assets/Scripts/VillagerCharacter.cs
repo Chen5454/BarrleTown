@@ -31,6 +31,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool nightHide;
 	public bool dayPickUp;
 	public bool isVulnerable;
+	public int faceDirection;
 	[SerializeField]
 	public WereWolf wereWolf;
 
@@ -110,6 +111,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				PickUpItem();
 				//PoolShoot();
 			}
+
+			Shoot();
 			MovementHandler();
 			if (!isWerewolfState)
 			{
@@ -314,9 +317,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-
-
-
 	public void GetDamage(int amount)
 	{
 		photonView.RPC("RPC_GetDamage", RpcTarget.AllBufferedViaServer, amount);
@@ -418,6 +418,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void MovementHandler()
 	{
+
+
 		if (canMove)
 		{
 			movement.x = Input.GetAxisRaw("Horizontal");
@@ -429,7 +431,35 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			movement.y = 0;
 			canMove = false;
 		}
+
+		if (movement.x == 1)
+		{
+			faceDirection = 0;
+		}
+		else if (movement.x == -1)
+		{
+			faceDirection = 1;
+		}
+		else if (movement.y == 1)
+		{
+			faceDirection = 2;
+		}
+		else if (movement.y == -1)
+		{
+			faceDirection = 3;
+		}
 	}
+
+	public void Shoot()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (playerItems.CanShoot())
+            {
+				PoolShoot(faceDirection);
+			}
+		}
+    }
 
 	private void OnDrawGizmosSelected()
 	{
