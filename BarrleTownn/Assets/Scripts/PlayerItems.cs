@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -7,6 +6,7 @@ public class PlayerItems
 {
 	[SerializeField] GunSO playerGun;
 	public GunSO getGun => playerGun;
+	public int ammo;
 	[SerializeField] ArmorSO playerArmor;
 	public int armor;
 	public ArmorSO getArmor => playerArmor;
@@ -18,12 +18,15 @@ public class PlayerItems
 	{
 		if (playerGun != null)
 		{
-			if (playerGun.ammoAmount > 0)
+			if (ammo > 0)
 			{
-				playerGun.ammoAmount -= 1;
-				
-				if (playerGun.ammoAmount <= 0)
+				ammo -= 1;
+
+				if (ammo <= 0)
 					playerGun = null;
+				if (playerGun == null)
+					GameManager.getInstance.getPlayerItemsUI.UnEquipUI(2);
+
 				return true;
 			}
 		}
@@ -31,7 +34,7 @@ public class PlayerItems
 		return false;
 	}
 
-	
+
 
 
 	public bool CanDamageArmor(int damage)
@@ -41,6 +44,9 @@ public class PlayerItems
 			armor -= damage;
 			if (armor <= 0)
 				playerArmor = null;
+			if (playerArmor == null)
+				GameManager.getInstance.getPlayerItemsUI.UnEquipUI(1);
+
 			return true;
 		}
 		return false;
@@ -55,15 +61,15 @@ public class PlayerItems
 
 	public bool CanEquipItem(ItemSO item)
 	{
-		if(item as ShoeSO)
+		if (item as ShoeSO)
 		{
-			if(playerShoes == null)
+			if (playerShoes == null)
 			{
 				playerShoes = (ShoeSO)item;
 				return true;
 			}
 		}
-		else if(item as ArmorSO)
+		else if (item as ArmorSO)
 		{
 			if (playerArmor == null)
 			{
@@ -71,7 +77,7 @@ public class PlayerItems
 				return true;
 			}
 		}
-		else if(item as GunSO)
+		else if (item as GunSO)
 		{
 			if (playerGun == null)
 			{
@@ -104,9 +110,10 @@ public class PlayerItems
 			if (playerGun == null)
 			{
 				playerGun = (GunSO)item;
+				ammo = playerGun.ammoAmount;
 			}
 		}
-	
+
 	}
 
 

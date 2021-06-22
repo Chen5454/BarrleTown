@@ -2281,12 +2281,6 @@ MonoBehaviour:
     - recipe: 0100000003000000
       amountRequired: 0100000002000000
       recipeReward: {fileID: 11400000, guid: e25f4dea770e0cb419e73ecf38cf98c0, type: 2}
-    - recipe: 0100000002000000
-      amountRequired: 0200000001000000
-      recipeReward: {fileID: 11400000, guid: d2639614ef589c44daabd73badb1de93, type: 2}
-    - recipe: 0100000002000000
-      amountRequired: 0200000001000000
-      recipeReward: {fileID: 11400000, guid: 84e1dff44033c2e43b126ffabbade289, type: 2}
   currentRecipe:
     recipe: 
     amountRequired: 

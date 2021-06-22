@@ -146,6 +146,7 @@ MonoBehaviour:
   nightHide: 0
   dayPickUp: 0
   isVulnerable: 0
+  faceDirection: 0
   wereWolf:
     rb2DWereWolf: {fileID: 6196262404252525881}
     player: {fileID: 6196262404252525862}

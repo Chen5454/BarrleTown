@@ -66,6 +66,20 @@ public class playerItemsUI : MonoBehaviour
 				equippedItems[2].sprite = item.itemSprite;
 		}
 	}
-
+	public void UnEquipUI(int index)
+	{
+		if(index == 0)
+		{
+			equippedItems[0].color = new Color(1,1,1,0);
+		}
+		if(index == 1)
+		{
+			equippedItems[1].color = new Color(1, 1, 1, 0);
+		}
+		if(index == 2)
+		{
+			equippedItems[2].color = new Color(1, 1, 1, 0);
+		}
+	}
 
 }
