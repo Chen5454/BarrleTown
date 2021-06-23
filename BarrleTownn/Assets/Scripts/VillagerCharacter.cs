@@ -1,18 +1,21 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
-	public float speed;
-
+	public float playerSpeed;
+	
 	public float getPlayerMovementSpeed
 	{
 		get
 		{
-			return speed + playerItems.GetShoeSpeed();
+			return playerSpeed + playerItems.GetShoeSpeed();
 		}
 	}
+
+	
 
 	float horiznotal;
 	float vertical;
@@ -151,12 +154,24 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
-            if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
-            {
-                horiznotal *= 0.7f;
-                vertical *= 0.7f;
+			if (!isWerewolfState)
+			{
+				if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+				{
+					horiznotal *= 0.7f;
+					vertical *= 0.7f;
+				}
+				rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
             }
-            rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
+            else
+            {
+				if (horiznotal != 0 && vertical != 0) 
+				{
+					horiznotal *= 0.7f;
+					vertical *= 0.7f;
+				}
+				wereWolf.WereWolfMovement();
+			}
         }
 	}
 
@@ -235,7 +250,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				box = GetBarrleCollider().gameObject;
 				box.transform.parent = this.gameObject.transform;
 				box.GetComponent<InteractItem>().transfer.PickingUp();
-				speed = speed / 2;
+				playerSpeed = playerSpeed / 2;
 			}
 
 
@@ -243,7 +258,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			{
 				if (box != null)
 					box.transform.parent = null;
-				speed = speed * 2;
+				playerSpeed = playerSpeed * 2;
 				GETIsPicked = false;
 
 			}
@@ -345,6 +360,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		photonView.RPC("RPC_SetWereWolfHP", RpcTarget.AllBuffered, amount, setMax);
 	}
+
 	[PunRPC]
 	public void RPC_SetWereWolfHP(int amount, bool setMax)
 	{
@@ -470,7 +486,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		Gizmos.color = Color.blue;
 		Gizmos.DrawWireCube(this.transform.position, playerPickUpRange);
 
-
+		
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawRay( this.gameObject.transform.position, faceDirection* playerDistance );
 	}
@@ -479,8 +495,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	#region PunRPC
 
 	#endregion
+	
+
 
 }
+
+
 [System.Serializable]
 public class WereWolf
 {
@@ -489,10 +509,19 @@ public class WereWolf
 	public Rigidbody2D rb2DWereWolf;
 	public VillagerCharacter player;
 
-
+	
 	public Transform attackPos;
 	public float attackRange;
 	public LayerMask enemy;
+	public float werewolfSpeed;
+	public float attackStun;
+	public bool isStunned;
+	public void WereWolfMovement()
+    {
+        
+		player.rb2D.MovePosition(player.rb2D.position + player.movement * werewolfSpeed * Time.deltaTime);
+
+	}
 
 	public void WerewolfAttack()
 	{
@@ -500,7 +529,7 @@ public class WereWolf
 
 		if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolfState)
 		{
-
+			
 			Collider2D[] enemiestoDmg = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
 
 			for (int i = 0; i < enemiestoDmg.Length; i++)
@@ -518,9 +547,19 @@ public class WereWolf
 					GameManager.getInstance.GetShop.DamageDoor(1);
 				}
 			}
+			if (player.isWerewolfState)
+			{
+				player.StartCoroutine(DelayAfterAttack());
+			}
 		}
 	}
 
+	IEnumerator DelayAfterAttack()
+    {
+		player.canMove = false;
+		yield return new WaitForSeconds(attackStun);
+		player.canMove = true;
+	}
 
 	public void Transform()
 	{
@@ -539,6 +578,10 @@ public class WereWolf
 			}
 		}
 
-
+		
 	}
+
+	
+
+
 }

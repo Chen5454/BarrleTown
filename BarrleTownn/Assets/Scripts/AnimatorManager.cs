@@ -20,6 +20,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             Player();
             WereWolf();
             PlayerDeadAnimation();
+            WereWolfDeadAnimation();
         }
     }
 
@@ -31,6 +32,18 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             {
                 player.canMove = false;
                 animator.SetBool("isDead",true);
+            }
+        }
+    }
+
+    public void WereWolfDeadAnimation()
+    {
+        if (player.isWerewolfState)
+        {
+            if (player.currentHp == 0)
+            {
+                player.canMove = false;
+                animator.SetBool("isWolfDead", true);
             }
         }
     }
