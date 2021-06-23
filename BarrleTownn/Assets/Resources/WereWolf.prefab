@@ -161,6 +161,7 @@ MonoBehaviour:
   box: {fileID: 2509538891122064825, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playerItems:
     playerGun: {fileID: 0}
+    ammo: 0
     playerArmor: {fileID: 0}
     armor: 0
     playerShoes: {fileID: 0}
