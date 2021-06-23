@@ -137,7 +137,7 @@ MonoBehaviour:
   speed: 4
   rb2D: {fileID: 0}
   canMove: 0
-  distance: 0.35
+  playerDistance: 0.5
   currentHp: 1
   Maxhp: 1
   canHide: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
   nightHide: 0
   dayPickUp: 0
   isVulnerable: 0
-  faceDirection: 0
+  faceDirection: {x: 0, y: 0}
   wereWolf:
     rb2DWereWolf: {fileID: 6196262404252525881}
     player: {fileID: 6196262404252525862}
@@ -154,7 +154,7 @@ MonoBehaviour:
     attackRange: 0.5
     enemy:
       serializedVersion: 2
-      m_Bits: 1024
+      m_Bits: 2147484672
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playerRenderer: {fileID: 6196262404252525863}

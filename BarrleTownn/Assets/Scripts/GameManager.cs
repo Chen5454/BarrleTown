@@ -372,7 +372,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 					}
 				}
 				ShowNames(true);
-
+				player.nightHide = false;
 				if (player.GETIsPicked)
 					if (player.box != null)
 					{

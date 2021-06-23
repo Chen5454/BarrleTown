@@ -22,7 +22,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	private bool isFacingUp;
 	public bool canMove;
 	private bool isPicked;
-	public float distance;
+	public float playerDistance;
 	public int currentHp;
 	public int Maxhp;
 	public bool canHide;
@@ -31,10 +31,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool nightHide;
 	public bool dayPickUp;
 	public bool isVulnerable;
-	public int faceDirection;
+	public Vector2 faceDirection;
 	[SerializeField]
 	public WereWolf wereWolf;
-
+	Vector3 previousGood = Vector3.zero;
 	[HideInInspector]
 	public Vector2 movement;
 
@@ -106,6 +106,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
+			
 			if (Input.GetKeyDown(KeyCode.F))
 			{
 				PickUpItem();
@@ -120,16 +121,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider() != null)
+					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null)
 					{
 						Hide(canHide);
 					}
-
+					//&& GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup")
 				}
-
-
-
-
 			}
 			else
 			{
@@ -144,7 +141,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				if (isWerewolfState)
 					wereWolf.WerewolfAttack();
 			}
-
+			GetBarrleCollider();
 			ChangeWerewolfTag();
 		}
 	}
@@ -154,13 +151,13 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
-			if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
-			{
-				horiznotal *= 0.7f;
-				vertical *= 0.7f;
-			}
-			rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
-		}
+            if (horiznotal != 0 && vertical != 0) //Diagnoal movement limited makes the movement more pleasent
+            {
+                horiznotal *= 0.7f;
+                vertical *= 0.7f;
+            }
+            rb2D.MovePosition(rb2D.position + movement * getPlayerMovementSpeed * Time.deltaTime);
+        }
 	}
 
 
@@ -187,6 +184,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			if (!canUsedExisted)
 			{
+				
 				Projectile proj = PhotonNetwork.Instantiate("Projectile", this.transform.position, this.transform.rotation).GetComponent<Projectile>();
 				proj.InitProjectile(this.transform, direction);
 				this.projPool.Add(proj);
@@ -213,19 +211,19 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 
-	public void Flip(float horiznotal)
-	{
-		if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
-		{
-			isFacingRight = !isFacingRight;
+	//public void Flip(float horiznotal)
+	//{
+	//	if (horiznotal > 0 && !isFacingRight || horiznotal < 0 && isFacingRight)
+	//	{
+	//		isFacingRight = !isFacingRight;
 
 
-			Vector2 scale = transform.localScale;
-			scale.x *= -1;
-			transform.localScale = scale;
-		}
+	//		Vector2 scale = transform.localScale;
+	//		scale.x *= -1;
+	//		transform.localScale = scale;
+	//	}
 
-	}
+	//}
 
 	public void PickUp()
 	{
@@ -257,17 +255,17 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 
 		Physics2D.queriesStartInColliders = false;
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, movement, distance);
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, faceDirection, playerDistance);
 		if (hit.collider != null && hit.collider.gameObject.CompareTag("Pickup"))
 		{
+			Debug.Log("Return NOT null" + " " + hit.collider.tag);
 			return hit.collider;
 		}
 		else
 		{
+			Debug.Log("Return null");
 			return null;
 		}
-
-
 	}
 
 
@@ -297,10 +295,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
-			if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
-			{
-				canHide = true;
+            if (!isWerewolfState)
+            {
+				if (GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup") && other.gameObject.CompareTag("Pickup"))
+				{
+					canHide = true;
+				}
 			}
+		
+          
 		}
 	}
 
@@ -310,10 +313,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
-			if (other.gameObject.CompareTag("Pickup"))
+			if (!isWerewolfState)
 			{
-				canHide = false;
+				if (other.gameObject.CompareTag("Pickup"))
+				{
+					canHide = false;
+				}
 			}
+
 		}
 	}
 
@@ -365,9 +372,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void RPC_Hide(bool _canHide)
 	{
 		canHide = _canHide;
+		Color tmp = playerRenderer.color;
 
 		if (canHide)
 		{
+			
 			playerRenderer.enabled = false;
 			GETcanMove = false;
 			isVulnerable = false;
@@ -375,12 +384,13 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			GETcanMove = true;
 			playerRenderer.enabled = true;
+			GETcanMove = true;
 			isVulnerable = true;
 			canHide = true;
 
 		}
+	//	playerRenderer.color = tmp;
 
 
 	}
@@ -424,6 +434,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			movement.x = Input.GetAxisRaw("Horizontal");
 			movement.y = Input.GetAxisRaw("Vertical");
+			
 		}
 		else
 		{
@@ -432,22 +443,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			canMove = false;
 		}
 
-		if (movement.x == 1)
+		if (movement != Vector2.zero)
 		{
-			faceDirection = 0;
+			faceDirection = movement;
 		}
-		else if (movement.x == -1)
-		{
-			faceDirection = 1;
-		}
-		else if (movement.y == 1)
-		{
-			faceDirection = 2;
-		}
-		else if (movement.y == -1)
-		{
-			faceDirection = 3;
-		}
+	
 	}
 
 	public void Shoot()
@@ -456,7 +456,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
         {
             if (playerItems.CanShoot())
             {
-				PoolShoot(faceDirection);
+				//PoolShoot(faceDirection);
 			}
 		}
     }
@@ -471,6 +471,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		Gizmos.DrawWireCube(this.transform.position, playerPickUpRange);
 
 
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawRay( this.gameObject.transform.position, faceDirection* playerDistance );
 	}
 
 
@@ -507,7 +509,7 @@ public class WereWolf
 				{
 					enemiestoDmg[i].GetComponent<VillagerCharacter>().GetDamage(1);
 				}
-				else if (enemiestoDmg[i].transform.tag == "Pickup")
+				else if (enemiestoDmg[i].transform.tag == "Pickup" )
 				{
 					enemiestoDmg[i].GetComponent<InteractItem>().BerrelGetDamage(1);
 				}
