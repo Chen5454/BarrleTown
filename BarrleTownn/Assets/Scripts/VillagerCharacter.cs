@@ -273,12 +273,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, faceDirection, playerDistance);
 		if (hit.collider != null && hit.collider.gameObject.CompareTag("Pickup"))
 		{
-			Debug.Log("Return NOT null" + " " + hit.collider.tag);
 			return hit.collider;
 		}
 		else
 		{
-			Debug.Log("Return null");
 			return null;
 		}
 	}
