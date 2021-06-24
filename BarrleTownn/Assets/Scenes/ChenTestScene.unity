@@ -197,6 +197,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5150906793705693844, guid: 025120c748fe59d44a77ad80e83bc1b2,
+        type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[9].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6196262404252525860, guid: 025120c748fe59d44a77ad80e83bc1b2,
         type: 3}
       propertyPath: m_RootOrder

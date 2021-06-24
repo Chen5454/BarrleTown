@@ -34,6 +34,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool nightHide;
 	public bool dayPickUp;
 	public bool isVulnerable;
+	public bool isAttack;
+
 	public Vector2 faceDirection;
 	[SerializeField]
 	public WereWolf wereWolf;
@@ -515,7 +517,6 @@ public class WereWolf
 	public LayerMask enemy;
 	public float werewolfSpeed;
 	public float attackStun;
-	public bool isStunned;
 	public void WereWolfMovement()
     {
         
@@ -529,7 +530,7 @@ public class WereWolf
 
 		if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolfState)
 		{
-			
+			player.isAttack = true;
 			Collider2D[] enemiestoDmg = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
 
 			for (int i = 0; i < enemiestoDmg.Length; i++)
@@ -547,9 +548,11 @@ public class WereWolf
 					GameManager.getInstance.GetShop.DamageDoor(1);
 				}
 			}
+			
 			if (player.isWerewolfState)
 			{
 				player.StartCoroutine(DelayAfterAttack());
+				
 			}
 		}
 	}
