@@ -1,6 +1,6 @@
 ﻿using Photon.Pun;
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 public class InteractItem : MonoBehaviourPunCallbacks
 {
 	public RecipeItems contain;
@@ -13,19 +13,19 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	public int barrleMaxHp;
 
 	public bool IsBarrelALive()
-    {
-        if (this.barrleCurrentHp>0)
-        {
+	{
+		if (this.barrleCurrentHp > 0)
+		{
 			return true;
-        }
-        else
-        {
+		}
+		else
+		{
 			return false;
-        }
-		
-    }
+		}
 
-    public void SetGameObjectActive(bool _active,Vector3 pos)
+	}
+
+	public void SetGameObjectActive(bool _active, Vector3 pos)
 	{
 		if (PhotonNetwork.IsMasterClient)
 			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos);
@@ -38,17 +38,25 @@ public class InteractItem : MonoBehaviourPunCallbacks
 		gameObject.transform.position = pos;
 	}
 
-
+	public void PlayerHiding(VillagerCharacter _player)
+	{
+		player = _player;
+		photonView.RPC("RPC_PlayerHiding", RpcTarget.AllBuffered, _player.photonView.ViewID);
+	}
+	public void RPC_PlayerHiding(int id)
+	{
+		player = PhotonView.Find(id).GetComponent<VillagerCharacter>();
+	}
 	public void HpBarrel()
-    {
-        if (barrleCurrentHp > barrleMaxHp)
-        {
+	{
+		if (barrleCurrentHp > barrleMaxHp)
+		{
 			barrleCurrentHp = barrleMaxHp;
 		}
-    }
+	}
 
 	public void BerrelGetDamage(int amount)
-    {
+	{
 		photonView.RPC("RPC_BerrelGetDamage", RpcTarget.AllBufferedViaServer, amount);
 	}
 
@@ -57,20 +65,29 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	public void RPC_BerrelGetDamage(int amount)
 	{
 		this.barrleCurrentHp -= amount;
-        if (!IsBarrelALive())
-        {
-			GameManager.getInstance.player.PlayerAppear(this.photonView.ViewID);
-        }
+		if (!IsBarrelALive())
+		{
+			if (player != null)
+				//if (player == GameManager.getInstance.player)
+				GameManager.getInstance.player.PlayerAppear(this.photonView.ViewID);
+
+
+			DestoryBerrel();
+
+			
+		}
+
 	}
 
 
 	public void DestoryBerrel()
-    {
+	{
 		this.gameObject.SetActive(false);
+		player = null;
 	}
 
 	IEnumerator WaitBeforeDestory()
-    {
+	{
 
 		yield return new WaitForSeconds(0.5f);
 

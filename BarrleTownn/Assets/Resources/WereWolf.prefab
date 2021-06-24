@@ -172,6 +172,7 @@ MonoBehaviour:
   ItemLayers:
     serializedVersion: 2
     m_Bits: 8192
+  playerCollider: {fileID: 6196262404252525861}
 --- !u!50 &6196262404252525881
 Rigidbody2D:
   serializedVersion: 4

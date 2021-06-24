@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Simple CrossBow
   itemSprite: {fileID: 21300000, guid: fe5b5712be3313a488a94646ef89e74d, type: 3}
-  ammoAmount: 10
+  ammoAmount: 5
   proj: {fileID: 993057092975144834, guid: fbe2d8fd2fd310448bc7f19fd6f49011, type: 3}

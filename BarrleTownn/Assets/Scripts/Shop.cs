@@ -46,14 +46,16 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	void Update()
 	{
-		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
+		Collider2D[] _insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
+		//Debug.Log(_insideBarrels.Length);
 		insidePlayers = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, playerMask);
 		//barrels
-		if (insideBarrels.Length > 0)
+		if (_insideBarrels.Length > 0)
 		{
-			if (barrelsInsideShopRegion != insideBarrels.Length / 2)
+			
+			if (barrelsInsideShopRegion != _insideBarrels.Length)
 			{
-				barrelsInsideShopRegion = insideBarrels.Length / 2;
+				barrelsInsideShopRegion = _insideBarrels.Length;
 				if (PhotonNetwork.IsMasterClient)
 				{
 					CheckDropSite();
@@ -167,7 +169,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		Collider2D[] insideBarrels = Physics2D.OverlapBoxAll(dropSite.position, dropSiteRadius, 0, barrelMask);
 		for (int i = 0; i < insideBarrels.Length; i++)
 		{
-			if (insideBarrels[i].isTrigger)
+			if (!insideBarrels[i].isTrigger)
 				itemInside.Add(insideBarrels[i].GetComponent<InteractItem>());
 		}
 

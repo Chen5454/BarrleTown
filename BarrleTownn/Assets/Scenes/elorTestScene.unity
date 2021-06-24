@@ -932,7 +932,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &112105471
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1073,7 +1073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &166290310
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2278,8 +2278,8 @@ MonoBehaviour:
     m_Bits: 1024
   shopRecipe:
     RecipeList:
-    - recipe: 0100000003000000
-      amountRequired: 0100000002000000
+    - recipe: 01000000
+      amountRequired: 01000000
       recipeReward: {fileID: 11400000, guid: e25f4dea770e0cb419e73ecf38cf98c0, type: 2}
   currentRecipe:
     recipe: 
@@ -2449,7 +2449,7 @@ RectTransform:
   - {fileID: 1961839021}
   - {fileID: 871474181}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2801,7 +2801,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &497005264
 GameObject:
@@ -5665,7 +5665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1115413323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6371,7 +6371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1277772539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7212,7 +7212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1469975456
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8239,7 +8239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1766856851
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10721,7 +10721,7 @@ PrefabInstance:
     - target: {fileID: 993057092975144893, guid: fbe2d8fd2fd310448bc7f19fd6f49011,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 993057092975144893, guid: fbe2d8fd2fd310448bc7f19fd6f49011,
         type: 3}
@@ -10810,7 +10810,7 @@ PrefabInstance:
     - target: {fileID: 1215802149201304375, guid: e9bdecc0f8f99f74e83943c8ed23dfa6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1215802149201304375, guid: e9bdecc0f8f99f74e83943c8ed23dfa6,
         type: 3}
