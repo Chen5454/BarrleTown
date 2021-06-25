@@ -162,6 +162,10 @@ MonoBehaviour:
   transfer: {fileID: -6168727787695638968}
   barrleCurrentHp: 3
   barrleMaxHp: 3
+  itemSprites:
+  - {fileID: 21300000, guid: df5f26ade13f3234c960b77c40c041be, type: 3}
+  - {fileID: 21300000, guid: f46f57494378e3c4096e1a568241663f, type: 3}
+  - {fileID: 21300000, guid: 35f4f09e1a21aa6418cee62563874c8e, type: 3}
 --- !u!114 &75972220418790823
 MonoBehaviour:
   m_ObjectHideFlags: 0

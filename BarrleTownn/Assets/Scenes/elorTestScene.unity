@@ -972,7 +972,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4f60f51a9a2ddbe4392124d84aca2475, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 35f4f09e1a21aa6418cee62563874c8e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2488,6 +2488,10 @@ MonoBehaviour:
   - {r: 0.5660378, g: 0.29951498, b: 0, a: 1}
   - {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   recipeUI: {fileID: 2014933325}
+  itemSprites:
+  - {fileID: 21300000, guid: df5f26ade13f3234c960b77c40c041be, type: 3}
+  - {fileID: 21300000, guid: f46f57494378e3c4096e1a568241663f, type: 3}
+  - {fileID: 21300000, guid: 35f4f09e1a21aa6418cee62563874c8e, type: 3}
 --- !u!114 &454505797
 MonoBehaviour:
   m_ObjectHideFlags: 0

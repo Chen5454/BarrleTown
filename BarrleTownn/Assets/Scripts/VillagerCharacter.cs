@@ -58,6 +58,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	List<Projectile> projPool = new List<Projectile>();
 
 
+	//bubble item related
+	public GameObject itemBubble;
+	public SpriteRenderer barrelInsideSprite;
+	private float lookingleftposx = -0.598f;
+	private float lookingRightRotationY = -180;
+
 	#region Getters Setters
 	public bool GETIsPicked
 	{
@@ -118,6 +124,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 			MovementHandler();
+			RotateItemBubble();
+
+
+
+
 			if (!isWerewolfState)
 			{
 				PickUp();
@@ -177,7 +188,21 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-
+	void RotateItemBubble()
+	{
+		if (faceDirection.x == 1)
+		{
+			itemBubble.transform.localPosition = new Vector3(0.598f, -0.359f);
+			itemBubble.transform.rotation = Quaternion.Euler(new Vector3(-180, -180, 0));
+			barrelInsideSprite.gameObject.transform.localRotation = Quaternion.Euler(-180, 0, 0);
+		}
+		else if (faceDirection.x == -1)
+		{
+			itemBubble.transform.localPosition = new Vector3(-0.598f, -0.359f);
+			itemBubble.transform.rotation = Quaternion.Euler(new Vector3(-180, 0, 0));
+			barrelInsideSprite.gameObject.transform.localRotation = Quaternion.Euler(-180, -180, 0);
+		}
+	}
 	public void PoolShoot(Vector2 direction)
 	{
 		bool canUsedExisted = false;
@@ -254,6 +279,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				box.transform.parent = this.gameObject.transform;
 				box.GetComponent<InteractItem>().transfer.PickingUp();
 				playerSpeed = playerSpeed / 2;
+
+
+				if (!itemBubble.activeInHierarchy)
+					itemBubble.SetActive(true);
+				if (barrelInsideSprite.sprite != GetBarrleCollider().GetComponent<InteractItem>().ReturnSpriteByBarrelType())
+				{
+					barrelInsideSprite.sprite = GetBarrleCollider().GetComponent<InteractItem>().ReturnSpriteByBarrelType();
+				}
 			}
 
 
@@ -263,11 +296,19 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 					box.transform.parent = null;
 				playerSpeed = playerSpeed * 2;
 				GETIsPicked = false;
-
+				Unpick();
 			}
 		}
 	}
 
+
+	public void Unpick()
+	{
+		if (itemBubble.activeInHierarchy)
+			itemBubble.SetActive(false);
+
+		barrelInsideSprite.sprite = null;
+	}
 
 	public Collider2D GetBarrleCollider()
 	{

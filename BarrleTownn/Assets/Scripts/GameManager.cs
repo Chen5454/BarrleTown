@@ -315,6 +315,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 							player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
 							player.playerSpeed = player.playerSpeed * 2;
 							player.GETIsPicked = false;
+							player.Unpick();
 						}
 					player.wereWolf.Transform();
 
@@ -333,6 +334,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 							player.box.transform.parent = barrelManager.spawnRegions[0].barrelParent;
 							player.playerSpeed = player.playerSpeed * 2;
 							player.GETIsPicked = false;
+							player.Unpick();
 						}
 					player.dayPickUp = false;
 				}
@@ -380,7 +382,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 						player.playerSpeed = player.playerSpeed * 2;
 						player.GETIsPicked = false;
 
-
+						player.Unpick();
 					}
 
 

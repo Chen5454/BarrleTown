@@ -11,6 +11,8 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	public OwnerShipTranfer transfer;
 	public int barrleCurrentHp;
 	public int barrleMaxHp;
+	// 0 = wood, 1 = leather, 2 = iron
+	public Sprite[] itemSprites;
 
 	public bool IsBarrelALive()
 	{
@@ -73,8 +75,6 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 
 			DestoryBerrel();
-
-			
 		}
 
 	}
@@ -93,6 +93,25 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	}
 
+
+	public Sprite ReturnSpriteByBarrelType()
+	{
+		switch (contain)
+		{
+			case RecipeItems.Empty:
+				return null;
+			case RecipeItems.Wood:
+				return itemSprites[0];
+			
+			case RecipeItems.Leather:
+				return itemSprites[1];
+			case RecipeItems.Metal:
+				return itemSprites[2];
+			default:
+				break;
+		}
+		return null;
+	}
 
 	//private void OnCollisionStay2D(Collision2D other)
 	//{
