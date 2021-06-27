@@ -55,7 +55,7 @@ public class VotingArea : MonoBehaviour
 	public void CheckVotes()
 	{
 		int highestIndex = 0;
-		int highestPoint = 0;
+		int highestPoint = -1;
 		bool hasTie = false;
 		bool skip = false;
 		for (int i = 0; i < voteAmount.Length; i++)
@@ -63,6 +63,11 @@ public class VotingArea : MonoBehaviour
 			// -1 < 0 
 			if (voteAmount[i] != 0)
 			{
+				if(i == 0)
+				{
+					highestPoint = i;
+					highestPoint = voteAmount[highestIndex];
+				}
 				if(voteAmount[i] > voteAmount[highestIndex])
 				{
 					highestIndex = i;
@@ -90,7 +95,7 @@ public class VotingArea : MonoBehaviour
 			skip = true;
 
 
-		if (hasTie || highestPoint == 0 || skip)
+		if (hasTie || highestPoint == -1 || skip)
 		{
 			Debug.Log("Tie! or No Votes");
 			GameManager.getInstance.killedPlayer = -1;

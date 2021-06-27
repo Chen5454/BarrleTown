@@ -87,6 +87,7 @@ public class CameraController : MonoBehaviour
 
 	public void ChangePhaseToDay()
 	{
+		GameManager.getInstance.CheckWinCondition();
 		GameManager.getInstance.ChangeToDay();
 	}
 	public void AnimKillVotedPlayer()
