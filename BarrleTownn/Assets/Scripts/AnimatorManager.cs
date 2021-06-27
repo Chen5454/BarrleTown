@@ -6,7 +6,6 @@ using Photon.Pun;
 public class AnimatorManager : MonoBehaviourPunCallbacks
 {
     public Animator animator;
-    
      VillagerCharacter player;
     private void Awake()
     {
@@ -21,6 +20,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             WereWolf();
             PlayerDeadAnimation();
             WereWolfDeadAnimation();
+            WerewolfAttack();
         }
     }
 
@@ -86,7 +86,17 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
     }
     public void WerewolfAttack()  
     {
-        animator.SetTrigger("attack");
+        if (player.isWerewolfState)
+        {
+
+
+            if (player.isAttack)
+            {
+                animator.SetTrigger("attack");
+                player.isAttack = false;
+            }
+            
+        }
     }
 
     private IEnumerator WaitAndAnimation(float waitTime)
