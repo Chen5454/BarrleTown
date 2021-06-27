@@ -597,7 +597,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		//Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
-		RemovePlayerFromList(other.NickName);
+		//RemovePlayerFromList(other.NickName);
 
 
 
@@ -783,7 +783,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void AddToPlayerList(string playerName)
 	{
-		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
+		//photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 	[PunRPC]
 	void RPC_AddToPlayerList(string playerName)
