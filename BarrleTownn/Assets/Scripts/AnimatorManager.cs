@@ -92,6 +92,13 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
 
             if (player.isAttack)
             {
+                if (Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1)
+                {
+                    animator.SetFloat("LastHorizontal", Input.GetAxisRaw("Horizontal"));
+                    
+                }
+               // animator.SetFloat("horizontal", player.movement.x);
+
                 animator.SetTrigger("attack");
                 player.isAttack = false;
             }
