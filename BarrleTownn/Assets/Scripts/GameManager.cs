@@ -963,7 +963,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 			}
 		}
 
-		if(villagersAlives == 1 && isWerewolfAlive)
+		if(villagersAlives == 0 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
 		}
