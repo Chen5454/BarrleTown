@@ -34,6 +34,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool nightHide;
 	public bool dayPickUp;
 	public bool isVulnerable;
+	public bool isAttack;
 	public Vector2 faceDirection;
 	[SerializeField]
 	public WereWolf wereWolf;
@@ -565,8 +566,10 @@ public class WereWolf
 					GameManager.getInstance.GetShop.DamageDoor(1);
 				}
 			}
+			
 			if (player.isWerewolfState)
 			{
+				player.isAttack = true;
 				player.StartCoroutine(DelayAfterAttack());
 			}
 		}
