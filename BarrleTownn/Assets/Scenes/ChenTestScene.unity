@@ -257,6 +257,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6196262404252525862, guid: 025120c748fe59d44a77ad80e83bc1b2,
+        type: 3}
+      propertyPath: isWerewolfState
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6196262404252525880, guid: 025120c748fe59d44a77ad80e83bc1b2,
         type: 3}
       propertyPath: m_Name
