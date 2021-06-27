@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			Destroy(this.gameObject);
 		}
+
+		
 	}
 
 	// Start is called before the first frame update
@@ -599,7 +601,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		//RemovePlayerFromList(other.NickName);
 
-
+		CheckWinCondition();
 
 
 
@@ -979,6 +981,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 	#endregion
+
+
+
+
+
+	
+
+	//void  OnMasterClientSwitched(Player newMasterClient)
+	//{
+	//	InteractItem[] barrels = FindObjectsOfType<InteractItem>();
+	//	for (int i = 0; i < barrels.Length; i++)
+	//	{
+	//		barrels[i].transfer.ReturnToMaster();
+	//	}
+
+	//}
+
 
 }
 [Serializable]
