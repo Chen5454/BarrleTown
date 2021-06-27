@@ -90,11 +90,13 @@ public class PlayerItems
 
 	public void EquipItem(ItemSO item)
 	{
+		Debug.LogError("Getting item: " + item.itemName);
 		if (item as ShoeSO)
 		{
 			if (playerShoes == null)
 			{
 				playerShoes = (ShoeSO)item;
+				
 			}
 		}
 		else if (item as ArmorSO)
@@ -103,6 +105,7 @@ public class PlayerItems
 			{
 				playerArmor = (ArmorSO)item;
 				this.armor = playerArmor.armourAmount;
+				Debug.LogError("Setting Armor: " + playerArmor.armourAmount + " from: " + playerArmor.itemName);
 			}
 		}
 		else if (item as GunSO)
@@ -110,12 +113,31 @@ public class PlayerItems
 			if (playerGun == null)
 			{
 				playerGun = (GunSO)item;
-				ammo = playerGun.ammoAmount;
+				this.ammo = playerGun.ammoAmount;
+				Debug.LogError("Setting ammo: " + playerGun.ammoAmount + " from: " + playerGun.itemName);
 			}
 		}
 
 	}
-
+	public void UpdateItem(ItemSO item)
+	{
+		if (item as ArmorSO)
+		{
+			if (playerArmor == null)
+			{
+				this.armor = playerArmor.armourAmount;
+				Debug.LogError("Setting Armor: " + playerArmor.armourAmount + " from: " + playerArmor.itemName);
+			}
+		}
+		else if (item as GunSO)
+		{
+			if (playerGun == null)
+			{
+				this.ammo = playerGun.ammoAmount;
+				Debug.LogError("Setting ammo: " + playerGun.ammoAmount + " from: " + playerGun.itemName);
+			}
+		}
+	}
 
 	public void UnEquipItem(int index)
 	{

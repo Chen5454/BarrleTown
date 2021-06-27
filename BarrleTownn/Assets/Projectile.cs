@@ -39,22 +39,45 @@ public class Projectile : MonoBehaviourPunCallbacks
 		this.gameObject.SetActive(false);
 	}
 	//direction, 0 = down, 1 = right, 2 = left, 3 = up
-	public void InitProjectile(Transform pos, int direction)
+	public void InitProjectile(Transform pos, Vector2 direction)
 	{
 		if(photonView.IsMine)
 		photonView.RPC("RPC_InitProjectile", RpcTarget.All, pos.position, direction);
 	}
 
 	[PunRPC]
-	public void RPC_InitProjectile(Vector3 pos, int direction)
+	public void RPC_InitProjectile(Vector3 pos, Vector2 direction)
 	{
 		transform.position = pos;
 		timer = timeToStayActive;
-		SetDirection(direction);
-		RotateGFX(direction);
+
+
+		SetDirection(ReturnIntDirectionByInt(direction));
+		RotateGFX(ReturnIntDirectionByInt(direction));
 		isActive = true;
 		this.gameObject.SetActive(true);
 	}
+
+	int ReturnIntDirectionByInt(Vector2 direction)
+	{
+		if(direction.y == 0)
+		{
+			if (direction.x == 1)
+				return 1;
+			else if (direction.x == -1)
+				return 2;
+		}
+		else if(direction.x == 0)
+		{
+			if (direction.y == 1)
+				return 0;
+			else if (direction.y == -1)
+				return 3;
+		}
+
+		return -1;
+	}
+
 
 	void RotateGFX(int direction)
 	{
