@@ -25,6 +25,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	public ItemBankSO itemBank;
 	public GameObject _reward;
 	[SerializeField] GameObject shopDoor;
+	public NotificationSystem notification;
 	//public SpriteRenderer[] recipeItemShow;
 	//public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	//public Sprite[] amountSprites;
@@ -52,7 +53,7 @@ public class Shop : MonoBehaviourPunCallbacks
 		//barrels
 		if (_insideBarrels.Length > 0)
 		{
-			
+
 			if (barrelsInsideShopRegion != _insideBarrels.Length)
 			{
 				barrelsInsideShopRegion = _insideBarrels.Length;
@@ -117,6 +118,7 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	}
 
+
 	public void SetDoor(bool _setActive)
 	{
 		if (insidePlayers.Length > 0)
@@ -152,9 +154,11 @@ public class Shop : MonoBehaviourPunCallbacks
 
 	public void GetNewGeneratedRecipeIndex(int _index)
 	{
+	
 		currentRecipe = shopRecipe.RecipeList[_index];
 		Debug.LogError(" the new recipe is for: " + currentRecipe.recipeReward.itemName);
 		canGenerateNewRecipe = false;
+		notification.ShowText("New recipe is: " + currentRecipe.recipeReward.itemName);
 	}
 
 	public void GenerateNewShopRecipe()
@@ -209,6 +213,9 @@ public class Shop : MonoBehaviourPunCallbacks
 				SpawnItemRecipe();
 
 			DeleteBarrelsFromDropZone();
+
+			notification.ShowText("Item has crafted: " + currentRecipe.recipeReward.itemName);
+
 		}
 		else
 		{
@@ -230,7 +237,7 @@ public class Shop : MonoBehaviourPunCallbacks
 			//destroyableBarrels.Add(itemInside[i]);
 			//checkList(destroyableBarrels);
 			//itemInside[i].gameObject.SetActive(false);
-			itemInside[i].GetComponent<InteractItem>().SetGameObjectActive(false,new Vector3(0,0,0));
+			itemInside[i].GetComponent<InteractItem>().SetGameObjectActive(false, new Vector3(0, 0, 0),RecipeItems.Empty);
 		}
 
 
@@ -298,9 +305,6 @@ public class Shop : MonoBehaviourPunCallbacks
 			return false;
 
 	}
-
-
-
 	public void SpawnItemRecipe()
 	{
 
@@ -311,14 +315,11 @@ public class Shop : MonoBehaviourPunCallbacks
 
 		//reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
 	}
-
 	public void ChangeRewardInfo(ItemSO _itemInfo)
 	{
 		_reward.GetComponent<PickableItem>().ShowItemOnFloor(_itemInfo);
 		Debug.Log("Reward: " + _reward.GetComponent<PickableItem>().pickableItem.itemName);
 	}
-
-
 	public void TeleportPlayersOutsideOfShop()
 	{
 		for (int i = 0; i < insidePlayers.Length; i++)
@@ -327,9 +328,6 @@ public class Shop : MonoBehaviourPunCallbacks
 				insidePlayers[i].transform.position = kickFromShopPlace.position;
 		}
 	}
-
-
-
 	private void OnDrawGizmos()
 	{
 		Gizmos.color = Color.red;

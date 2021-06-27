@@ -31,12 +31,11 @@ public class VotingArea : MonoBehaviour
 	{
 		voteAmount = new int[votingUI.playerVotingButtons.Length + 1];
 	}
-
 	public void VoteToPlayer(int playerIndex, int vote)
 	{
 		voteAmount[playerIndex] += vote;
+		votingUI.UpdateVoteAmountUI();
 	}
-
 	public void PlayersCanMove()
 	{
 		for (int i = 0; i < GameManager.getInstance.playersList.Count; i++)
@@ -53,7 +52,6 @@ public class VotingArea : MonoBehaviour
 
 		GameManager.getInstance.ResetVotes();
 	}
-
 	public void CheckVotes()
 	{
 		int highestIndex = 0;
@@ -95,21 +93,23 @@ public class VotingArea : MonoBehaviour
 		if (hasTie || highestPoint == 0 || skip)
 		{
 			Debug.Log("Tie! or No Votes");
+			GameManager.getInstance.killedPlayer = -1;
+			GameManager.getInstance.camera.NoOneWasVoted();
 		}
 		else
 		{
-			KillVotedPlayer(highestIndex);
+			GameManager.getInstance.killedPlayer = highestIndex;
+			GameManager.getInstance.camera.SetCameraToKillVoted();
+
+
+			//KillVotedPlayer(highestIndex);
 		}
 
 	}
-
 	public void KillVotedPlayer(int _indexPlayer)
 	{
 		GameManager.getInstance.KillVotedPlayer(_indexPlayer);
 	}
-
-
-
 	public void ShowVotingButtons(bool _show)
 	{
 		votingUI.SetVotingButtons(_show);

@@ -13,7 +13,8 @@ public enum GamePhases
 	Day,
 	Night,
 	talk,
-	Vote
+	Vote,
+	Vote_Result
 }
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -24,7 +25,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public ItemBankSO itemBank;
 	[SerializeField] FieldOfView fov;
 	[SerializeField] BarrelManager barrelManager;
-	[SerializeField] CameraController camera;
+	public CameraController camera;
 	[SerializeField] VotingArea votingArea;
 	[SerializeField] LobbyController lobbyCon;
 	[SerializeField] ChatUI chat;
@@ -81,6 +82,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public int wolfStartHP;
 	[Tooltip("when to show the werewolf the timer, if its 0 it will always show the timer for the werewolf, the timer will show when its going to be night and when the night is going to end")]
 	public int showNightTime;
+	public int killedPlayer;
+
+
+
+
+
+	[Header("Voting animation related")]
+	public float KillVotedTime;
+
+
 	private void Awake()
 	{
 		if (_instance == null)
@@ -98,6 +109,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void Start()
 	{
 		Debug.Log("Game Manger is now On");
+
+	
+
 	}
 
 	// Update is called once per frame
@@ -166,17 +180,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void GameTimers()
 	{
-		if (timer >= 0)
+		if (gamePhase != GamePhases.Vote_Result)
 		{
+			if (timer >= 0)
+			{
 
-			timer -= Time.deltaTime;
+				timer -= Time.deltaTime;
+			}
+			else
+			{
+				SwitchGamePhases();
+			}
 		}
-		else
-		{
-			SwitchGamePhases();
-		}
+
 	}
-
 	public void InitGame()
 	{
 		if (PhotonNetwork.IsMasterClient)
@@ -211,7 +228,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		barrelManager.canStartGeneration = true;
 		barrelManager.GenerateBarrels();
-		
+
 
 		shop.canGenerateNewRecipe = true;
 		if (shop.canGenerateNewRecipe)
@@ -232,7 +249,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	}
-
 	[PunRPC]
 	void RPC_ChooseWereWolf(bool[] boolArray)
 	{
@@ -254,7 +270,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 			}
 		}
 	}
-
 	void InstantiatePlayer(bool _IsWereWolf)
 	{
 		int spawnIndex = -1;
@@ -271,16 +286,40 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		GameObject _player = PhotonNetwork.Instantiate("WereWolf", spawn.position, new Quaternion(0, 0, 0, 0));
 		player = _player.GetComponent<VillagerCharacter>();
-		player.isWerewolf = _IsWereWolf;
-		if (_IsWereWolf)
+		this.player.isWerewolf = _IsWereWolf;
+
+	
+	}
+
+	[PunRPC]
+	void RPC_SetWereWolf(int id,string name, bool _IsWereWolf)
+	{
+		//VillagerCharacter villager = PhotonView.Find(id).gameObject.GetComponent<VillagerCharacter>();
+		//villager.isWerewolf = _IsWereWolf;
+
+		for (int i = 0; i < playersList.Count; i++)
 		{
-			player.SetWereWolfHP(wolfStartHP, true);
+			if(playersList[i].photonView.ViewID == id)
+			{
+				playersList[i].isWerewolf = _IsWereWolf;
+				if (_IsWereWolf)
+				{
+					playersList[i].SetWereWolfHP(wolfStartHP, true);
+				}
+				else
+				{
+					playersList[i].SetWereWolfHP(1, true);
+				}
+
+				playersList[i].playerName = name;
+			}
 		}
+
+
+
 		
 
 	}
-
-
 
 	IEnumerator delayedList()
 	{
@@ -359,8 +398,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 				{
 					gameTimeUI.isTimerShown = true;
 				}
-
-
 				if (player.isWerewolf)
 				{
 					player.wereWolf.Transform();
@@ -384,66 +421,70 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 						player.Unpick();
 					}
-
-
-
 				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
 				StartTalkPhase();
 				Debug.Log("Switching to Talk");
 				fov.SetDayFOV();
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
-				//if (UIManager.getInstance.shop.shopRef.canGenerateNewRecipe)
-				//	if (PhotonNetwork.IsMasterClient)
-				//		shop.GenerateNewRecipe();
 				barrelManager.GenerateBarrels();
-
 				camera.setCameraToGamePhase(true);
 				SetPlayersAtVotingPosition();
-
 				break;
 			case GamePhases.talk://switches to Vote
-
 				if (!gameTimeUI.isTimerShown)
 				{
 					gameTimeUI.isTimerShown = true;
 				}
-
-
 				votingArea.ShowVotingButtons(true);
 				SetShopDoorActive(false);
-
-
 				gamePhase = GamePhases.Vote;
 				timer = voteTime;
 				canVote = true;
 				Debug.Log("Players can vote");
 				break;
-			case GamePhases.Vote: //switches to Day
+			case GamePhases.Vote: //vote Result
+				gamePhase = GamePhases.Vote_Result;
 
-				if (gameTimeUI.isTimerShown)
+				votingArea.votingUI.voting.CheckVotes();
+
+				//if (killedPlayer != -1)
+				//	camera.SetCameraToKillVoted();
+				//else
+				//{
+				//	camera.NoOneWasVoted();
+				//}
+				chat.SetChatVisibility(false);
+				votingArea.ShowVotingButtons(false);
+				canVote = false;
+				if (!gameTimeUI.isTimerShown)
 				{
 					gameTimeUI.isTimerShown = false;
 				}
-				chat.SetChatVisibility(false);
-				camera.setCameraToGamePhase(false);
-				votingArea.ShowVotingButtons(false);
-				votingArea.PlayersCanMove();
-				votingArea.CheckVotes();
 
-				player.dayPickUp = true;
-				player.nightHide = false;
-				canVote = false;
-				gamePhase = GamePhases.Day;
-				timer = dayTime;
-				Debug.Log("Switching to Day");
+
+
 				break;
 			default:
 				break;
 		}
 	}
 
-
+	public void ChangeToDay()
+	{
+		if (gameTimeUI.isTimerShown)
+		{
+			gameTimeUI.isTimerShown = false;
+		}
+		camera.setCameraToGamePhase(false);
+		votingArea.PlayersCanMove();
+		//votingArea.CheckVotes();
+		player.dayPickUp = true;
+		player.nightHide = false;
+		gamePhase = GamePhases.Day;
+		timer = dayTime;
+		Debug.Log("Switching to Day");
+	}
 
 	public void ShowNames(bool _show)
 	{
@@ -641,9 +682,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 		playersList[playerIndex].canMove = false;
 	}
 
+	public void PutVotedPlayerOnFire(Vector3 position, int playerIndex)
+	{
+		photonView.RPC("RPC_PutVotedPlayerOnFire", RpcTarget.AllBufferedViaServer, position, playerIndex);
+	}
 
-
-
+	[PunRPC]
+	public void RPC_PutVotedPlayerOnFire(Vector3 position, int playerIndex)
+	{
+		playersList[playerIndex].gameObject.transform.position = position;
+	}
 
 	public void GetPlayerVotes(int index, int amount)
 	{
@@ -653,6 +701,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void RPC_GetVotes(int index, int amount)
 	{
 		votingArea.VoteToPlayer(index, amount);
+
 	}
 
 
@@ -693,6 +742,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 	void RPC_GetPlayerList()
 	{
 		playersList = playersList.OrderBy(x => x.photonView.ViewID).ToList();
+
+		
+			for (int i = 0; i < playersList.Count; i++)
+			{
+				if (playersList[i].photonView.IsMine)
+				{
+					Debug.LogError("Setting: " + PhotonNetwork.PlayerList[i].NickName + " IsWerewolf: " + player.isWerewolf.ToString());
+					photonView.RPC("RPC_SetWereWolf", RpcTarget.AllBufferedViaServer, playersList[i].photonView.ViewID, PhotonNetwork.PlayerList[i].NickName, player.isWerewolf);
+				}
+			}
+		
 	}
 
 

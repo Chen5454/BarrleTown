@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
+	public string playerName;
+
 	public float playerSpeed;
 
 	public float getPlayerMovementSpeed
@@ -115,6 +117,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
+			if (currentHp <= 0)
+				return;
+
 
 			if (Input.GetKeyDown(KeyCode.F))
 			{
@@ -125,9 +130,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			MovementHandler();
 			RotateItemBubble();
-
-
-
 
 			if (!isWerewolfState)
 			{

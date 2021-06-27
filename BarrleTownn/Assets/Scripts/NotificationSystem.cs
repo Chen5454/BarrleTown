@@ -22,12 +22,12 @@ public class NotificationSystem : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.G))
-		{
-			ShowText("WereWolf Has Died");
-			ShowText("Completed Recipe: Simple Gun");
-			ShowText("Hello World!");
-		}
+		//if (Input.GetKeyDown(KeyCode.G))
+		//{
+		//	ShowText("WereWolf Has Died");
+		//	ShowText("Completed Recipe: Simple Gun");
+		//	ShowText("Hello World!");
+		//}
 
 
 		if (notification.Count != 0)

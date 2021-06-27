@@ -74,7 +74,6 @@ public class VotingUI : MonoBehaviour
 
 		}
 	}
-
 	public void ChangeButtonText()
 	{
 		for (int i = 0; i < playerVotingButtons.Length; i++)
@@ -88,8 +87,6 @@ public class VotingUI : MonoBehaviour
 			}
 			else
 			{
-
-
 				if (i != 8)
 					playerVotingButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = "Vote";
 				else
@@ -97,8 +94,6 @@ public class VotingUI : MonoBehaviour
 			}
 		}
 	}
-
-
 	public void VoteButton(int buttonIndex)
 	{
 		isVotedFor = new bool[playerVotingButtons.Length + 1];
@@ -119,24 +114,33 @@ public class VotingUI : MonoBehaviour
 
 			isVotedFor[votingIndex] = false;
 			ChangeButtonText();
-
-
 			votingIndex = -1;
 		}
 	}
 	public void VoteToPlayer(int index)
 	{
 		GameManager.getInstance.GetPlayerVotes(index, 1);
-		//voting.VoteToPlayer(index, 1);
 	}
 	public void RemoveVoteFromPlayer(int index)
 	{
 		GameManager.getInstance.GetPlayerVotes(index, -1);
-		//voting.VoteToPlayer(index, -1);
 	}
 
 
+	public void UpdateVoteAmountUI()
+	{
+		for (int i = 0; i < voteAmount.Length; i++)
+		{
+			voteAmount[i].text = voting.voteAmount[i].ToString();
+		}
+	}
+	public void SetVotingAmountActive(bool active)
+	{
+		for (int i = 0; i < voteAmount.Length; i++)
+		{
+			voteAmount[i].gameObject.SetActive(active);
+		}
+	}
 
-
-
+	
 }

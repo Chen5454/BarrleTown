@@ -27,15 +27,17 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	}
 
-	public void SetGameObjectActive(bool _active, Vector3 pos)
+	public void SetGameObjectActive(bool _active, Vector3 pos,RecipeItems _item)
 	{
 		if (PhotonNetwork.IsMasterClient)
-			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos);
+			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos,(int)_item);
 	}
 
 	[PunRPC]
-	void RPC_SetActive(bool _active, Vector3 pos)
+	void RPC_SetActive(bool _active, Vector3 pos,int _item)
 	{
+		RecipeItems item = (RecipeItems)_item;
+		this.contain = item;
 		gameObject.SetActive(_active);
 		gameObject.transform.position = pos;
 	}
@@ -45,6 +47,7 @@ public class InteractItem : MonoBehaviourPunCallbacks
 		player = _player;
 		photonView.RPC("RPC_PlayerHiding", RpcTarget.AllBuffered, _player.photonView.ViewID);
 	}
+	[PunRPC]
 	public void RPC_PlayerHiding(int id)
 	{
 		player = PhotonView.Find(id).GetComponent<VillagerCharacter>();
