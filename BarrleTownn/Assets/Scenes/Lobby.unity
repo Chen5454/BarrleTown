@@ -1169,7 +1169,7 @@ MonoBehaviour:
   - {fileID: 1238378398}
   - {fileID: 698704929}
   - {fileID: 512109911}
-  maxWaitTime: 3
+  maxWaitTime: 15
   maxFullGameWaitTime: 5
 --- !u!4 &679583362
 Transform:
