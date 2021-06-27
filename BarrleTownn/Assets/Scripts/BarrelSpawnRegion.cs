@@ -41,7 +41,6 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 		}
 	}
-
 	public void RandomizeBarrelsSpawn(int amount)
 	{
 		int loopIndex = amount;
@@ -109,7 +108,6 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 		}
 
 	}
-
 	public void InstantiateBarrel(Transform trans)
 	{
 
@@ -124,8 +122,6 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 
 	}
-
-
 	void spawnBarrels(Transform trans)
 	{
 
@@ -135,7 +131,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 		{
 			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
 			_barrel = barrel;
-			_barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
+			_barrel.GetComponent<InteractItem>().SetGameObjectActive(true, trans.position, RandomizeBarrelType());
 			_barrel.transform.SetParent(barrelParent);
 			barrelList.Add(_barrel);
 
@@ -147,8 +143,8 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 			{
 				if (!barrelList[i].activeInHierarchy)
 				{
-					barrelList[i].GetComponent<InteractItem>().contain = RandomizeBarrelType();
-					barrelList[i].GetComponent<InteractItem>().SetGameObjectActive(true, trans.position);
+					
+					barrelList[i].GetComponent<InteractItem>().SetGameObjectActive(true, trans.position, RandomizeBarrelType());
 					barrelList[i].transform.position = trans.position;
 					barrelList[i].SetActive(true);
 					canUseExisted = true;
@@ -161,7 +157,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 			{
 				GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
 				_barrel = barrel;
-				_barrel.GetComponent<InteractItem>().contain = RandomizeBarrelType();
+				_barrel.GetComponent<InteractItem>().SetGameObjectActive(true, trans.position, RandomizeBarrelType());
 				_barrel.transform.SetParent(barrelParent);
 				barrelList.Add(_barrel);
 			}

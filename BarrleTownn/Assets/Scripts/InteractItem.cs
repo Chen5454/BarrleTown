@@ -11,6 +11,8 @@ public class InteractItem : MonoBehaviourPunCallbacks
 	public OwnerShipTranfer transfer;
 	public int barrleCurrentHp;
 	public int barrleMaxHp;
+	// 0 = wood, 1 = leather, 2 = iron
+	public Sprite[] itemSprites;
 
 	public bool IsBarrelALive()
 	{
@@ -25,15 +27,17 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	}
 
-	public void SetGameObjectActive(bool _active, Vector3 pos)
+	public void SetGameObjectActive(bool _active, Vector3 pos,RecipeItems _item)
 	{
 		if (PhotonNetwork.IsMasterClient)
-			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos);
+			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos,(int)_item);
 	}
 
 	[PunRPC]
-	void RPC_SetActive(bool _active, Vector3 pos)
+	void RPC_SetActive(bool _active, Vector3 pos,int _item)
 	{
+		RecipeItems item = (RecipeItems)_item;
+		this.contain = item;
 		gameObject.SetActive(_active);
 		gameObject.transform.position = pos;
 	}
@@ -43,6 +47,7 @@ public class InteractItem : MonoBehaviourPunCallbacks
 		player = _player;
 		photonView.RPC("RPC_PlayerHiding", RpcTarget.AllBuffered, _player.photonView.ViewID);
 	}
+	[PunRPC]
 	public void RPC_PlayerHiding(int id)
 	{
 		player = PhotonView.Find(id).GetComponent<VillagerCharacter>();
@@ -73,8 +78,6 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 
 			DestoryBerrel();
-
-			
 		}
 
 	}
@@ -93,6 +96,25 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	}
 
+
+	public Sprite ReturnSpriteByBarrelType()
+	{
+		switch (contain)
+		{
+			case RecipeItems.Empty:
+				return null;
+			case RecipeItems.Wood:
+				return itemSprites[0];
+			
+			case RecipeItems.Leather:
+				return itemSprites[1];
+			case RecipeItems.Metal:
+				return itemSprites[2];
+			default:
+				break;
+		}
+		return null;
+	}
 
 	//private void OnCollisionStay2D(Collision2D other)
 	//{

@@ -12,7 +12,10 @@ public class GameTimeUI : MonoBehaviour
 
 	GamePhases phase => GameManager.getInstance.getGamePhase;
 
-
+	private void Awake()
+	{
+		isTimerShown = false;
+	}
 
 	void Update()
     {

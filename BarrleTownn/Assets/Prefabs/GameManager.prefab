@@ -60,8 +60,8 @@ MonoBehaviour:
     playerVoteSpots: []
   isGameActive: 0
   gamePhase: 3
-  dayTime: 30
-  nightTime: 30
+  dayTime: 10
+  nightTime: 10
   voteTime: 5
   waitForVoteTime: 5
   wolfViewRange: 4
@@ -75,6 +75,8 @@ MonoBehaviour:
   isWerewolfFullHeal: 0
   wolfStartHP: 3
   showNightTime: 10
+  killedPlayer: -1
+  KillVotedTime: 0
   playerName: {fileID: 991857482718824612, guid: 1ed0dedb29d81ca46ba624205e138fb9,
     type: 3}
   item: {fileID: 0}

@@ -11,13 +11,14 @@ public class ShopUI : MonoBehaviour
 	public TextMeshProUGUI[] itemAmountText;
 	public Color[] tempColor; //for now the item sprites will be barrels with different color, metal = gray, wood = brown, leather = orange;
 	public GameObject recipeUI;
+	public Sprite[] itemSprites;
 	public void ShowRecipe(int[] amountAquired)
 	{
 		for (int i = 0; i < itemImage.Length; i++)
 		{
 			if (i < shopRef.currentRecipe.recipe.Count)
 			{
-				itemImage[i].color = GetColorByItemType(shopRef.currentRecipe.recipe[i]);
+				itemImage[i].sprite = ReturnSpriteByBarrelType(shopRef.currentRecipe.recipe[i]);
 				itemAmountText[i].text = shopRef.currentRecipe.amountRequired[i].ToString();
 				itemImage[i].gameObject.SetActive(true);
 			}
@@ -71,8 +72,25 @@ public class ShopUI : MonoBehaviour
 		return tempColor[2];
 	}
 
-	
 
+	public Sprite ReturnSpriteByBarrelType(RecipeItems type)
+	{
+		switch (type)
+		{
+			case RecipeItems.Empty:
+				return null;
+			case RecipeItems.Wood:
+				return itemSprites[0];
+
+			case RecipeItems.Leather:
+				return itemSprites[1];
+			case RecipeItems.Metal:
+				return itemSprites[2];
+			default:
+				break;
+		}
+		return null;
+	}
 
 
 }
