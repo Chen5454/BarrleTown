@@ -402,12 +402,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 				{
 					player.wereWolf.Transform();
 					ShowWolfHPBar(false);
-
-					if (isWerewolfFullHeal)
-						player.SetWereWolfHP(wolfStartHP, false);
-					else
+					if (player.currentHp > 0)
 					{
-						player.SetWereWolfHP(1, false);
+						if (isWerewolfFullHeal)
+							player.SetWereWolfHP(wolfStartHP, false);
+						else
+						{
+							player.SetWereWolfHP(1, false);
+						}
 					}
 				}
 				ShowNames(true);
@@ -943,6 +945,36 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
 
+
+	#region WinCondition;
+	public void CheckWinCondition()
+	{
+		int villagersAlives = 0;
+		bool isWerewolfAlive = false; ;
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if(playersList[i].currentHp >= 1 && !playersList[i].isWerewolf)
+			{
+				villagersAlives++;
+			}
+			else if (playersList[i].currentHp >= 1 && playersList[i].isWerewolf)
+			{
+				isWerewolfAlive = true;
+			}
+		}
+
+		if(villagersAlives == 1 && isWerewolfAlive)
+		{
+			Debug.LogError(" WereWolf WINSSSSSSSS");
+		}
+		else if (!isWerewolfAlive)
+		{
+			Debug.LogError(" Villagers!!! WINSSSSSSSS");
+		}
+
+	}
+
+	#endregion
 
 }
 [Serializable]

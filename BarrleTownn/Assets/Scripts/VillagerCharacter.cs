@@ -404,6 +404,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		if (isVulnerable && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
+
+			GameManager.getInstance.CheckWinCondition();
 		}
 	}
 
