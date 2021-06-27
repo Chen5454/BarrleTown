@@ -966,10 +966,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if(villagersAlives == 0 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
+			UIManager.getInstance.ShowWerewolfVictoryScreen();
+			isGameActive = false;
 		}
 		else if (!isWerewolfAlive)
 		{
 			Debug.LogError(" Villagers!!! WINSSSSSSSS");
+			UIManager.getInstance.ShowVillageVictoryScreen();
+			isGameActive = false;
 		}
 
 	}
