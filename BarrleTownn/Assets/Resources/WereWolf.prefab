@@ -240,8 +240,8 @@ MonoBehaviour:
     enemy:
       serializedVersion: 2
       m_Bits: 2147484672
-    werewolfSpeed: 10
-    attackStun: 2
+    werewolfSpeed: 5
+    attackStun: 1
     isStunned: 0
   movement: {x: 0, y: 0}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}

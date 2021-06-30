@@ -11102,9 +11102,15 @@ MonoBehaviour:
     m_Bits: 1024
   shopRecipe:
     RecipeList:
-    - recipe: 01000000
-      amountRequired: 01000000
+    - recipe: 0100000003000000
+      amountRequired: 0300000002000000
       recipeReward: {fileID: 11400000, guid: e25f4dea770e0cb419e73ecf38cf98c0, type: 2}
+    - recipe: 0100000002000000
+      amountRequired: 0300000002000000
+      recipeReward: {fileID: 11400000, guid: 84e1dff44033c2e43b126ffabbade289, type: 2}
+    - recipe: 0100000002000000
+      amountRequired: 0200000003000000
+      recipeReward: {fileID: 11400000, guid: d2639614ef589c44daabd73badb1de93, type: 2}
   currentRecipe:
     recipe: 
     amountRequired: 
@@ -11327,7 +11333,7 @@ RectTransform:
   - {fileID: 871474181}
   - {fileID: 851008032}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -37798,7 +37804,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2066806493
 MonoBehaviour:
@@ -38644,7 +38650,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2141206248
 GameObject:
@@ -38869,7 +38875,7 @@ PrefabInstance:
     - target: {fileID: 1215802149201304375, guid: e9bdecc0f8f99f74e83943c8ed23dfa6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1215802149201304375, guid: e9bdecc0f8f99f74e83943c8ed23dfa6,
         type: 3}
