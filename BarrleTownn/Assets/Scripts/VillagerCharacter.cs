@@ -122,7 +122,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				return;
 
 
-			if (Input.GetKeyDown(KeyCode.F))
+			if (Input.GetKeyDown(KeyCode.Z))
 			{
 				PickUpItem();
 				//PoolShoot();
@@ -138,7 +138,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player != null) 
+					if (Input.GetKeyDown(KeyCode.C) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null) 
 					{
 						Hide(canHide);
 					}
@@ -275,7 +275,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (dayPickUp)
 		{
-			if (Input.GetKeyDown(KeyCode.Q) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+			if (Input.GetKeyDown(KeyCode.C) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
 			{
 				GETIsPicked = true;
 				box = GetBarrleCollider().gameObject;
@@ -293,7 +293,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 
 
-			else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
+			else if (Input.GetKeyUp(KeyCode.C) && GETIsPicked)
 			{
 				
 				if (box != null)
@@ -536,7 +536,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void Shoot()
 	{
-		if (Input.GetKeyDown(KeyCode.P))
+		if (Input.GetKeyDown(KeyCode.X))
 		{
 			if (playerItems.CanShoot())
 			{
