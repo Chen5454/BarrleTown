@@ -281,7 +281,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				box = GetBarrleCollider().gameObject;
 				box.transform.parent = this.gameObject.transform;
 				box.GetComponent<InteractItem>().transfer.PickingUp();
-				playerSpeed = playerSpeed / 2;
+				playerSpeed = 4 / 2;
 
 
 				if (!itemBubble.activeInHierarchy)
@@ -295,9 +295,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 			else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
 			{
+				
 				if (box != null)
 					box.transform.parent = null;
-				playerSpeed = playerSpeed * 2;
+				playerSpeed = 4;
 				GETIsPicked = false;
 				Unpick();
 			}
