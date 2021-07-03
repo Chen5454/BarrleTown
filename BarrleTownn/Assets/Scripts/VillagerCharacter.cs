@@ -17,7 +17,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-
+	public CameraController camera;
 
 	float horiznotal;
 	float vertical;
@@ -102,7 +102,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-
+		camera = FindObjectOfType<CameraController>();
 		gameObject.tag = "Player";
 		dayPickUp = true;
 		isWerewolfState = false;
@@ -142,11 +142,16 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 					{
 						isHiding = true;
 						Hide(isHiding);
+						box =GetBarrleCollider().gameObject;
 					}
 					else if(Input.GetKeyDown(KeyCode.C) && isHiding)
 					{
 						isHiding = false;
 						Hide(isHiding);
+
+					
+
+
 					}
 
 					Shoot();
@@ -410,6 +415,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			currentHp -= amount;
 
+			if (currentHp <= 0 && this.photonView.IsMine)
+			{
+				camera.EnableSpectateMode();
+			}
+
 			GameManager.getInstance.CheckWinCondition();
 		}
 	}
@@ -445,7 +455,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(null);
+			if (box != null)
+			{
+				box.GetComponent<InteractItem>().PlayerHiding(null);
+				box = null;
+			}
 			photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, false);
 		}
 	}
@@ -466,6 +480,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 		else
 		{
+			
+
+
+
 			playerCollider.enabled = true;
 			playerRenderer.enabled = true;
 			GETcanMove = true;

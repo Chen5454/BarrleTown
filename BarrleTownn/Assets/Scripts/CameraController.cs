@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -12,17 +13,81 @@ public class CameraController : MonoBehaviour
 	public Transform firePlace;
 	public NotificationSystem notifictaion;
 	[SerializeField] GameTimeUI gameTimeUI;
+	public List<VillagerCharacter> alivePlayers;
+	public bool spectateMode;
+
+	public int spectateIndex = 0;
+	public FieldOfView fov;
+
 	// Update is called once per frame
 	void Update()
 	{
 		if (GameManager.getInstance != null)
 			if (GameManager.getInstance.player != null && !isAtVotingPhase)
 			{
-				Vector3 cameraPos = new Vector3(GameManager.getInstance.player.transform.position.x, GameManager.getInstance.player.transform.position.y, -10f);
+				if (!spectateMode)
+				{
+					Vector3 cameraPos = new Vector3(GameManager.getInstance.player.transform.position.x, GameManager.getInstance.player.transform.position.y, -10f);
+					transform.position = cameraPos;
 
-				transform.position = cameraPos;
+					fov.SetOrigin();
+
+				}
+				else
+				{
+					for (int i = 0; i < alivePlayers.Count; i++)
+					{
+						if (alivePlayers[i].currentHp <= 0)
+							alivePlayers.RemoveAt(i);
+					}
+
+					if (Input.GetKeyDown(KeyCode.Mouse0))
+					{
+						spectateIndex -= 1;
+					}
+					else if (Input.GetKeyDown(KeyCode.Mouse1))
+					{
+						spectateIndex += 1;
+					}
+
+
+
+					if (spectateIndex > alivePlayers.Count - 1)
+					{
+						spectateIndex = 0;
+					}
+					else if (spectateIndex < 0)
+					{
+						spectateIndex = alivePlayers.Count - 1;
+					}
+
+
+					Vector3 cameraPos = new Vector3(alivePlayers[spectateIndex].transform.position.x, alivePlayers[spectateIndex].transform.position.y, -10f);
+					transform.position = cameraPos;
+
+
+					fov.SetOriginToOther(alivePlayers[spectateIndex].transform.position);
+				}
 			}
 	}
+
+	public void EnableSpectateMode()
+	{
+		VillagerCharacter[] players = FindObjectsOfType<VillagerCharacter>();
+
+		for (int i = 0; i < players.Length; i++)
+		{
+			if (players[i].currentHp > 0 && players[i] != GameManager.getInstance.player)
+			{
+				alivePlayers.Add(players[i]);
+			}
+		}
+
+
+
+		spectateMode = true;
+	}
+
 
 	public void setCameraToGamePhase(bool _VotingPhase)
 	{
@@ -124,7 +189,7 @@ public class CameraController : MonoBehaviour
 			string text = GameManager.getInstance.playersList[GameManager.getInstance.killedPlayer].playerName + " were not the werewolf";
 			notifictaion.ShowText(text);
 		}
-		
+
 	}
 
 	#endregion

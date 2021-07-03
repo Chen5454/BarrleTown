@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: 
   playerSpeed: 4
+  camera: {fileID: 0}
   rb2D: {fileID: 0}
   canMove: 0
   playerDistance: 0.5

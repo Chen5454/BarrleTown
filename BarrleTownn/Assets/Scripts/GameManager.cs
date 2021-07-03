@@ -1,6 +1,7 @@
 ﻿using Afik.MultiProject.BarrelTown;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -122,11 +123,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if (isGameActive)
 		{
 			GameTimers();
-			if (fov != null)
-			{
-				fov.SetOrigin();
-			}
-
 			if (Input.GetKeyDown(KeyCode.V))
 			{
 				playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
@@ -601,7 +597,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		//RemovePlayerFromList(other.NickName);
 
+
+
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if(playersList[i].playerName == other.NickName)
+			{
+				playersList.RemoveAt(i);
+				playersNameList.RemoveAt(i);
+			}
+		}
+		
+
+
+
 		CheckWinCondition();
+
+	
 
 
 
@@ -948,9 +960,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
+
 	#region WinCondition;
 	public void CheckWinCondition()
 	{
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if (playersList[i] == null)
+			{
+				playersList.RemoveAt(i);
+			}
+		}
+
+
+
 		int villagersAlives = 0;
 		bool isWerewolfAlive = false; ;
 		for (int i = 0; i < playersList.Count; i++)

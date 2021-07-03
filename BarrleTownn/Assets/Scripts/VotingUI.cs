@@ -8,7 +8,8 @@ public class VotingUI : MonoBehaviour
 	public TextMeshProUGUI[] voteAmount;
 	public bool[] isVotedFor;
 	public VotingArea voting;
-
+	public TMP_InputField inputChat;
+	public Button chatButton;
 	[SerializeField] int votingIndex = -1;
 	private void Awake()
 	{
@@ -71,6 +72,14 @@ public class VotingUI : MonoBehaviour
 						playerVotingButtons[i].gameObject.SetActive(false);
 				}
 			}
+
+			if (GameManager.getInstance.player.photonView.IsMine && GameManager.getInstance.player.currentHp <= 0)
+			{
+				chatButton.interactable = false;
+				inputChat.interactable = false;
+			}
+
+
 
 		}
 	}

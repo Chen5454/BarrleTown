@@ -94,6 +94,10 @@ public class FieldOfView : MonoBehaviour
 		}
 	}
 
+
+
+
+
 	public void SetNightFOV(bool _IsWerewolf)
 	{
 		camData.SetRenderer(0);
@@ -132,5 +136,11 @@ public class FieldOfView : MonoBehaviour
 		}
 		
 	}
+	public void SetOriginToOther(Vector3 pos)
+	{
+		this.origin = pos;
+	}
+
+
 
 }
