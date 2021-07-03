@@ -11395,14 +11395,12 @@ MonoBehaviour:
   - {fileID: 1766856852}
   - {fileID: 1469975457}
   - {fileID: 1277772540}
-  - {fileID: 0}
   itemAmountText:
   - {fileID: 1292252001}
   - {fileID: 1341616286}
   - {fileID: 1044663911}
   - {fileID: 1872925064}
   - {fileID: 588672610}
-  - {fileID: 0}
   tempColor:
   - {r: 0.3584906, g: 0.053691827, b: 0, a: 1}
   - {r: 0.5660378, g: 0.29951498, b: 0, a: 1}
