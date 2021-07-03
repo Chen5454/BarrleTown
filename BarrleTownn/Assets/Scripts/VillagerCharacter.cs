@@ -17,7 +17,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-
+	public CameraController camera;
 
 	float horiznotal;
 	float vertical;
@@ -103,7 +103,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-
+		camera = FindObjectOfType<CameraController>();
 		gameObject.tag = "Player";
 		dayPickUp = true;
 		isAttack = false;
@@ -115,7 +115,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		ChangeWerewolfTag();
 	}
 
-
+	bool isHiding = false;
 	public void Update()
 	{
 		if (photonView.IsMine)
@@ -124,7 +124,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				return;
 
 
-			if (Input.GetKeyDown(KeyCode.F))
+			if (Input.GetKeyDown(KeyCode.Z))
 			{
 				PickUpItem();
 				//PoolShoot();
@@ -140,9 +140,20 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null)
+					if (Input.GetKeyDown(KeyCode.C) && !isHiding && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null) 
 					{
-						Hide(canHide);
+						isHiding = true;
+						Hide(isHiding);
+						box =GetBarrleCollider().gameObject;
+					}
+					else if(Input.GetKeyDown(KeyCode.C) && isHiding)
+					{
+						isHiding = false;
+						Hide(isHiding);
+
+					
+
+
 					}
 
 					Shoot();
@@ -277,13 +288,13 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (dayPickUp)
 		{
-			if (Input.GetKeyDown(KeyCode.Q) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+			if (Input.GetKeyDown(KeyCode.Z) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
 			{
 				GETIsPicked = true;
 				box = GetBarrleCollider().gameObject;
 				box.transform.parent = this.gameObject.transform;
 				box.GetComponent<InteractItem>().transfer.PickingUp();
-				playerSpeed = playerSpeed / 2;
+				playerSpeed = 4 / 2;
 
 
 				if (!itemBubble.activeInHierarchy)
@@ -293,13 +304,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 					barrelInsideSprite.sprite = GetBarrleCollider().GetComponent<InteractItem>().ReturnSpriteByBarrelType();
 				}
 			}
-
-
-			else if (Input.GetKeyUp(KeyCode.Q) && GETIsPicked)
+			else if (Input.GetKeyUp(KeyCode.Z) && GETIsPicked)
 			{
+				
 				if (box != null)
 					box.transform.parent = null;
-				playerSpeed = playerSpeed * 2;
+				playerSpeed = 4;
 				GETIsPicked = false;
 				Unpick();
 			}
@@ -407,6 +417,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			currentHp -= amount;
 
+			if (currentHp <= 0 && this.photonView.IsMine)
+			{
+				camera.EnableSpectateMode();
+			}
+
 			GameManager.getInstance.CheckWinCondition();
 		}
 	}
@@ -436,18 +451,28 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void Hide(bool _canHide)
 	{
 		if (_canHide)
+		{
 			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(this);
-
-		photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
+			photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
+		}
+		else
+		{
+			if (box != null)
+			{
+				box.GetComponent<InteractItem>().PlayerHiding(null);
+				box = null;
+			}
+			photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, false);
+		}
 	}
 
 	[PunRPC]
 	public void RPC_Hide(bool _canHide)
 	{
-		canHide = _canHide;
+		isHiding = _canHide;
 		Color tmp = playerRenderer.color;
 
-		if (canHide)
+		if (isHiding)
 		{
 			playerCollider.enabled = false;
 			playerRenderer.enabled = false;
@@ -457,6 +482,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 		else
 		{
+			
+
+
+
 			playerCollider.enabled = true;
 			playerRenderer.enabled = true;
 			GETcanMove = true;
@@ -534,7 +563,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void Shoot()
 	{
-		if (Input.GetKeyDown(KeyCode.P))
+		if (Input.GetKeyDown(KeyCode.X))
 		{
 			if (playerItems.CanShoot())
 			{

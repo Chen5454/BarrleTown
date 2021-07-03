@@ -1,6 +1,7 @@
 ﻿using Afik.MultiProject.BarrelTown;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -103,6 +104,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			Destroy(this.gameObject);
 		}
+
+		
 	}
 
 	// Start is called before the first frame update
@@ -120,11 +123,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if (isGameActive)
 		{
 			GameTimers();
-			if (fov != null)
-			{
-				fov.SetOrigin();
-			}
-
 			if (Input.GetKeyDown(KeyCode.V))
 			{
 				playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
@@ -597,9 +595,25 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		//Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
-		RemovePlayerFromList(other.NickName);
+		//RemovePlayerFromList(other.NickName);
 
 
+
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if(playersList[i].playerName == other.NickName)
+			{
+				playersList.RemoveAt(i);
+				playersNameList.RemoveAt(i);
+			}
+		}
+		
+
+
+
+		CheckWinCondition();
+
+	
 
 
 
@@ -783,7 +797,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void AddToPlayerList(string playerName)
 	{
-		photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
+		//photonView.RPC("RPC_AddToPlayerList", RpcTarget.AllBufferedViaServer, playerName);
 	}
 	[PunRPC]
 	void RPC_AddToPlayerList(string playerName)
@@ -946,9 +960,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
+
 	#region WinCondition;
 	public void CheckWinCondition()
 	{
+		for (int i = 0; i < playersList.Count; i++)
+		{
+			if (playersList[i] == null)
+			{
+				playersList.RemoveAt(i);
+			}
+		}
+
+
+
 		int villagersAlives = 0;
 		bool isWerewolfAlive = false; ;
 		for (int i = 0; i < playersList.Count; i++)
@@ -966,15 +991,36 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if(villagersAlives == 0 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
+			UIManager.getInstance.ShowWerewolfVictoryScreen();
+			isGameActive = false;
 		}
 		else if (!isWerewolfAlive)
 		{
 			Debug.LogError(" Villagers!!! WINSSSSSSSS");
+			UIManager.getInstance.ShowVillageVictoryScreen();
+			isGameActive = false;
 		}
 
 	}
 
 	#endregion
+
+
+
+
+
+	
+
+	//void  OnMasterClientSwitched(Player newMasterClient)
+	//{
+	//	InteractItem[] barrels = FindObjectsOfType<InteractItem>();
+	//	for (int i = 0; i < barrels.Length; i++)
+	//	{
+	//		barrels[i].transfer.ReturnToMaster();
+	//	}
+
+	//}
+
 
 }
 [Serializable]

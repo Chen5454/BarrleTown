@@ -67,6 +67,14 @@ namespace Afik.MultiProject.BarrelTown
 			roomSize = PhotonNetwork.CurrentRoom.MaxPlayers;
 			roomCountDisplay.text = playerCount + "/" + roomSize;
 
+			GameManager.getInstance.playersNameList = new System.Collections.Generic.List<string>();
+
+			for (int i = 0; i < playerCount; i++)
+			{
+				GameManager.getInstance.playersNameList.Add(PhotonNetwork.PlayerList[i].NickName);
+			}
+
+
 			if (playerCount == roomSize)
 			{
 				readyToStart = true;

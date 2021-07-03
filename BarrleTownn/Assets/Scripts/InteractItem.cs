@@ -27,14 +27,14 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	}
 
-	public void SetGameObjectActive(bool _active, Vector3 pos,RecipeItems _item)
+	public void SetGameObjectActive(bool _active, Vector3 pos, RecipeItems _item)
 	{
 		if (PhotonNetwork.IsMasterClient)
-			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos,(int)_item);
+			photonView.RPC("RPC_SetActive", RpcTarget.AllBufferedViaServer, _active, pos, (int)_item);
 	}
 
 	[PunRPC]
-	void RPC_SetActive(bool _active, Vector3 pos,int _item)
+	void RPC_SetActive(bool _active, Vector3 pos, int _item)
 	{
 		RecipeItems item = (RecipeItems)_item;
 		this.contain = item;
@@ -44,13 +44,28 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	public void PlayerHiding(VillagerCharacter _player)
 	{
-		player = _player;
-		photonView.RPC("RPC_PlayerHiding", RpcTarget.AllBuffered, _player.photonView.ViewID);
+		int viewID = 0;
+		if (_player != null)
+		{
+			viewID = _player.photonView.ViewID;
+			player = _player;
+		}
+		else
+		{
+			viewID = -1;
+			player = null;
+		}
+
+
+			photonView.RPC("RPC_PlayerHiding", RpcTarget.AllBuffered, viewID);
 	}
 	[PunRPC]
 	public void RPC_PlayerHiding(int id)
 	{
-		player = PhotonView.Find(id).GetComponent<VillagerCharacter>();
+		if (id != -1)
+			player = PhotonView.Find(id).GetComponent<VillagerCharacter>();
+		else
+			player = null;
 	}
 	public void HpBarrel()
 	{
@@ -105,7 +120,7 @@ public class InteractItem : MonoBehaviourPunCallbacks
 				return null;
 			case RecipeItems.Wood:
 				return itemSprites[0];
-			
+
 			case RecipeItems.Leather:
 				return itemSprites[1];
 			case RecipeItems.Metal:

@@ -60,10 +60,10 @@ MonoBehaviour:
     playerVoteSpots: []
   isGameActive: 0
   gamePhase: 3
-  dayTime: 30
-  nightTime: 30
-  voteTime: 15
-  waitForVoteTime: 10
+  dayTime: 60
+  nightTime: 60
+  voteTime: 30
+  waitForVoteTime: 20
   wolfViewRange: 4
   VillageViewRange: 2
   timer: 5

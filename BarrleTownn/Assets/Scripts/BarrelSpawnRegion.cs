@@ -129,7 +129,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 		bool canUseExisted = false;
 		if (barrelList.Count == 0)
 		{
-			GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
+			GameObject barrel = PhotonNetwork.InstantiateRoomObject("Barrel", trans.position, new Quaternion());
 			_barrel = barrel;
 			_barrel.GetComponent<InteractItem>().SetGameObjectActive(true, trans.position, RandomizeBarrelType());
 			_barrel.transform.SetParent(barrelParent);
@@ -155,7 +155,7 @@ public class BarrelSpawnRegion : MonoBehaviourPunCallbacks
 
 			if (!canUseExisted)
 			{
-				GameObject barrel = PhotonNetwork.Instantiate("Barrel", trans.position, new Quaternion());
+				GameObject barrel = PhotonNetwork.InstantiateRoomObject("Barrel", trans.position, new Quaternion());
 				_barrel = barrel;
 				_barrel.GetComponent<InteractItem>().SetGameObjectActive(true, trans.position, RandomizeBarrelType());
 				_barrel.transform.SetParent(barrelParent);
