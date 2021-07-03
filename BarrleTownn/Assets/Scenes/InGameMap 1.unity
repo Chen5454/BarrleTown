@@ -29885,6 +29885,8 @@ MonoBehaviour:
   - {fileID: 1110663880}
   isVotedFor: 
   voting: {fileID: 111204208}
+  inputChat: {fileID: 0}
+  chatButton: {fileID: 0}
   votingIndex: -1
 --- !u!114 &454505798
 MonoBehaviour:
@@ -88804,6 +88806,8 @@ MonoBehaviour:
   - {fileID: 1513917239}
   - {fileID: 1800113558}
   - {fileID: 1476644409}
+  - {fileID: 1258859269}
+  - {fileID: 932561629}
   minBarrelsSpawn: 2
   maxBarrelsSpawn: 3
   canStartGeneration: 1
@@ -101193,6 +101197,10 @@ MonoBehaviour:
   firePlace: {fileID: 1235160272}
   notifictaion: {fileID: 454505799}
   gameTimeUI: {fileID: 454505800}
+  alivePlayers: []
+  spectateMode: 0
+  spectateIndex: 0
+  fov: {fileID: 1215802147408129908}
 --- !u!95 &2066806495
 Animator:
   serializedVersion: 3
@@ -103117,3 +103125,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9bdecc0f8f99f74e83943c8ed23dfa6, type: 3}
+--- !u!114 &1215802147408129908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1215802149201304368, guid: e9bdecc0f8f99f74e83943c8ed23dfa6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1215802147408129907}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419f5e4d98c78e74ab95bcee964da937, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
