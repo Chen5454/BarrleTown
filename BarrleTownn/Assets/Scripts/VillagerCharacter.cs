@@ -113,7 +113,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		ChangeWerewolfTag();
 	}
 
-
+	bool isHiding = false;
 	public void Update()
 	{
 		if (photonView.IsMine)
@@ -138,9 +138,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.C) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null) 
+					if (Input.GetKeyDown(KeyCode.C) && !isHiding && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null) 
 					{
-						Hide(canHide);
+						isHiding = true;
+						Hide(isHiding);
+					}
+					else if(Input.GetKeyDown(KeyCode.C) && isHiding)
+					{
+						isHiding = false;
+						Hide(isHiding);
 					}
 
 					Shoot();
@@ -275,7 +281,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (dayPickUp)
 		{
-			if (Input.GetKeyDown(KeyCode.C) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
+			if (Input.GetKeyDown(KeyCode.Z) && GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup"))
 			{
 				GETIsPicked = true;
 				box = GetBarrleCollider().gameObject;
@@ -291,9 +297,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 					barrelInsideSprite.sprite = GetBarrleCollider().GetComponent<InteractItem>().ReturnSpriteByBarrelType();
 				}
 			}
-
-
-			else if (Input.GetKeyUp(KeyCode.C) && GETIsPicked)
+			else if (Input.GetKeyUp(KeyCode.Z) && GETIsPicked)
 			{
 				
 				if (box != null)
