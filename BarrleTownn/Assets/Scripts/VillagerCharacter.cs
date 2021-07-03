@@ -38,6 +38,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public bool isVulnerable;
 	public bool isAttack;
 	public Vector2 faceDirection;
+	public AnimatorManager animManager;
 	[SerializeField]
 	public WereWolf wereWolf;
 	Vector3 previousGood = Vector3.zero;
@@ -105,6 +106,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 		gameObject.tag = "Player";
 		dayPickUp = true;
+		isAttack = false;
 		isWerewolfState = false;
 		rb2D = GetComponent<Rigidbody2D>();
 		canMove = true;
@@ -591,9 +593,8 @@ public class WereWolf
 	{
 		enemy = (1 << 10) | (1 << 31) | (1 << 12);
 
-		if (Input.GetKeyDown(KeyCode.LeftControl) && player.isWerewolfState)
+		if (Input.GetKeyDown(KeyCode.X) && player.isWerewolfState && !player.isAttack)
 		{
-
 			Collider2D[] enemiestoDmg = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
 
 			for (int i = 0; i < enemiestoDmg.Length; i++)
@@ -611,20 +612,24 @@ public class WereWolf
 					GameManager.getInstance.GetShop.DamageDoor(1);
 				}
 			}
-			
-			if (player.isWerewolfState)
+			player.isAttack = true;
+			if (player.isWerewolfState && player.isAttack)
 			{
-				player.isAttack = true;
+
+				player.animManager.WerewolfAttack();
 				player.StartCoroutine(DelayAfterAttack());
+
 			}
 		}
 	}
 
 	IEnumerator DelayAfterAttack()
 	{
+		
 		player.canMove = false;
 		yield return new WaitForSeconds(attackStun);
 		player.canMove = true;
+		player.isAttack = false;
 	}
 
 	public void Transform()

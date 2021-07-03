@@ -232,6 +232,7 @@ MonoBehaviour:
   isVulnerable: 0
   isAttack: 0
   faceDirection: {x: 0, y: 0}
+  animManager: {fileID: 2717848340600013757}
   wereWolf:
     rb2DWereWolf: {fileID: 6196262404252525881}
     player: {fileID: 6196262404252525862}
@@ -406,6 +407,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: isWolfDead
+  - Type: 9
+    SynchronizeType: 0
+    Name: attack
+  - Type: 4
+    SynchronizeType: 0
+    Name: isAttack
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0

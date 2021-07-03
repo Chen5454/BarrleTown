@@ -20,7 +20,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             WereWolf();
             PlayerDeadAnimation();
             WereWolfDeadAnimation();
-            WerewolfAttack();
+           // WerewolfAttack();
         }
     }
 
@@ -100,9 +100,8 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
                // animator.SetFloat("horizontal", player.movement.x);
 
                 animator.SetTrigger("attack");
-                player.isAttack = false;
+               // player.isAttack = false;
             }
-            
         }
     }
 
