@@ -439,12 +439,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public void Hide(bool _canHide)
 	{
 		if (_canHide)
+		{
 			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(this);
+			photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
+		}
 		else
 		{
 			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(null);
+			photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
 		}
-		photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
 	}
 
 	[PunRPC]
