@@ -70,9 +70,9 @@ public class Projectile : MonoBehaviourPunCallbacks
 		else if(direction.x == 0)
 		{
 			if (direction.y == 1)
-				return 0;
-			else if (direction.y == -1)
 				return 3;
+			else if (direction.y == -1)
+				return 0;
 		}
 
 		return -1;
