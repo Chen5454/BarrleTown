@@ -138,7 +138,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null)
+					if (Input.GetKeyDown(KeyCode.E) && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player != null) 
 					{
 						Hide(canHide);
 					}
@@ -436,7 +436,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (_canHide)
 			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(this);
-
+		else
+		{
+			GetBarrleCollider().GetComponent<InteractItem>().PlayerHiding(null);
+		}
 		photonView.RPC("RPC_Hide", RpcTarget.AllBufferedViaServer, _canHide);
 	}
 
