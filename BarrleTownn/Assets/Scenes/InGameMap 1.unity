@@ -88808,8 +88808,8 @@ MonoBehaviour:
   - {fileID: 1476644409}
   - {fileID: 1258859269}
   - {fileID: 932561629}
-  minBarrelsSpawn: 2
-  maxBarrelsSpawn: 3
+  minBarrelsSpawn: 4
+  maxBarrelsSpawn: 5
   canStartGeneration: 1
 --- !u!1 &1542368575
 GameObject:
