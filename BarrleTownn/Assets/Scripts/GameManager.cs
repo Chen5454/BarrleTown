@@ -448,7 +448,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				canVote = true;
 
 
-
+				player.canMove = false;
 
 				Debug.Log("Players can vote");
 				break;
