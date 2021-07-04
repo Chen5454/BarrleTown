@@ -402,7 +402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 14117768}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2845,7 +2845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 78442106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5532,7 +5532,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201181288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24995,7 +24995,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 255511209}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26949,7 +26949,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 311531443}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26980,7 +26980,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 312611845}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28542,7 +28542,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 387824161}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37750,7 +37750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 800103488}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38978,7 +38978,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 844507415}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Houses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45480,7 +45480,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1092896753}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47962,7 +47962,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165698307}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87521,7 +87521,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491047076}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89437,7 +89437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1574641260}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90640,7 +90640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1609397140}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
