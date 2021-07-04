@@ -424,6 +424,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 						player.Unpick();
 					}
+
+
 				chat.SetChatVisibility(true);
 				timer = waitForVoteTime;
 				StartTalkPhase();
@@ -444,6 +446,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 				gamePhase = GamePhases.Vote;
 				timer = voteTime;
 				canVote = true;
+
+
+
+
 				Debug.Log("Players can vote");
 				break;
 			case GamePhases.Vote: //vote Result

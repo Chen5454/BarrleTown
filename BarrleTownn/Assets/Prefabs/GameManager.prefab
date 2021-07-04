@@ -65,7 +65,7 @@ MonoBehaviour:
   voteTime: 30
   waitForVoteTime: 20
   wolfViewRange: 4
-  VillageViewRange: 2
+  VillageViewRange: 2.6
   timer: 5
   canVote: 0
   isWereWolf: 
