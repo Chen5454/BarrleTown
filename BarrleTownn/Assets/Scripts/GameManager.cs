@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 	[SerializeField]
 	float waitForVoteTime; // this will have to be lower then vote time, how long players will have to wait untill they can vote someone
 
+
+	[Header("Players Settings")]
+
 	public float wolfViewRange;
 	public float VillageViewRange;
 
