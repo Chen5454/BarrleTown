@@ -63,20 +63,28 @@ public class ChatUI : MonoBehaviourPun
 			messagePool.Add(newMessage);
 			hasUsedExisted = true;
 		}
-		else
+		else if(messagePool.Count <= 4)
 		{
 			for (int i = 0; i < messagePool.Count; i++)
 			{
 				if (!messagePool[i].activeInHierarchy)
 				{
-					messagePool[i].GetComponentInChildren<TextMeshProUGUI>().text = "  " + senderName + ": " + message;
+					
 					messagePool[i].SetActive(true);
 					hasUsedExisted = true;
 					break;
 				}
 
 			}
-
+		}
+		else 
+		{
+			messagePool[0].transform.GetComponentInChildren<TextMeshProUGUI>().text = messagePool[1].transform.GetComponentInChildren<TextMeshProUGUI>().text;
+			messagePool[1].transform.GetComponentInChildren<TextMeshProUGUI>().text = messagePool[2].transform.GetComponentInChildren<TextMeshProUGUI>().text;
+			messagePool[2].transform.GetComponentInChildren<TextMeshProUGUI>().text = messagePool[3].transform.GetComponentInChildren<TextMeshProUGUI>().text;
+			messagePool[3].transform.GetComponentInChildren<TextMeshProUGUI>().text = messagePool[4].transform.GetComponentInChildren<TextMeshProUGUI>().text;
+			messagePool[4].transform.GetComponentInChildren<TextMeshProUGUI>().text = "  " + senderName + ": " + message;
+			hasUsedExisted = true;
 		}
 		if (!hasUsedExisted)
 		{
