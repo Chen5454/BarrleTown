@@ -435,6 +435,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				barrelManager.GenerateBarrels();
 				camera.setCameraToGamePhase(true);
 				SetPlayersAtVotingPosition();
+
+				
 				break;
 			case GamePhases.talk://switches to Vote
 				if (!gameTimeUI.isTimerShown)
@@ -448,7 +450,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				canVote = true;
 
 
-				player.canMove = false;
+			
 
 				Debug.Log("Players can vote");
 				break;
@@ -973,6 +975,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 	#region WinCondition;
 	public void CheckWinCondition()
 	{
+		if (!isGameActive)
+			return;
+
+
 		for (int i = 0; i < playersList.Count; i++)
 		{
 			if (playersList[i] == null)
@@ -1019,16 +1025,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 	
-
-	//void  OnMasterClientSwitched(Player newMasterClient)
-	//{
-	//	InteractItem[] barrels = FindObjectsOfType<InteractItem>();
-	//	for (int i = 0; i < barrels.Length; i++)
-	//	{
-	//		barrels[i].transfer.ReturnToMaster();
-	//	}
-
-	//}
 
 
 }

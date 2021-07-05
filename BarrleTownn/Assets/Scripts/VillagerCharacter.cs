@@ -9,14 +9,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public float playerSpeed;
 
-	public float getPlayerMovementSpeed
-	{
-		get
-		{
-			return playerSpeed + playerItems.GetShoeSpeed();
-		}
-	}
-
+	
 	public CameraController camera;
 
 	float horiznotal;
@@ -53,6 +46,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	public GameObject box;
 	UIManager uiManager;
 
+
+
+
 	[Header("Player Items")]
 	[SerializeField] PlayerItems playerItems;
 	public PlayerItems getPlayerItems => playerItems;
@@ -60,6 +56,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[SerializeField] LayerMask ItemLayers;
 	[SerializeField] Collider2D playerCollider;
 	List<Projectile> projPool = new List<Projectile>();
+
+
+	public float getPlayerMovementSpeed
+	{
+		get
+		{
+			return playerSpeed + playerItems.GetShoeSpeed(isWerewolfState);
+		}
+	}
 
 
 	//bubble item related
@@ -155,6 +160,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 					}
+
+
+
 
 					Shoot();
 					//&& GetBarrleCollider() != null && GetBarrleCollider().CompareTag("Pickup")
@@ -412,18 +420,23 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-
-		if (isVulnerable && !playerItems.CanDamageArmor(amount))
+		
+		if (isVulnerable && !isWerewolfState && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
-
-			if (currentHp <= 0 && this.photonView.IsMine)
-			{
-				camera.EnableSpectateMode();
-			}
-
-			GameManager.getInstance.CheckWinCondition();
 		}
+		else if(isVulnerable && isWerewolfState)
+		{
+			currentHp -= amount;
+		}
+
+		if (this.currentHp <= 0 && this.photonView.IsMine)
+		{
+			this.camera.EnableSpectateMode();
+		}
+
+		GameManager.getInstance.CheckWinCondition();
+
 	}
 
 
@@ -541,7 +554,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 
 
-		if (canMove)
+		if (canMove && gameManager.getGamePhase != GamePhases.talk && gameManager.getGamePhase != GamePhases.Vote && gameManager.getGamePhase != GamePhases.Vote_Result)
 		{
 			movement.x = Input.GetAxisRaw("Horizontal");
 			movement.y = Input.GetAxisRaw("Vertical");
@@ -563,7 +576,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void Shoot()
 	{
-		if (Input.GetKeyDown(KeyCode.X))
+		if (Input.GetKeyDown(KeyCode.X) && !isWerewolfState)
 		{
 			if (playerItems.CanShoot())
 			{

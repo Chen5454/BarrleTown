@@ -51,9 +51,9 @@ public class PlayerItems
 		}
 		return false;
 	}
-	public float GetShoeSpeed()
+	public float GetShoeSpeed(bool isWereWolfState)
 	{
-		if (playerShoes != null)
+		if (playerShoes != null && !isWereWolfState)
 			return playerShoes.shoeSpeed;
 		else
 			return 0;

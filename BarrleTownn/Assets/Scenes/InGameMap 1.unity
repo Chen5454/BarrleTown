@@ -29920,7 +29920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notificationText: {fileID: 592394805}
   textShowed: 0
-  textStartTimer: 4.5
+  textStartTimer: 8
   Timer: 0
   alphaMultiplier: 2.36
 --- !u!114 &454505800
