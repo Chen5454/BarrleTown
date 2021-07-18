@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Photon.Pun;
 public class UIManager : MonoBehaviour
 {
 	private static UIManager _instance;
@@ -79,6 +81,10 @@ public class UIManager : MonoBehaviour
 	}
 
 
+	public void ReturnToMainMenu() 
+	{
+		PhotonNetwork.LeaveRoom();
+	}
 
 
 }

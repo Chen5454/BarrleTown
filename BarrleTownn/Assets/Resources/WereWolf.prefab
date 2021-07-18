@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2592250174348063100}
   - component: {fileID: 1537557051233479933}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: SpeakBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: b0a1aae3c2f230d41a895cd6add4bb13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -192,7 +192,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 3309797658611898765, guid: 7331c8bc2bf1d144297a366ab25d05a1,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -262,6 +262,10 @@ MonoBehaviour:
   playerCollider: {fileID: 6196262404252525861}
   itemBubble: {fileID: 1559162387769587047}
   barrelInsideSprite: {fileID: 1919983849727751651}
+  keys:
+  - {fileID: 21300000, guid: ff10b759c8fa25942b41f5c55d324872, type: 3}
+  - {fileID: 21300000, guid: ca5ee453d121ecf4ab3d9e361519c34a, type: 3}
+  - {fileID: 21300000, guid: 64bc2ca23691041459db085c4ebb13f6, type: 3}
 --- !u!50 &6196262404252525881
 Rigidbody2D:
   serializedVersion: 4
@@ -459,7 +463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5858833304502349622}
   - component: {fileID: 1919983849727751651}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -474,8 +478,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9018417320235593073}
   m_LocalRotation: {x: -0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: 0.56, y: 0.55, z: 0}
-  m_LocalScale: {x: 1.4628596, y: 1.4628596, z: 1.4628596}
+  m_LocalPosition: {x: 0.55, y: 0.7, z: 0}
+  m_LocalScale: {x: 1.1628159, y: 1.1628159, z: 1.1628159}
   m_Children: []
   m_Father: {fileID: 2592250174348063100}
   m_RootOrder: 0
@@ -518,7 +522,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 35f4f09e1a21aa6418cee62563874c8e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

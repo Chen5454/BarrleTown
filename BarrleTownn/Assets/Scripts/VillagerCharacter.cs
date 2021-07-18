@@ -9,7 +9,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public float playerSpeed;
 
-	
+
 	public CameraController camera;
 
 	float horiznotal;
@@ -66,12 +66,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-
+	[Header("bubble item related")]
 	//bubble item related
 	public GameObject itemBubble;
 	public SpriteRenderer barrelInsideSprite;
 	private float lookingleftposx = -0.598f;
 	private float lookingRightRotationY = -180;
+	public Sprite[] keys; // z = 0, c = 1, x = 2;
+
 
 	#region Getters Setters
 	public bool GETIsPicked
@@ -145,18 +147,18 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 				if (nightHide)
 				{
-					if (Input.GetKeyDown(KeyCode.C) && !isHiding && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null) 
+					if (Input.GetKeyDown(KeyCode.C) && !isHiding && GetBarrleCollider().CompareTag("Pickup") && GetBarrleCollider() != null && GetBarrleCollider().GetComponent<InteractItem>().player == null)
 					{
 						isHiding = true;
 						Hide(isHiding);
-						box =GetBarrleCollider().gameObject;
+						box = GetBarrleCollider().gameObject;
 					}
-					else if(Input.GetKeyDown(KeyCode.C) && isHiding)
+					else if (Input.GetKeyDown(KeyCode.C) && isHiding)
 					{
 						isHiding = false;
 						Hide(isHiding);
 
-					
+
 
 
 					}
@@ -181,7 +183,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				if (isWerewolfState)
 					wereWolf.WerewolfAttack();
 			}
-			GetBarrleCollider();
+			ShowKeyToClick();
 			ChangeWerewolfTag();
 		}
 	}
@@ -211,6 +213,50 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 		}
 	}
+
+	void ShowKeyToClick()
+	{
+
+		Physics2D.queriesStartInColliders = false;
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, faceDirection, playerDistance);
+		if (hit.collider != null && !GETIsPicked)
+		{
+
+
+			if (hit.collider.gameObject.layer == 13 || hit.collider.gameObject.layer == 31 && gameManager.getGamePhase == GamePhases.Day)
+			{
+				if (!itemBubble.activeInHierarchy)
+					itemBubble.SetActive(true);
+				// z button
+				barrelInsideSprite.sprite = keys[0];
+			}
+			else if (hit.collider.gameObject.layer == 31 && gameManager.getGamePhase == GamePhases.Night)
+			{
+				if (!itemBubble.activeInHierarchy)
+					itemBubble.SetActive(true);
+				if (!isWerewolfState)
+				{
+					
+					// c button
+					barrelInsideSprite.sprite = keys[1];
+				}
+				else
+				{
+					barrelInsideSprite.sprite = keys[2];
+				}
+			}
+		}
+		else if (!GETIsPicked || isHiding)
+		{
+			if (itemBubble.activeInHierarchy)
+			{
+				itemBubble.SetActive(false);
+			}
+		}
+
+	}
+
+
 
 	void RotateItemBubble()
 	{
@@ -257,6 +303,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 
 		}
+		gameManager.getPlayerItemsUI.UpdateAmmoText();
 	}
 
 
@@ -314,7 +361,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			}
 			else if (Input.GetKeyUp(KeyCode.Z) && GETIsPicked)
 			{
-				
+
 				if (box != null)
 					box.transform.parent = null;
 				playerSpeed = 4;
@@ -420,12 +467,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	[PunRPC]
 	public void RPC_GetDamage(int amount)
 	{
-		
+
 		if (isVulnerable && !isWerewolfState && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
 		}
-		else if(isVulnerable && isWerewolfState)
+		else if (isVulnerable && isWerewolfState)
 		{
 			currentHp -= amount;
 		}
@@ -495,7 +542,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			
+
 
 
 
@@ -667,7 +714,7 @@ public class WereWolf
 
 	IEnumerator DelayAfterAttack()
 	{
-		
+
 		player.canMove = false;
 		yield return new WaitForSeconds(attackStun);
 		player.canMove = true;

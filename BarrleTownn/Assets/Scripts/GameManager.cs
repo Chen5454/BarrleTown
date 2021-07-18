@@ -331,7 +331,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		RPC_ShowNames();
 		playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
 
-
+		playerItemsUI.OrgenizeUI();
 	}
 	public void SwitchGamePhases()
 	{
@@ -339,6 +339,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			case GamePhases.Day: //switches to night
 				gamePhase = GamePhases.Night;
+
+
+				playerItemsUI.SetNightUI();
+
 
 				if (gameTimeUI.isTimerShown)
 					gameTimeUI.isTimerShown = false;
@@ -394,6 +398,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
+
+				playerItemsUI.SetDayUI();
+
 
 				if (!gameTimeUI.isTimerShown)
 				{
