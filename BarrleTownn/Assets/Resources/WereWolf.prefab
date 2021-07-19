@@ -246,6 +246,7 @@ MonoBehaviour:
     attackStun: 1
     isStunned: 0
   movement: {x: 0, y: 0}
+  wolfAttack: {fileID: 8300000, guid: 166ce6026ecb81140b9f9be712df2cd3, type: 3}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playerRenderer: {fileID: 6196262404252525863}
   box: {fileID: 2509538891122064825, guid: af5c48bb499112945b751a6d54866c90, type: 3}
@@ -413,7 +414,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: isWolfDead
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: attack
   - Type: 4
     SynchronizeType: 0

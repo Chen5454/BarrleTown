@@ -37,7 +37,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	Vector3 previousGood = Vector3.zero;
 	[HideInInspector]
 	public Vector2 movement;
-
+	[SerializeField] AudioClip wolfAttack;
 	public InteractItem hidebehind;
 
 	private Shop shop;
@@ -651,7 +651,19 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	#endregion
 
+	[PunRPC]
+	public void WolfAttackSound()
+	{
+		AudioSource audioRPC = gameObject.AddComponent<AudioSource>();
+		audioRPC.clip = wolfAttack;
+		audioRPC.spatialBlend = 1;
+		audioRPC.rolloffMode = AudioRolloffMode.Linear;
+		audioRPC.minDistance = 5;
+		audioRPC.maxDistance = 11;
+		audioRPC.playOnAwake = false;
+		audioRPC.Play();
 
+	}
 
 }
 
@@ -664,7 +676,7 @@ public class WereWolf
 	public Rigidbody2D rb2DWereWolf;
 	public VillagerCharacter player;
 
-
+	
 	public Transform attackPos;
 	public float attackRange;
 	public LayerMask enemy;
@@ -706,11 +718,16 @@ public class WereWolf
 			{
 
 				player.animManager.WerewolfAttack();
+				player.photonView.RPC("WolfAttackSound", RpcTarget.All);
 				player.StartCoroutine(DelayAfterAttack());
+
+				
 
 			}
 		}
 	}
+
+	
 
 	IEnumerator DelayAfterAttack()
 	{
