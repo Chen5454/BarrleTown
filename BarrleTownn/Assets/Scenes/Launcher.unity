@@ -3500,6 +3500,7 @@ MonoBehaviour:
   roomSlotPF: {fileID: 7092210084304110512, guid: 756c8cb90f50b9b4b9be8f2da64e8338,
     type: 3}
   roomPool: []
+  isOnLobbyScreen: 0
   newRoomPanel: {fileID: 71600017}
   roomNameInput: {fileID: 1578612679}
   maxPlayersAllowed: 8

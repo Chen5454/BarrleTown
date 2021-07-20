@@ -246,7 +246,8 @@ MonoBehaviour:
     attackStun: 1
     isStunned: 0
   movement: {x: 0, y: 0}
-  wolfAttack: {fileID: 8300000, guid: 166ce6026ecb81140b9f9be712df2cd3, type: 3}
+  soundManager: {fileID: 6315989076093882573, guid: d3bd6c88c3690c24e94e60d05ad6cf25,
+    type: 3}
   hidebehind: {fileID: 1250729668, guid: af5c48bb499112945b751a6d54866c90, type: 3}
   playerRenderer: {fileID: 6196262404252525863}
   box: {fileID: 2509538891122064825, guid: af5c48bb499112945b751a6d54866c90, type: 3}
