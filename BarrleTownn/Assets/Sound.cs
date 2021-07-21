@@ -7,7 +7,7 @@ public class Sound:ScriptableObject
 {
 
 
-    public string name;
+    public string soundName;
     public AudioClip clip;
     //[HideInInspector]
     //public AudioSource source;

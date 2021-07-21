@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0db3550bd1df44a57988d324970ae, type: 3}
   m_Name: BarrelDrop
   m_EditorClassIdentifier: 
-  name: BarrelDrop
+  soundName: BarrelDrop
   clip: {fileID: 8300000, guid: 81c358bc6d795cb45bcf0ceb5b2c0bae, type: 3}
   loop: 0
   playOnstart: 0
   spatialBlend: 0
   minDistance: 0
   maxDistance: 0
-  volume: 0
   audioMode: 0

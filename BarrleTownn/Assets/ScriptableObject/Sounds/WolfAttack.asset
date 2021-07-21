@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0b0db3550bd1df44a57988d324970ae, type: 3}
   m_Name: WolfAttack
   m_EditorClassIdentifier: 
-  name: WolfAttack
+  soundName: WolfAttack
   clip: {fileID: 8300000, guid: 166ce6026ecb81140b9f9be712df2cd3, type: 3}
   loop: 0
   playOnstart: 0

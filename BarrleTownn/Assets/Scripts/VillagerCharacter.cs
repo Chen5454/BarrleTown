@@ -40,7 +40,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 
-	public SoundManager soundManager;  
+//	public SoundManager soundManager;  
 	private AudioSource audioSource;
 
 	public InteractItem hidebehind;
@@ -639,7 +639,10 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			if (playerItems.CanShoot())
 			{
+
 				PoolShoot(faceDirection);
+				photonView.RPC("RPC_PlaySound", RpcTarget.All, "CrossBowFire");
+
 			}
 		}
 	}

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0b0db3550bd1df44a57988d324970ae, type: 3}
-  m_Name: BarrelPickUp
+  m_Name: CrossBowFire
   m_EditorClassIdentifier: 
-  soundName: BarrelPickUp
-  clip: {fileID: 8300000, guid: 0a16b32fad57eef46818de1169be9348, type: 3}
+  soundName: CrossBowFire
+  clip: {fileID: 8300000, guid: b55cfb9147c831245b31000f7470db60, type: 3}
   loop: 0
   playOnstart: 0
-  spatialBlend: 0
-  minDistance: 0
-  maxDistance: 0
-  audioMode: 0
+  spatialBlend: 1
+  minDistance: 5
+  maxDistance: 11
+  audioMode: 1

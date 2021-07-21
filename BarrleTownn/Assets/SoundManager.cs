@@ -32,7 +32,7 @@ public class SoundManager : MonoBehaviour
         foreach (Sound s in sounds)
         {
 
-            soundDictionary.Add(s.name, s);
+            soundDictionary.Add(s.soundName, s);
 
 
 
