@@ -40,7 +40,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 
-	[SerializeField] private SoundManager soundManager;  ///<<<<<<<<<<<<<<<<<<<===========================================================
+	public SoundManager soundManager;  
 	private AudioSource audioSource;
 
 	public InteractItem hidebehind;
@@ -65,7 +65,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-		audioSource = soundManager.GetComponent<AudioSource>();     //<<<<<<<<<<<<<<<<<<<<<<<<<<<+================================================
+		audioSource = transform.GetComponent<AudioSource>();     
 	}
 
     public float getPlayerMovementSpeed
@@ -360,6 +360,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				box.transform.parent = this.gameObject.transform;
 				box.GetComponent<InteractItem>().transfer.PickingUp();
 				playerSpeed = 4 / 2;
+				PlaySound("BarrelPickUp");
 
 
 				if (!itemBubble.activeInHierarchy)
@@ -388,6 +389,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			itemBubble.SetActive(false);
 
 		barrelInsideSprite.sprite = null;
+		PlaySound("BarrelDrop");
 	}
 
 	public Collider2D GetBarrleCollider()
@@ -661,7 +663,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	#endregion
 
-	//[PunRPC]
+	//[PunRPC] <<<<<<<<<<<<<<old one that worked>>>>>>>>>>>>
 	//public void WolfAttackSound()
 	//{
 	//	AudioSource audioRPC = gameObject.AddComponent<AudioSource>();
@@ -675,16 +677,40 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	//}
 
+	//Sound Area
+	
+	public void PlaySound(string soundName)
+    {
+		Sound sound = SoundManager.instance.GetSound(soundName);
+
+		audioSource.clip = sound.clip;
+		audioSource.playOnAwake = sound.playOnstart;
+		audioSource.loop = sound.loop;
+		audioSource.spatialBlend = sound.spatialBlend;
+		audioSource.minDistance = sound.minDistance;
+		audioSource.maxDistance = sound.maxDistance;
+		audioSource.rolloffMode = sound.audioMode;
+		audioSource.PlayOneShot(audioSource.clip);
+	}
 
 	[PunRPC]
-	public void RPC_WolfAttackSound()
+	public void RPC_PlaySound(string soundName)
     {
-        //FindObjectOfType<SoundManager>().Play("wolfAttack");
-        
-			
-			soundManager.Play("wolfAttack");
-		
-	
+		Sound sound = SoundManager.instance.GetSound(soundName);
+
+		audioSource.clip = sound.clip;
+		audioSource.playOnAwake = sound.playOnstart;
+		audioSource.loop = sound.loop;
+		audioSource.spatialBlend = sound.spatialBlend;
+		audioSource.minDistance = sound.minDistance;
+		audioSource.maxDistance = sound.maxDistance;
+		audioSource.rolloffMode = sound.audioMode;
+		audioSource.PlayOneShot(audioSource.clip);
+
+		//FindObjectOfType<SoundManager>().Play("wolfAttack");
+		//soundManager.Play("wolfAttack");
+
+
 
 	}
 
@@ -741,8 +767,7 @@ public class WereWolf
 			{
 
 				player.animManager.WerewolfAttack();
-				//player.photonView.RPC("WolfAttackSound", RpcTarget.All);
-				player.photonView.RPC("RPC_WolfAttackSound", RpcTarget.All);
+				player.photonView.RPC("RPC_PlaySound", RpcTarget.All,"WolfAttack");
 				player.StartCoroutine(DelayAfterAttack());
 
 				

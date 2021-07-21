@@ -60,8 +60,8 @@ MonoBehaviour:
     playerVoteSpots: []
   isGameActive: 0
   gamePhase: 3
-  dayTime: 5
-  nightTime: 300
+  dayTime: 60
+  nightTime: 60
   voteTime: 30
   waitForVoteTime: 20
   wolfViewRange: 4

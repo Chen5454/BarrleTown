@@ -44,13 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: wolfAttack
-    clip: {fileID: 8300000, guid: 166ce6026ecb81140b9f9be712df2cd3, type: 3}
-    source: {fileID: 0}
-    loop: 0
-    playOnstart: 0
-    spatialBlend: 1
-    minDistance: 5
-    maxDistance: 11
-    audioMode: 1
-  audioSource: {fileID: 0}
+  - {fileID: 11400000, guid: cdac6da54ab9b3d4d8e830234423bd0e, type: 2}
+  - {fileID: 11400000, guid: bdd5db8174f9a8e41b122a6555ad77e8, type: 2}
+  - {fileID: 11400000, guid: d36b93eec1628354c8205b32565c08f3, type: 2}
