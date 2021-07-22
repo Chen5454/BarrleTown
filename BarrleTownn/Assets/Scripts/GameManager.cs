@@ -339,6 +339,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		{
 			case GamePhases.Day: //switches to night
 				gamePhase = GamePhases.Night;
+				SoundManager.instance.NightPhaseSound();
 
 
 				playerItemsUI.SetNightUI();
@@ -402,6 +403,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				playerItemsUI.SetDayUI();
 
 
+
+
 				if (!gameTimeUI.isTimerShown)
 				{
 					gameTimeUI.isTimerShown = true;
@@ -442,8 +445,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				barrelManager.GenerateBarrels();
 				camera.setCameraToGamePhase(true);
 				SetPlayersAtVotingPosition();
+				SoundManager.instance.StopNightPhaseSound();
 
-				
 				break;
 			case GamePhases.talk://switches to Vote
 				if (!gameTimeUI.isTimerShown)
@@ -480,6 +483,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 					gameTimeUI.isTimerShown = false;
 				}
 
+				
 
 
 				break;
@@ -769,10 +773,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 		votingArea.MovePlayersToVotingArea(this.playersList);
 	}
 
+
+	[PunRPC]
+
 	#endregion
 
 	#region player list
-	[PunRPC]
 	void RPC_GetPlayerList()
 	{
 		playersList = playersList.OrderBy(x => x.photonView.ViewID).ToList();

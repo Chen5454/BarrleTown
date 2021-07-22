@@ -309,7 +309,7 @@ public class Shop : MonoBehaviourPunCallbacks
 	public void SpawnItemRecipe()
 	{
 
-		SoundManager.instance.PlayItemCreatedSound();
+		SoundManager.instance.ItemCreatedSound();
 		int _index = itemBank.itemList.FindIndex(x => x.itemName == currentRecipe.recipeReward.itemName);
 
 		GameManager.getInstance.ShowDroppedItemInfo(_index);

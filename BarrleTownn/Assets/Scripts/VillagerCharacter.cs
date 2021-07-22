@@ -702,7 +702,20 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	//}
 
 	//Sound Area
-	
+	public void StopSound(string soundName)
+    {
+		Sound sound = SoundManager.instance.GetSound(soundName);
+
+		audioSource.clip = sound.clip;
+		audioSource.playOnAwake = sound.playOnstart;
+		audioSource.loop = sound.loop;
+		audioSource.spatialBlend = sound.spatialBlend;
+		audioSource.minDistance = sound.minDistance;
+		audioSource.maxDistance = sound.maxDistance;
+		audioSource.rolloffMode = sound.audioMode;
+		audioSource.Stop();
+	}
+
 	public void PlaySound(string soundName)
     {
 		Sound sound = SoundManager.instance.GetSound(soundName);
@@ -735,20 +748,65 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		//soundManager.Play("wolfAttack");
 
 	}
+	#region Sound coming from villgers using subscribtion
 
+	public void WolfHowlSound()
+	{
+		if (photonView.IsMine)
+		{
+			PlaySound("WolfHowls");
+		}
+	}
 
-	public  void ItemCreated()
+	public void NewDaySound()
+	{
+		if (photonView.IsMine)
+		{
+			PlaySound("NewDay");
+		}
+	}
+
+	public void MorningSound()
+	{
+		if (photonView.IsMine)
+		{
+			PlaySound("Birds");
+		}
+	}
+
+	public void StopMorningSound()
+	{
+		if (photonView.IsMine)
+		{
+			StopSound("Birds");
+		}
+	}
+
+	public void NightPhaseSound()
     {
-		
-		
+		if (photonView.IsMine)
+		{
+				PlaySound("NewNight");
+		}
+    }
+
+	public void StopNightSound()
+	{
+		if (photonView.IsMine)
+		{
+			StopSound("NewNight");
+		}
+	}
+
+	public void ItemCreatedSound()
+    {
         if ( photonView.IsMine)
         {
 			PlaySound("ItemReady");
-
 		}
-
     }
-	
+
+    #endregion
 }
 
 
