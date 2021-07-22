@@ -38,11 +38,9 @@ public class Shop : MonoBehaviourPunCallbacks
 	public bool canGenerateNewRecipe;
 	Collider2D[] insidePlayers;
 	[SerializeField] Transform kickFromShopPlace;
-	private AudioSource audioSource;
 
 	private void Awake()
 	{
-		audioSource = transform.GetComponent<AudioSource>();
 		_reward.SetActive(false);
 		canGetReward = true;
 		doorHP = doorStartHP;
@@ -311,13 +309,12 @@ public class Shop : MonoBehaviourPunCallbacks
 	public void SpawnItemRecipe()
 	{
 
-
+		SoundManager.instance.PlayItemCreatedSound();
 		int _index = itemBank.itemList.FindIndex(x => x.itemName == currentRecipe.recipeReward.itemName);
 
 		GameManager.getInstance.ShowDroppedItemInfo(_index);
 
-		photonView.RPC("RPC_PlaySound", RpcTarget.Others, "ItemReady");
-
+			
 		//reward.GetComponent<PickableItem>().ShowItemOnFloor(currentRecipe.recipeReward);
 	}
 	public void ChangeRewardInfo(ItemSO _itemInfo)
@@ -343,21 +340,7 @@ public class Shop : MonoBehaviourPunCallbacks
 
 
 
-	[PunRPC]
-	public void RPC_PlaySound(string soundName)
-	{
-		Sound sound = SoundManager.instance.GetSound(soundName);
 
-		audioSource.clip = sound.clip;
-		audioSource.playOnAwake = sound.playOnstart;
-		audioSource.loop = sound.loop;
-		audioSource.spatialBlend = sound.spatialBlend;
-		audioSource.minDistance = sound.minDistance;
-		audioSource.maxDistance = sound.maxDistance;
-		audioSource.rolloffMode = sound.audioMode;
-		audioSource.PlayOneShot(audioSource.clip);
-
-	}
 
 }
 public enum RecipeItems

@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoBehaviour
 {
+    List<VillagerCharacter> villagerCharactersList;
 
-   public static SoundManager instance;
+
+    public static SoundManager instance;
 
     public Sound[] sounds;
 
     Dictionary<string, Sound> soundDictionary;
-    
+
 
     //public AudioSource audioSource;
 
@@ -25,7 +27,8 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        
+
+        villagerCharactersList = new List<VillagerCharacter>();
 
         soundDictionary = new Dictionary<string, Sound>();
 
@@ -34,23 +37,43 @@ public class SoundManager : MonoBehaviour
 
             soundDictionary.Add(s.soundName, s);
 
+            //     audioSource = gameObject.AddComponent<AudioSource>();
+            //     //s.source = gameObject.AddComponent<AudioSource>();
+            //     s.source.clip = s.clip;
+            //     s.source.playOnAwake = s.playOnstart;
+            //     s.source.loop = s.loop;
+            //     s.source.spatialBlend = s.spatialBlend;
+            //     s.source.minDistance = s.minDistance;
+            //     s.source.maxDistance = s.maxDistance;
+            //     s.source.rolloffMode = s.audioMode;
 
 
 
+        }
+    }
+
+    public void SubscribeVillger (VillagerCharacter villger)
+    {
+        if (!villagerCharactersList.Contains(villger))
+        {
+            villagerCharactersList.Add(villger);
+        }
+    }
+
+    public void UnsubscribeVillger(VillagerCharacter villger)
+    {
+        if (villagerCharactersList.Contains(villger))
+        {
+            villagerCharactersList.Remove(villger);
+        }
+    }
 
 
-           //     audioSource = gameObject.AddComponent<AudioSource>();
-           //     //s.source = gameObject.AddComponent<AudioSource>();
-           //     s.source.clip = s.clip;
-           //     s.source.playOnAwake = s.playOnstart;
-           //     s.source.loop = s.loop;
-           //     s.source.spatialBlend = s.spatialBlend;
-           //     s.source.minDistance = s.minDistance;
-           //     s.source.maxDistance = s.maxDistance;
-           //     s.source.rolloffMode = s.audioMode;
-            
-
-      
+    public void PlayItemCreatedSound()
+    {
+        foreach (VillagerCharacter villager in villagerCharactersList)
+        {
+            villager.ItemCreated();
         }
     }
 

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class VillagerCharacter : MonoBehaviourPunCallbacks
 {
+
+
 	public string playerName;
 
 	public float playerSpeed;
@@ -40,7 +42,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 
 
-//	public SoundManager soundManager;  
+	public SoundManager soundManager;  
+
 	private AudioSource audioSource;
 
 	public InteractItem hidebehind;
@@ -65,7 +68,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-		audioSource = transform.GetComponent<AudioSource>();     
+		audioSource = transform.GetComponent<AudioSource>();
+
 	}
 
     public float getPlayerMovementSpeed
@@ -120,6 +124,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
+
+		SoundManager.instance.SubscribeVillger(this);
+
 		camera = FindObjectOfType<CameraController>();
 		gameObject.tag = "Player";
 		dayPickUp = true;
@@ -139,6 +146,11 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			if (currentHp <= 0)
 				return;
+
+           
+            
+				
+			
 
 
 			if (Input.GetKeyDown(KeyCode.Z))
@@ -199,6 +211,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	}
 
 
+
+
 	public void FixedUpdate()
 	{
 		if (photonView.IsMine)
@@ -224,7 +238,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 	}
 
-	void ShowKeyToClick()
+
+    private void OnDestroy()
+    {
+		SoundManager.instance.UnsubscribeVillger(this);
+    }
+
+
+    void ShowKeyToClick()
 	{
 
 		Physics2D.queriesStartInColliders = false;
@@ -418,6 +439,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 			if (this.playerItems.CanEquipItem(gameManager.itemBank.itemList[_index]))
 			{
 				Debug.LogError("Pickup!");
+
 				//this.playerItems.EquipItem(gameManager.itemBank.itemList[_index]);
 				if (gameManager.itemBank.itemList[_index] as GunSO)
 				{
@@ -435,7 +457,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		this.playerItems.EquipItem(gameManager.itemBank.itemList[index]);
 		this.playerItems.UpdateItem(gameManager.itemBank.itemList[index]);
 		this.gameManager.GetShop._reward.GetComponent<PickableItem>().VanishFromWorld();
-
 	}
 	private void OnTriggerEnter2D(Collider2D other)
 	{
@@ -713,10 +734,21 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		//FindObjectOfType<SoundManager>().Play("wolfAttack");
 		//soundManager.Play("wolfAttack");
 
-
-
 	}
 
+
+	public  void ItemCreated()
+    {
+		
+		
+        if ( photonView.IsMine)
+        {
+			PlaySound("ItemReady");
+
+		}
+
+    }
+	
 }
 
 

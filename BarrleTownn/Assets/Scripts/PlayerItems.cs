@@ -91,6 +91,7 @@ public class PlayerItems
 	public void EquipItem(ItemSO item)
 	{
 		Debug.LogError("Getting item: " + item.itemName);
+
 		if (item as ShoeSO)
 		{
 			if (playerShoes == null)
