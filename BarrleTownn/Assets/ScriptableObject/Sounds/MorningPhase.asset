@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0b0db3550bd1df44a57988d324970ae, type: 3}
+  m_Name: MorningPhase
+  m_EditorClassIdentifier: 
+  soundName: MorningPhase
+  clip: {fileID: 8300000, guid: 7f3b5d4eebaa67541acb1e7bbe0f087f, type: 3}
+  loop: 0
+  playOnstart: 0
+  spatialBlend: 0
+  minDistance: 0
+  maxDistance: 0
+  audioMode: 0

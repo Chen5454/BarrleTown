@@ -67,32 +67,12 @@ public class SoundManager : MonoBehaviour
             villagerCharactersList.Remove(villger);
         }
     }
-    public void WolfHowlSound()
+
+    public void MorningPhaseSound()
     {
         foreach (VillagerCharacter villager in villagerCharactersList)
         {
-            villager.WolfHowlSound();
-        }
-    }
-    public void NewDaySound()
-    {
-        foreach (VillagerCharacter villager in villagerCharactersList)
-        {
-            villager.NewDaySound();
-        }
-    }
-    public void MorningSound()
-    {
-        foreach (VillagerCharacter villager in villagerCharactersList)
-        {
-            villager.MorningSound();
-        }
-    }
-    public void StopMorningSound()
-    {
-        foreach (VillagerCharacter villager in villagerCharactersList)
-        {
-            villager.StopMorningSound();
+            villager.MorningPhaseSound();
         }
     }
 
@@ -101,14 +81,6 @@ public class SoundManager : MonoBehaviour
         foreach (VillagerCharacter villager in villagerCharactersList)
         {
             villager.NightPhaseSound();
-        }
-    }
-
-    public void StopNightPhaseSound()
-    {
-        foreach (VillagerCharacter villager in villagerCharactersList)
-        {
-            villager.StopNightSound();
         }
     }
 

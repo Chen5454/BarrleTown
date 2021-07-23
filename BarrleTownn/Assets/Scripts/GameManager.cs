@@ -225,6 +225,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
+
 		isGameActive = true;
 
 		barrelManager.canStartGeneration = true;
@@ -399,7 +400,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				break;
 			case GamePhases.Night://switches to talk
 				gamePhase = GamePhases.talk;
-
+				SetPlayersAtVotingPosition();
 				playerItemsUI.SetDayUI();
 
 
@@ -444,8 +445,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				UIManager.getInstance.shop.shopRef.GenerateNewShopRecipe();
 				barrelManager.GenerateBarrels();
 				camera.setCameraToGamePhase(true);
-				SetPlayersAtVotingPosition();
-				SoundManager.instance.StopNightPhaseSound();
+				
 
 				break;
 			case GamePhases.talk://switches to Vote
@@ -468,7 +468,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				gamePhase = GamePhases.Vote_Result;
 
 				votingArea.votingUI.voting.CheckVotes();
-
+			//	SoundManager.instance.MorningPhaseSound();   // doing weird bug to tele players
 				//if (killedPlayer != -1)
 				//	camera.SetCameraToKillVoted();
 				//else
