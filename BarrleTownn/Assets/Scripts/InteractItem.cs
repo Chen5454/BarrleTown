@@ -100,6 +100,7 @@ public class InteractItem : MonoBehaviourPunCallbacks
 
 	public void DestoryBerrel()
 	{
+		//player.photonView.RPC("RPC_PlaySound", RpcTarget.All, "BarrelDestroy");
 		this.gameObject.SetActive(false);
 		player = null;
 	}

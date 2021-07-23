@@ -714,7 +714,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		audioSource.minDistance = sound.minDistance;
 		audioSource.maxDistance = sound.maxDistance;
 		audioSource.rolloffMode = sound.audioMode;
-		audioSource.Play();
+		//audioSource.Play();
+		audioSource.PlayOneShot(audioSource.clip);
+
 	}
 
 	[PunRPC]
