@@ -144,6 +144,8 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine)
 		{
+			DeadSound();
+			
 			if (currentHp <= 0)
 				return;
 
@@ -159,7 +161,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				//PoolShoot();
 			}
 
-
+			
 			MovementHandler();
 			RotateItemBubble();
 
@@ -687,21 +689,27 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	#endregion
 
-	//[PunRPC] <<<<<<<<<<<<<<old one that worked>>>>>>>>>>>>
-	//public void WolfAttackSound()
-	//{
-	//	AudioSource audioRPC = gameObject.AddComponent<AudioSource>();
-	//	audioRPC.clip = wolfAttack;
-	//	audioRPC.spatialBlend = 1;
-	//	audioRPC.rolloffMode = AudioRolloffMode.Linear;
-	//	audioRPC.minDistance = 5;
-	//	audioRPC.maxDistance = 11;
-	//	audioRPC.playOnAwake = false;
-	//	audioRPC.Play();
 
-	//}
+	public void DeadSound()
+    {
+		if (!isWerewolfState)
+		{
+			if (currentHp == 0)
+			{
+				
+				photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
+			}
+		}
+		else if (isWerewolfState)
+		{
+			if (currentHp == 0)
+			{
+				photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
+			}
+		}
 
-	//Sound Area
+	}
+
 
 	public void PlaySound(string soundName)
     {

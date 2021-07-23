@@ -32,6 +32,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             {
                 player.canMove = false;
                 animator.SetBool("isDead",true);
+               // player.photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
             }
         }
     }
@@ -44,6 +45,7 @@ public class AnimatorManager : MonoBehaviourPunCallbacks
             {
                 player.canMove = false;
                 animator.SetBool("isWolfDead", true);
+              //  player.photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
             }
         }
     }
