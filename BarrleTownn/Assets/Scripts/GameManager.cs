@@ -468,7 +468,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 				gamePhase = GamePhases.Vote_Result;
 
 				votingArea.votingUI.voting.CheckVotes();
-			//	SoundManager.instance.MorningPhaseSound();   // doing weird bug to tele players
+			
 				//if (killedPlayer != -1)
 				//	camera.SetCameraToKillVoted();
 				//else
@@ -482,8 +482,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 				{
 					gameTimeUI.isTimerShown = false;
 				}
+					SoundManager.instance.MorningPhaseSound();   // doing weird bug to tele players
 
-				
 
 
 				break;

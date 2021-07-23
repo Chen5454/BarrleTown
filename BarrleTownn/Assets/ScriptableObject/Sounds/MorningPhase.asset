@@ -16,7 +16,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: 7f3b5d4eebaa67541acb1e7bbe0f087f, type: 3}
   loop: 0
   playOnstart: 0
-  spatialBlend: 0
-  minDistance: 0
-  maxDistance: 0
-  audioMode: 0
+  spatialBlend: 1
+  minDistance: 50
+  maxDistance: 50
+  audioMode: 1
