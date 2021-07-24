@@ -78,6 +78,9 @@ public class UIManager : MonoBehaviourPunCallbacks
 
 	public void ShowWerewolfVictoryScreen()
 	{
+		
+
+
 		List<string> names = new List<string>();
 		wolfWinScreen.SetActive(true);
 		for (int i = 0; i < GameManager.getInstance.playersList.Count; i++)
@@ -92,8 +95,9 @@ public class UIManager : MonoBehaviourPunCallbacks
 		{
 			werewolfName.text = names[i];
 		}
+		SoundManager.instance.StopNightPhaseSound();
 		SoundManager.instance.WolfVictorySound();
-
+		
 	}
 
 

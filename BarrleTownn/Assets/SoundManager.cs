@@ -93,6 +93,13 @@ public class SoundManager : MonoBehaviour
             villager.MorningPhaseSound();
         }
     }
+    public void StopNightPhaseSound()
+    {
+        foreach (VillagerCharacter villager in villagerCharactersList)
+        {
+            villager.StopNightSound();
+        }
+    }
 
     public void NightPhaseSound()
     {

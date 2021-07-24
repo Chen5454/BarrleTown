@@ -698,7 +698,20 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	#endregion
 
 
-	
+	public void StopStound(string soundName)
+    {
+		Sound sound = SoundManager.instance.GetSound(soundName);
+
+		audioSource.clip = sound.clip;
+		audioSource.playOnAwake = sound.playOnstart;
+		audioSource.loop = sound.loop;
+		audioSource.spatialBlend = sound.spatialBlend;
+		audioSource.minDistance = sound.minDistance;
+		audioSource.maxDistance = sound.maxDistance;
+		audioSource.rolloffMode = sound.audioMode;
+		//audioSource.Play();
+		audioSource.Stop();
+	}
 
 	public void PlaySound(string soundName)
     {
@@ -735,6 +748,15 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	}
 	#region Sound coming from villgers using subscribtion
+
+
+	public void StopNightSound()
+    {
+		if (photonView.IsMine)
+		{
+			StopStound("NightPhase");
+		}
+	}
 
 	public void MorningPhaseSound()
 	{
