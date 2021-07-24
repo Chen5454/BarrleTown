@@ -30136,6 +30136,7 @@ MonoBehaviour:
     type: 3}
   parent: {fileID: 2094972912}
   inputField: {fileID: 831382021}
+  butt: {fileID: 1081155260}
   messagePool: []
 --- !u!114 &454505799
 MonoBehaviour:
