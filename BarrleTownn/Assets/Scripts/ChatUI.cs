@@ -2,6 +2,8 @@
 using TMPro;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
+
 public class ChatUI : MonoBehaviourPun
 {
 	public GameObject chat;
@@ -10,6 +12,7 @@ public class ChatUI : MonoBehaviourPun
 
 	private string playerMessage;
 	[SerializeField] TMP_InputField inputField;
+	[SerializeField] Button butt;
 
 	[SerializeField] List<GameObject> messagePool = new List<GameObject>();
 
@@ -33,10 +36,12 @@ public class ChatUI : MonoBehaviourPun
 		if(GameManager.getInstance.player.currentHp > 0)
 		{
 			inputField.interactable = true;
+			butt.interactable = true;
 		}
 		else
 		{
 			inputField.interactable = false;
+			butt.interactable = false;
 		}
 	}
 	
