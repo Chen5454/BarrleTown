@@ -197,6 +197,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 	public void InitGame()
 	{
+		GameObject.Find("LoadingScreen").transform.GetChild(0).gameObject.SetActive(true);
+
 		if (PhotonNetwork.IsMasterClient)
 		{
 			isWereWolf = new bool[playersNameList.Count];
@@ -230,7 +232,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		timer = dayTime;
 		gamePhase = GamePhases.Day;
 
-		isGameActive = true;
+	
 
 		barrelManager.canStartGeneration = true;
 		barrelManager.GenerateBarrels();
@@ -337,6 +339,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 		playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
 
 		playerItemsUI.OrgenizeUI();
+
+		Animator fadeAnim = GameObject.Find("LoadingPanel").GetComponent<Animator>();
+		fadeAnim.SetTrigger("Fade");
+		//GameObject.Find("LoadingScreen").SetActive(false);
+		isGameActive = true;
 	}
 	public void SwitchGamePhases()
 	{
