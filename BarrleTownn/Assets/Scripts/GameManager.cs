@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public List<string> playersNameList;
 	public List<VillagerCharacter> playersList;
 	public VotePhase votePhase;
-	[SerializeField] bool isGameActive = false;
+	public bool isGameActive = false;
 	[Header("Current Phase")]
 	[SerializeField]
 	GamePhases gamePhase;
@@ -325,10 +325,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	IEnumerator delayedList()
 	{
-		yield return new WaitForSeconds(0.4f);
+		yield return new WaitForSeconds(2f);
 		playersList = new List<VillagerCharacter>(FindObjectsOfType<VillagerCharacter>());
 		photonView.RPC("RPC_GetPlayerList", RpcTarget.AllBufferedViaServer);
-		yield return new WaitForSeconds(0.4f);
+		yield return new WaitForSeconds(2f);
 		RPC_ShowNames();
 		playerItemsUI.UpdateItemsUI(player.getPlayerItems.getShoes, player.getPlayerItems.getArmor, player.getPlayerItems.getGun);
 
@@ -1019,13 +1019,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if(villagersAlives == 0 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
-			UIManager.getInstance.ShowWerewolfVictoryScreen();
+			UIManager.getInstance.ShowWinScreen(true);
+
 			isGameActive = false;
 		}
 		else if (!isWerewolfAlive)
 		{
 			Debug.LogError(" Villagers!!! WINSSSSSSSS");
-			UIManager.getInstance.ShowVillageVictoryScreen();
+			//UIManager.getInstance.ShowVillageVictoryScreen();
+			UIManager.getInstance.ShowWinScreen(false);
 			isGameActive = false;
 		}
 

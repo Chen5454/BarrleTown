@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviourPunCallbacks
 {
 	private static UIManager _instance;
 	public static UIManager getInstance => _instance;
@@ -38,9 +38,22 @@ public class UIManager : MonoBehaviour
 
 
 
-
-
-
+	public void ShowWinScreen(bool isWerewolf)
+	{
+		photonView.RPC("RPC_ShowWinScreen", RpcTarget.AllBufferedViaServer, isWerewolf);
+	}
+	[PunRPC]
+	void RPC_ShowWinScreen(bool isWerewolf)
+	{
+		if (isWerewolf)
+		{
+			ShowWerewolfVictoryScreen();
+		}
+		else
+		{
+			ShowVillageVictoryScreen();
+		}
+	}
 	public void ShowVillageVictoryScreen()
 	{
 		villagerWinScreen.SetActive(true);

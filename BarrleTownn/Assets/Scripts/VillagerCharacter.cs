@@ -142,7 +142,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	bool isHiding = false;
 	public void Update()
 	{
-		if (photonView.IsMine)
+		if (photonView.IsMine && gameManager.isGameActive)
 		{
 			DeadSound();
 			
@@ -217,7 +217,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 
 	public void FixedUpdate()
 	{
-		if (photonView.IsMine)
+		if (photonView.IsMine && gameManager.isGameActive)
 		{
 			if (!isWerewolfState)
 			{
@@ -696,7 +696,6 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		{
 			if (currentHp == 0)
 			{
-				
 				photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
 			}
 		}
