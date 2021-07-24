@@ -506,12 +506,14 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		if (isVulnerable && !isWerewolfState && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
-			photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
+			//photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
+			RPC_PlaySound("VillegerDeath");
 		}
 		else if (isVulnerable && isWerewolfState)
 		{
 			currentHp -= amount;
-			photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
+			//photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
+			RPC_PlaySound("WolfDead");
 		}
 
 		if (this.currentHp <= 0 && this.photonView.IsMine)

@@ -204,6 +204,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 			isWereWolf[randomIndex] = true;
 
 			photonView.RPC("RPC_ChooseWereWolf", RpcTarget.AllBufferedViaServer, isWereWolf);
+
+
+			PhotonNetwork.CurrentRoom.IsOpen = false;
+
 		}
 
 		if (fov == null)
@@ -1019,15 +1023,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 		if(villagersAlives == 0 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
-			UIManager.getInstance.ShowWinScreen(true);
+			UIManager.getInstance.ShowWerewolfVictoryScreen();
+			//UIManager.getInstance.ShowWinScreen(true);
 
 			isGameActive = false;
 		}
 		else if (!isWerewolfAlive)
 		{
 			Debug.LogError(" Villagers!!! WINSSSSSSSS");
-			//UIManager.getInstance.ShowVillageVictoryScreen();
-			UIManager.getInstance.ShowWinScreen(false);
+			UIManager.getInstance.ShowVillageVictoryScreen();
+			//UIManager.getInstance.ShowWinScreen(false);
 			isGameActive = false;
 		}
 
