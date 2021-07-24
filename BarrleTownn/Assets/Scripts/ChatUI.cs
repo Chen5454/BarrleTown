@@ -16,19 +16,31 @@ public class ChatUI : MonoBehaviourPun
 	public void SetChatVisibility(bool _setActive)
 	{
 		chat.SetActive(_setActive);
-
+		CheckIfAlive();
 
 		if (!_setActive)
 		{
 			for (int i = 0; i < messagePool.Count; i++)
 			{
 				messagePool[i].SetActive(false);
+				
 			}
 		}
 	}
 
-
-
+	public void CheckIfAlive()
+	{
+		if(GameManager.getInstance.player.currentHp > 0)
+		{
+			inputField.interactable = true;
+		}
+		else
+		{
+			inputField.interactable = false;
+		}
+	}
+	
+	
 
 
 	public void OnChangeMessageValue(string _message)
