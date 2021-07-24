@@ -144,7 +144,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	{
 		if (photonView.IsMine && gameManager.isGameActive)
 		{
-			DeadSound();
+			
 			
 			if (currentHp <= 0)
 				return;
@@ -506,10 +506,12 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		if (isVulnerable && !isWerewolfState && !playerItems.CanDamageArmor(amount))
 		{
 			currentHp -= amount;
+			photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
 		}
 		else if (isVulnerable && isWerewolfState)
 		{
 			currentHp -= amount;
+			photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
 		}
 
 		if (this.currentHp <= 0 && this.photonView.IsMine)
@@ -518,6 +520,9 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
 
 		GameManager.getInstance.CheckWinCondition();
+
+
+		
 
 	}
 
@@ -690,25 +695,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 	#endregion
 
 
-	public void DeadSound()
-    {
-		if (!isWerewolfState)
-		{
-			if (currentHp == 0)
-			{
-				photonView.RPC("RPC_PlaySound", RpcTarget.All, "VillegerDeath");
-			}
-		}
-		else if (isWerewolfState)
-		{
-			if (currentHp == 0)
-			{
-				photonView.RPC("RPC_PlaySound", RpcTarget.All, "WolfDead");
-			}
-		}
-
-	}
-
+	
 
 	public void PlaySound(string soundName)
     {
