@@ -1020,7 +1020,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 			}
 		}
 
-		if(villagersAlives == 0 && isWerewolfAlive)
+		if(villagersAlives == 1 && isWerewolfAlive)
 		{
 			Debug.LogError(" WereWolf WINSSSSSSSS");
 			UIManager.getInstance.ShowWerewolfVictoryScreen();
