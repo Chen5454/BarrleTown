@@ -52,6 +52,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+
     public void SubscribeVillger (VillagerCharacter villger)
     {
         if (!villagerCharactersList.Contains(villger))
@@ -65,6 +66,23 @@ public class SoundManager : MonoBehaviour
         if (villagerCharactersList.Contains(villger))
         {
             villagerCharactersList.Remove(villger);
+        }
+    }
+
+    public void VillegerVictorySound()
+    {
+        foreach (VillagerCharacter villager in villagerCharactersList)
+        {
+            villager.VillegersWinSOund();
+        }
+    }
+
+
+    public void WolfVictorySound()
+    {
+        foreach (VillagerCharacter villager in villagerCharactersList)
+        {
+            villager.WolfVicrorySound();
         }
     }
 

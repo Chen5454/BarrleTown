@@ -450,6 +450,7 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 				}
 				photonView.RPC("RPC_EquipItem", RpcTarget.AllBuffered, _index);
 				gameManager.getPlayerItemsUI.UpdatePlayerItemUI(gameManager.itemBank.itemList[_index]);
+				PlaySound("ItemPickUp");
 			}
 		}
 	}
@@ -759,6 +760,21 @@ public class VillagerCharacter : MonoBehaviourPunCallbacks
 		}
     }
 
+	public void VillegersWinSOund()
+    {
+		if (photonView.IsMine)
+		{
+			PlaySound("VillgersVictory");
+		}
+	}
+
+	public void WolfVicrorySound()
+    {
+		if (photonView.IsMine)
+		{
+			PlaySound("WolfVictory");
+		}
+	}
     #endregion
 }
 

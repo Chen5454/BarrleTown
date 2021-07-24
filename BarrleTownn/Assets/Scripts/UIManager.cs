@@ -72,6 +72,8 @@ public class UIManager : MonoBehaviourPunCallbacks
 			playernames[i].text = names[i];
 		}
 
+		SoundManager.instance.VillegerVictorySound();
+
 	}
 
 	public void ShowWerewolfVictoryScreen()
@@ -90,6 +92,7 @@ public class UIManager : MonoBehaviourPunCallbacks
 		{
 			werewolfName.text = names[i];
 		}
+		SoundManager.instance.WolfVictorySound();
 
 	}
 
